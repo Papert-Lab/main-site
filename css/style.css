@@ -1,60 +1,62 @@
-/* Papert Lab — Text-first research site */
+/* Papert Lab — Design System
+   Direction: Dario Amodei warmth + Patrick Collison structure
+   Font: Newsreader (warm academic serif)
+   No images, no JS, no frameworks */
+
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap');
 
 :root {
-  --bg: #faf9f6;
+  --bg: #f5f4f0;
   --text: #1a1a1a;
-  --text-muted: #6b6b6b;
-  --link: #1a4d8f;
-  --link-hover: #0a2d5f;
-  --border: #e0ddd8;
-  --max-width: 640px;
+  --muted: #6b6b6b;
+  --border: #d4d2cc;
+  --max-width: 680px;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--serif);
   font-size: 17px;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--text);
   background: var(--bg);
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 3rem 1.5rem;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Navigation */
+/* — Navigation — */
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 4rem;
-  padding-bottom: 1rem;
+  padding-bottom: 1.2rem;
   border-bottom: 1px solid var(--border);
 }
 
 .site-name {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
   color: var(--text);
   text-decoration: none;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .nav-links {
-  display: flex;
-  gap: 1.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 0.85rem;
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
 }
 
 .nav-links a {
-  color: var(--text-muted);
+  color: var(--muted);
   text-decoration: none;
 }
 
@@ -62,62 +64,66 @@ nav {
   color: var(--text);
 }
 
-/* Typography */
+.nav-links a + a::before {
+  content: "·";
+  margin: 0 0.7em;
+  color: var(--border);
+}
+
+/* — Typography — */
 
 h1 {
-  font-size: 1.8rem;
+  font-family: var(--serif);
+  font-size: 1.6rem;
   font-weight: 400;
-  margin-bottom: 1rem;
   letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
 }
 
 h2 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  color: var(--muted);
   margin-bottom: 1rem;
-  font-size: 0.75rem;
 }
 
 p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 a {
-  color: var(--link);
+  color: var(--text);
   text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration-color: var(--border);
+  text-underline-offset: 3px;
 }
 
 a:hover {
-  color: var(--link-hover);
+  text-decoration-color: var(--text);
 }
 
-em {
-  font-style: italic;
-}
+em { font-style: italic; }
+strong { font-weight: 600; }
 
-/* Sections */
+/* — Layout — */
+
+main { min-height: 50vh; }
 
 section {
-  margin-bottom: 3rem;
-}
-
-.hero {
   margin-bottom: 3.5rem;
 }
 
 .tagline {
-  font-size: 1.4rem;
-  line-height: 1.5;
+  font-size: 1.25rem;
+  line-height: 1.6;
   color: var(--text);
-  font-weight: 400;
+  margin-bottom: 3.5rem;
 }
 
-/* Essay List */
+/* — Essay List — */
 
 .essay-list {
   list-style: none;
@@ -127,7 +133,7 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 0.5rem 0;
+  padding: 0.6rem 0;
   border-bottom: 1px solid var(--border);
 }
 
@@ -142,70 +148,66 @@ section {
 
 .essay-list a:hover {
   text-decoration: underline;
+  text-decoration-color: var(--text);
+  text-underline-offset: 3px;
 }
 
 .date {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--muted);
   white-space: nowrap;
-  margin-left: 1rem;
+  margin-left: 1.5rem;
+  letter-spacing: 0.02em;
 }
 
-/* Paper List */
+/* — Paper List — */
 
 .paper-list {
   list-style: none;
 }
 
 .paper-list li {
-  margin-bottom: 1rem;
-  padding-left: 0;
+  margin-bottom: 1.2rem;
   font-size: 0.95rem;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
-/* Footer */
+.muted {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* — Footer — */
 
 footer {
-  margin-top: 4rem;
+  margin-top: 5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
 }
 
 footer a {
-  color: var(--text-muted);
+  color: var(--muted);
+  text-decoration-color: transparent;
 }
 
 footer a:hover {
   color: var(--text);
+  text-decoration-color: var(--text);
 }
 
-footer p {
-  margin-bottom: 0.3rem;
-}
+footer p { margin-bottom: 0.3rem; }
 
-/* Responsive */
+/* — Responsive — */
 
 @media (max-width: 500px) {
-  body {
-    padding: 2rem 1rem;
-  }
-
-  nav {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .essay-list li {
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .date {
-    margin-left: 0;
-  }
+  body { padding: 2rem 1.2rem; }
+  nav { flex-direction: column; gap: 0.6rem; margin-bottom: 3rem; }
+  .essay-list li { flex-direction: column; gap: 0.15rem; }
+  .date { margin-left: 0; }
+  h1 { font-size: 1.4rem; }
 }
