@@ -1,36 +1,46 @@
 <!DOCTYPE html>
+<!-- Content source: content/donors.md -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Donors — Papert Lab</title>
   <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Donors and supporters of Papert Lab.">
 </head>
 <body>
+
   <header>
     <nav>
-    <a href="/" class="site-name">Papert Lab</a>
-    <div class="nav-links">
-      <a href="/essays">Essays</a>
-      <a href="/papers">Papers</a>
-      <a href="/donors">Donors</a>
-      <a href="/about">About</a>
-    </div>
+      <a href="/" class="site-name">Papert Lab</a>
+      <div class="nav-links">
+        <a href="/essays">Essays</a>
+        <a href="/papers">Papers</a>
+        <a href="/donors" class="active">Donors</a>
+        <a href="/about">About</a>
+      </div>
     </nav>
   </header>
 
-  <main>
-    <h1>Donors</h1>
+  <div class="content">
 
-    <p>Papert Lab is funded by grants and individual contributions. We are grateful to the following supporters.</p>
+    <!-- Page title: edit in content/donors.md -->
+    <h1 class="page-title">Donors</h1>
+    <p class="page-subtitle">We are grateful to those who support independent research.</p>
 
+    <!-- Grants: add entries in content/donors.md -->
     <section>
       <h2>Grants</h2>
-      <ul class="paper-list">
-        <li><strong>Emergent Ventures</strong> (Mercatus Center, George Mason University) &mdash; $20,000 grant for CS education research, 2026.</li>
-      </ul>
+      <div class="grant-item">
+        <div class="grant-header">
+          <span class="grant-org">Emergent Ventures</span>
+          <span class="grant-amount">$20,000</span>
+        </div>
+        <p class="grant-desc">Mercatus Center, George Mason University — CS education research, 2026.</p>
+      </div>
     </section>
 
+    <!-- Individual supporters: add in content/donors.md -->
     <section>
       <h2>Individual Supporters</h2>
       <p class="muted">Coming soon.</p>
@@ -38,16 +48,35 @@
 
     <section>
       <h2>Support Our Work</h2>
-      <p>If you are interested in supporting research at the intersection of cognition, computing, and education, please contact <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a>.</p>
+      <p>If you are interested in supporting research at the intersection of cognition, computing, and education, please reach out at <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a>.</p>
     </section>
-  </main>
+
+  </div>
 
   <footer>
-    <p>Papert Lab &middot; San Diego, CA</p>
-    <p>
-      <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a> &middot;
-      <a href="https://github.com/Papert-Lab">GitHub</a>
-    </p>
+    <div class="footer-inner">
+      <div class="footer-brand-col">
+        <a href="/" class="footer-name">Papert Lab</a>
+        <p class="footer-tagline">Independent research on cognition, computing, and education. San Diego, CA.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Research</h3>
+        <a href="/papers">Papers</a>
+        <a href="/essays">Essays</a>
+      </div>
+      <div class="footer-col">
+        <h3>Lab</h3>
+        <a href="/about">About</a>
+        <a href="/donors">Donors</a>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a>
+        <a href="https://github.com/Papert-Lab">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Papert Lab</div>
   </footer>
+
 </body>
 </html>

@@ -1,12 +1,15 @@
 <!DOCTYPE html>
+<!-- Content source: content/home.md -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Papert Lab</title>
   <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Papert Lab — independent research at the intersection of human cognition, computing, and education.">
 </head>
 <body>
+
   <header>
     <nav>
       <a href="/" class="site-name">Papert Lab</a>
@@ -19,11 +22,22 @@
     </nav>
   </header>
 
-  <main>
-    <section class="hero">
-      <p class="tagline">Research at the intersection of human cognition, computing, and education.</p>
-    </section>
+  <!-- Hero: edit tagline/subtitle in content/home.md -->
+  <div class="hero-banner">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Independent Research Lab</p>
+      <h1 class="hero-title">Papert Lab</h1>
+      <p class="hero-sub">Research at the intersection of human cognition, computing, and education — building the science of how people learn to think with machines.</p>
+      <div class="hero-actions">
+        <a href="/about" class="hero-btn filled">About the Lab</a>
+        <a href="/papers" class="hero-btn">Read the Papers</a>
+      </div>
+    </div>
+  </div>
 
+  <div class="content">
+
+    <!-- Essays: edit list in content/essays.md -->
     <section>
       <h2>Recent Essays</h2>
       <ul class="essay-list">
@@ -35,32 +49,60 @@
           <a href="/essays/why-learn-stem.html">Why Do We Learn STEM?</a>
           <span class="date">February 2026</span>
         </li>
+        <li>
+          <a href="/essays/who-was-i.html">Who Was I (Part I)</a>
+          <span class="date">February 2026</span>
+        </li>
       </ul>
     </section>
 
+    <!-- About blurb: edit in content/home.md -->
     <section>
       <h2>Research</h2>
       <p>Papert Lab investigates how students solve complex problems and how intelligent systems can scaffold deeper thinking. Our work spans requirement engineering pedagogy, self-directed learning, and context engineering for large language models.</p>
-      <p>Named for <a href="https://en.wikipedia.org/wiki/Seymour_Papert">Seymour Papert</a>, whose constructionist theory of learning remains foundational to our approach.</p>
+      <p>Named for <a href="https://en.wikipedia.org/wiki/Seymour_Papert">Seymour Papert</a> (1928–2016), whose constructionist theory of learning remains foundational to our approach.</p>
     </section>
 
+    <!-- Papers: edit in content/papers.md -->
     <section>
       <h2>Papers</h2>
       <ul class="paper-list">
         <li>
-          Mitchell-Pullman, H. (2026). "Software Testing as a Pedagogical Vehicle for Requirement Engineering." <em>AIED BlueSky</em>. [<a href="#">PDF</a>]
+          Mitchell-Pullman, H. (2026). "Software Testing as a Pedagogical Vehicle for Requirement Engineering." <em>AIED BlueSky 2026</em>. [<a href="#">PDF</a>]
+        </li>
+        <li>
+          Mitchell-Pullman, H., Vadaparty, A. (2026). "Testing and Specification for AI-Assisted Programming." <em>In progress</em>.
         </li>
       </ul>
       <p><a href="/papers">All papers &rarr;</a></p>
     </section>
-  </main>
+
+  </div>
 
   <footer>
-    <p>Papert Lab &middot; San Diego, CA</p>
-    <p>
-      <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a> &middot;
-      <a href="https://github.com/Papert-Lab">GitHub</a>
-    </p>
+    <div class="footer-inner">
+      <div class="footer-brand-col">
+        <a href="/" class="footer-name">Papert Lab</a>
+        <p class="footer-tagline">Independent research on cognition, computing, and education. San Diego, CA.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Research</h3>
+        <a href="/papers">Papers</a>
+        <a href="/essays">Essays</a>
+      </div>
+      <div class="footer-col">
+        <h3>Lab</h3>
+        <a href="/about">About</a>
+        <a href="/donors">Donors</a>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a>
+        <a href="https://github.com/Papert-Lab">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Papert Lab</div>
   </footer>
+
 </body>
 </html>
