@@ -4,61 +4,194 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Papert Lab</title>
+
+  <!-- Preload hero image -->
+  <link rel="preload" as="image" type="image/webp" href="images/hero-1024.webp">
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <nav>
-    <a href="/" class="site-name">Papert Lab</a>
-    <div class="nav-links">
-      <a href="/essays.html">Essays</a>
-      <a href="/papers.html">Papers</a>
-      <a href="/donors.html">Donors</a>
-      <a href="/about.html">About</a>
-    </div>
-  </nav>
+  <header id="site-header">
+    <nav>
+      <a href="/" class="site-name"><em>Papert Lab</em></a>
+      <div class="nav-links">
+        <a href="/essays.html">Essays</a>
+        <a href="/papers.html">Papers</a>
+        <a href="/about.html">About</a>
+        <a href="/donors.html">Donors</a>
+      </div>
+    </nav>
+  </header>
 
   <main>
-    <section class="hero">
-      <p class="tagline">Research at the intersection of human cognition, computing, and education.</p>
+    <!-- Hero with scroll animation -->
+    <section class="hero" id="hero">
+      <div class="hero-image-wrapper" id="hero-image-wrapper">
+        <picture>
+          <source type="image/webp"
+                  srcset="images/hero.webp 512w, images/hero-1024.webp 1024w"
+                  sizes="(max-width: 500px) 100vw, 70vw">
+          <img src="images/hero.png"
+               alt="Papert Lab — illustration of a chalkboard, desk, bookshelf, and turtle"
+               class="hero-image"
+               loading="eager"
+               decoding="async"
+               fetchpriority="high"
+               width="1024"
+               height="634">
+        </picture>
+      </div>
     </section>
 
-    <section>
-      <h2>Recent Essays</h2>
-      <ul class="essay-list">
-        <li>
-          <a href="/essays/transforming-societies.html">Transforming Societies</a>
-          <span class="date">March 2026</span>
-        </li>
-        <li>
-          <a href="/essays/why-learn-stem.html">Why Do We Learn STEM?</a>
-          <span class="date">February 2026</span>
-        </li>
-      </ul>
+    <!-- Lab description -->
+    <section class="blurb" id="blurb">
+      <p>Papert Lab is a research collective studying how humans learn to think with computers. We build tools, run experiments, and write about the cognitive machinery of programming, problem-solving, and self-directed learning.</p>
     </section>
 
-    <section>
-      <h2>Research</h2>
-      <p>Papert Lab investigates how students solve complex problems and how intelligent systems can scaffold deeper thinking. Our work spans requirement engineering pedagogy, self-directed learning, and context engineering for large language models.</p>
-      <p>Named for <a href="https://en.wikipedia.org/wiki/Seymour_Papert">Seymour Papert</a>, whose constructionist theory of learning remains foundational to our approach.</p>
+    <!-- Featured work -->
+    <section class="featured" id="featured">
+      <h2 class="section-heading">Featured Work</h2>
+      <div class="card-grid">
+        <article class="card">
+          <div class="card-accent" style="--accent-color: #5C3A1E;"></div>
+          <div class="card-body">
+            <h3 class="card-title">Requirement Engineering via Software Testing in CS1</h3>
+            <p class="card-desc">Using high-level blackbox testing as a pedagogical vehicle to teach requirement specification. Students learn to discover and articulate system requirements through test-case construction.</p>
+            <span class="card-meta">AIED 2026 &middot; BlueSky</span>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-accent" style="--accent-color: #7B5B3A;"></div>
+          <div class="card-body">
+            <h3 class="card-title">Context Engineering for LLM-Assisted Science</h3>
+            <p class="card-desc">Investigating how the structure and selection of context supplied to language models affects the quality of scientific reasoning, analogous to how requirements shape software outcomes.</p>
+            <span class="card-meta">In Progress</span>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-accent" style="--accent-color: #9B7D5A;"></div>
+          <div class="card-body">
+            <h3 class="card-title">LLMs as Simulated Students for Requirement Discovery</h3>
+            <p class="card-desc">Exploring whether LLMs that simulate help-seeking behaviors can teach students to write better test cases by forcing them to specify requirements for an underspecified system.</p>
+            <span class="card-meta">CHI 2027 &middot; Planned</span>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <section>
-      <h2>Papers</h2>
-      <ul class="paper-list">
-        <li>
-          Mitchell-Pullman, H. (2026). "Software Testing as a Pedagogical Vehicle for Requirement Engineering." <em>AIED BlueSky</em>. [<a href="#">PDF</a>]
-        </li>
-      </ul>
-      <p><a href="/papers.html">All papers &rarr;</a></p>
+    <!-- About -->
+    <section class="about" id="about">
+      <h2 class="section-heading">About</h2>
+      <p>Named for Seymour Papert, who believed that the best way to learn is to build things that matter. We operate at the intersection of human-computer interaction, learning science, and artificial intelligence &mdash; asking what changes when students have powerful tools and the agency to direct their own learning.</p>
+      <p>Our work draws on cognitive science, software engineering pedagogy, and the constructionist tradition. We care less about whether students can pass a test and more about whether they can specify what a system should do, reason about why it fails, and iteratively refine their mental models until the gap between intention and artifact closes.</p>
+    </section>
+
+    <!-- Manifesto image -->
+    <section class="manifesto" id="manifesto">
+      <picture>
+        <source type="image/webp"
+                srcset="images/manifesto-800.webp 800w, images/manifesto-1200.webp 1200w, images/manifesto.webp 2406w"
+                sizes="(max-width: 500px) 100vw, (max-width: 900px) 80vw, 640px">
+        <img src="images/manifesto.png"
+             alt="Students building with LEGO robotics"
+             class="manifesto-image"
+             loading="lazy"
+             decoding="async"
+             width="2406"
+             height="1760">
+      </picture>
     </section>
   </main>
 
   <footer>
-    <p>Papert Lab &middot; San Diego, CA</p>
-    <p>
-      <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a> &middot;
-      <a href="https://github.com/Papert-Lab">GitHub</a>
-    </p>
+    <p>&copy; 2026 Papert Lab &middot; <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a> &middot; <a href="https://github.com/Papert-Lab">GitHub</a></p>
   </footer>
+
+  <!-- GSAP + ScrollTrigger via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
+  <script>
+    // ── Reduced motion check ──
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      // Static layout: show header name immediately, no animation
+      document.getElementById('site-header').classList.add('scrolled');
+    } else {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const header = document.getElementById('site-header');
+      const hero = document.getElementById('hero');
+      const wrapper = document.getElementById('hero-image-wrapper');
+      const heroImg = wrapper.querySelector('img');
+
+      // ── APPROACH C: Simple confident sticky ──
+      // Image scrolls naturally. When chalkboard reaches header, it sticks.
+      // Apple-like restraint — no fancy dissolve, just physics.
+
+      // Pin the hero section during the animation
+      const heroTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: '+=500',
+          scrub: 0.5,
+          pin: true,
+          anticipatePin: 1,
+        }
+      });
+
+      // Phase 1 (0-20%): Slight parallax
+      heroTl.to(wrapper, {
+        y: -30,
+        ease: 'none',
+        duration: 0.2,
+      });
+
+      // Phase 2 (20-60%): Cream mask rises from bottom, hides desk/bookshelf
+      // Uses CSS mask-image animated via a custom property
+      heroTl.to(wrapper, {
+        '--mask-stop': '45%',
+        ease: 'power1.in',
+        duration: 0.4,
+      }, 0.2);
+
+      // Phase 3 (60-100%): Scale down + translate up toward header
+      heroTl.to(wrapper, {
+        scale: 0.35,
+        y: () => {
+          // Calculate distance from hero center to header center
+          const headerRect = header.getBoundingClientRect();
+          const heroRect = hero.getBoundingClientRect();
+          return -(heroRect.height * 0.3);
+        },
+        '--mask-stop': '70%',
+        '--clip-top': '0%',
+        '--clip-bottom': '55%',
+        '--clip-left': '20%',
+        '--clip-right': '20%',
+        transformOrigin: '50% 15%',
+        ease: 'power2.inOut',
+        duration: 0.4,
+      }, 0.6);
+
+      // Fade in header site-name as hero animation completes
+      heroTl.to('.site-name', {
+        opacity: 1,
+        pointerEvents: 'auto',
+        ease: 'power1.in',
+        duration: 0.15,
+      }, 0.85);
+
+      // After scroll past pinned section, keep header name visible
+      ScrollTrigger.create({
+        trigger: hero,
+        start: 'bottom top',
+        onEnter: () => header.classList.add('scrolled'),
+        onLeaveBack: () => header.classList.remove('scrolled'),
+      });
+    }
+  </script>
 </body>
 </html>
