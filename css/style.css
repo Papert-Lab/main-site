@@ -123,6 +123,13 @@ nav {
   margin: 0 auto;
 }
 
+.hero-emblem {
+  display: block;
+  margin: 0 auto 1.75rem;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.15));
+}
+
 .hero-eyebrow {
   font-size: 11px;
   font-weight: 600;
