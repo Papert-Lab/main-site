@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Content source: content/home.md -->
+<!-- Content source: content/home.md — edit all text there -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -12,70 +12,205 @@
 
   <header>
     <nav>
-      <a href="/" class="site-name">Papert Lab</a>
+      <a href="#" class="site-name">Papert Lab</a>
       <div class="nav-links">
-        <a href="/essays">Essays</a>
-        <a href="/papers">Papers</a>
-        <a href="/donors">Donors</a>
-        <a href="/about">About</a>
+        <a href="#essays">Essays</a>
+        <a href="#papers">Papers</a>
+        <a href="#about">About</a>
+        <a href="#donors">Donors</a>
       </div>
     </nav>
   </header>
 
-  <!-- Hero: edit tagline/subtitle in content/home.md -->
-  <div class="hero-banner">
-    <div class="hero-inner">
-      <img src="/images/emblem.svg" class="hero-emblem" alt="" width="90" height="90">
-      <p class="hero-eyebrow">Independent Research Lab</p>
-      <h1 class="hero-title">Papert Lab</h1>
-      <p class="hero-sub">Research at the intersection of human cognition, computing, and education — building the science of how people learn to think with machines.</p>
-      <div class="hero-actions">
-        <a href="/about" class="hero-btn filled">About the Lab</a>
-        <a href="/papers" class="hero-btn">Read the Papers</a>
-      </div>
+  <div class="page">
+
+    <!-- ── Page header: edit content/home.md ── -->
+    <div class="page-header">
+      <h1 class="page-title">Papert Lab</h1>
+      <p class="page-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Independent research on cognition, computing, and education. San Diego, CA.</p>
     </div>
-  </div>
 
-  <div class="content">
+    <!-- ── Hero image ── -->
+    <figure class="img-callout">
+      <img src="/images/hero.png" alt="" width="720" height="400">
+      <figcaption class="img-caption">Lorem ipsum — the intersection of cognition, computing, and education</figcaption>
+    </figure>
 
-    <!-- Essays: edit list in content/essays.md -->
-    <section>
-      <h2>Recent Essays</h2>
+    <!-- ────────────────────────────────────────
+         ESSAYS
+         Edit titles and dates in content/essays.md
+    ─────────────────────────────────────────── -->
+    <section id="essays">
+      <h2 class="section-label">Essays</h2>
       <ul class="essay-list">
         <li>
-          <a href="/essays/transforming-societies.html">Transforming Societies</a>
+          <a href="#">Lorem ipsum dolor sit amet consectetur</a>
           <span class="date">March 2026</span>
         </li>
         <li>
-          <a href="/essays/why-learn-stem.html">Why Do We Learn STEM?</a>
+          <a href="#">Sed do eiusmod tempor incididunt labore</a>
           <span class="date">February 2026</span>
         </li>
         <li>
-          <a href="/essays/who-was-i.html">Who Was I (Part I)</a>
+          <a href="#">Ut enim ad minim veniam quis nostrud</a>
           <span class="date">February 2026</span>
+        </li>
+        <li>
+          <a href="#">Duis aute irure dolor in reprehenderit</a>
+          <span class="date">December 2025</span>
+        </li>
+        <li>
+          <a href="#">Excepteur sint occaecat cupidatat non</a>
+          <span class="date">October 2025</span>
         </li>
       </ul>
     </section>
 
-    <!-- About blurb: edit in content/home.md -->
-    <section>
-      <h2>Research</h2>
-      <p>Papert Lab investigates how students solve complex problems and how intelligent systems can scaffold deeper thinking. Our work spans requirement engineering pedagogy, self-directed learning, and context engineering for large language models.</p>
-      <p>Named for <a href="https://en.wikipedia.org/wiki/Seymour_Papert">Seymour Papert</a> (1928–2016), whose constructionist theory of learning remains foundational to our approach.</p>
+    <!-- ────────────────────────────────────────
+         PAPERS
+         Edit citations in content/papers.md
+    ─────────────────────────────────────────── -->
+    <section id="papers">
+      <h2 class="section-label">Papers</h2>
+      <div class="papers-shelf">
+
+        <figure class="shelf-figure">
+          <img src="/images/bookshelf.png" alt="Research library">
+        </figure>
+
+        <ul class="paper-list">
+          <li><span class="paper-year">2026</span></li>
+          <li>
+            Lorem, I., Ipsum, D. (2026). "Consectetur adipiscing elit sed eiusmod tempor incididunt labore." <em>Lorem Conference 2026</em>. [<a href="#">PDF</a>]
+          </li>
+          <li>
+            Ipsum, D., Dolor, S. (2026). "Ut enim ad minim veniam quis nostrud exercitation ullamco." <em>In progress</em>.
+          </li>
+          <li>
+            Lorem, I., Amet, C., Dolor, S. (2026). "Duis aute irure dolor in reprehenderit voluptate velit." <em>In progress</em>.
+          </li>
+          <li><span class="paper-year">2025</span></li>
+          <li>
+            Dolor, S., Sit, A. (2025). "Excepteur sint occaecat cupidatat non proident sunt culpa qui." <em>Adipiscing Journal, 8</em>(2), 1–14. [<a href="#">PDF</a>] [<a href="#">DOI</a>]
+          </li>
+          <li>
+            Amet, C., Consectetur, E., Labore, D. (2025). "Sed ut perspiciatis unde omnis iste natus error sit voluptatem." <em>Lorem Venue 2025</em>. [<a href="#">PDF</a>]
+          </li>
+        </ul>
+
+      </div>
     </section>
 
-    <!-- Papers: edit in content/papers.md -->
-    <section>
-      <h2>Papers</h2>
-      <ul class="paper-list">
+    <!-- ────────────────────────────────────────
+         ABOUT
+         Edit content/about.md
+    ─────────────────────────────────────────── -->
+    <section id="about">
+      <h2 class="section-label">About</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit.</p>
+      <p>Named for <a href="https://en.wikipedia.org/wiki/Seymour_Papert">Seymour Papert</a> (1928–2016). Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia.</p>
+    </section>
+
+    <!-- ── Principles (deep blue callout) ── -->
+    <div class="callout">
+      <h2 class="section-label">Principles</h2>
+      <ul class="principles">
         <li>
-          Mitchell-Pullman, H. (2026). "Software Testing as a Pedagogical Vehicle for Requirement Engineering." <em>AIED BlueSky 2026</em>. [<a href="#">PDF</a>]
+          <span class="principle-num">01</span>
+          <div>
+            <p class="principle-title">Construction over consumption</p>
+            <p class="principle-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation.</p>
+          </div>
         </li>
         <li>
-          Mitchell-Pullman, H., Vadaparty, A. (2026). "Testing and Specification for AI-Assisted Programming." <em>In progress</em>.
+          <span class="principle-num">02</span>
+          <div>
+            <p class="principle-title">Theories before systems</p>
+            <p class="principle-body">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt in culpa.</p>
+          </div>
+        </li>
+        <li>
+          <span class="principle-num">03</span>
+          <div>
+            <p class="principle-title">Requirement engineering as the core skill</p>
+            <p class="principle-body">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis.</p>
+          </div>
+        </li>
+        <li>
+          <span class="principle-num">04</span>
+          <div>
+            <p class="principle-title">Honest evaluation</p>
+            <p class="principle-body">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+          </div>
         </li>
       </ul>
-      <p><a href="/papers">All papers &rarr;</a></p>
+    </div>
+
+    <!-- ── People ── -->
+    <section>
+      <h2 class="section-label">People</h2>
+      <ul class="people-list">
+        <li>
+          <span class="people-name">Hudson Mitchell-Pullman</span>
+          <p class="people-role">Founder — Lorem ipsum dolor sit amet, consectetur adipiscing elit. Emergent Ventures grantee. Summer 2026 RA at Virginia Tech.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── Collaborators ── -->
+    <section>
+      <h2 class="section-label">Collaborators</h2>
+      <ul class="people-list">
+        <li>
+          <span class="people-name">Annapurna Vadaparty</span>
+          <p class="people-role">UC San Diego — CS education, AI in introductory programming.</p>
+        </li>
+        <li>
+          <span class="people-name">Qianou (Christina) Ma</span>
+          <p class="people-role">Carnegie Mellon University — LLMs for requirement discovery, calculus education.</p>
+        </li>
+        <li>
+          <span class="people-name">David Smith</span>
+          <p class="people-role">Virginia Tech — software engineering education.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ────────────────────────────────────────
+         DONORS
+         Edit content/donors.md
+    ─────────────────────────────────────────── -->
+    <section id="donors">
+      <h2 class="section-label">Donors</h2>
+
+      <div class="grant-item">
+        <div class="grant-header">
+          <span class="grant-org">Emergent Ventures</span>
+          <span class="grant-amount">$20,000</span>
+        </div>
+        <p class="grant-desc">Mercatus Center, George Mason University — CS education research, 2026.</p>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <h2 class="section-label">Individual Supporters</h2>
+        <ul class="people-list">
+          <li>
+            <span class="people-name" style="font-style:italic; font-weight:400; color:var(--muted);">Names listed with permission.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 2.5rem;">
+        <h2 class="section-label">Support Our Work</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore. Contact us at <a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a>.</p>
+      </div>
+    </section>
+
+    <!-- ── Contact ── -->
+    <section id="contact">
+      <h2 class="section-label">Contact</h2>
+      <p><a href="mailto:hudson@papertlab.org">hudson@papertlab.org</a></p>
+      <p><a href="https://github.com/Papert-Lab">github.com/Papert-Lab</a></p>
     </section>
 
   </div>
@@ -83,18 +218,18 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-brand-col">
-        <a href="/" class="footer-name">Papert Lab</a>
+        <a href="#" class="footer-name">Papert Lab</a>
         <p class="footer-tagline">Independent research on cognition, computing, and education. San Diego, CA.</p>
       </div>
       <div class="footer-col">
         <h3>Research</h3>
-        <a href="/papers">Papers</a>
-        <a href="/essays">Essays</a>
+        <a href="#papers">Papers</a>
+        <a href="#essays">Essays</a>
       </div>
       <div class="footer-col">
         <h3>Lab</h3>
-        <a href="/about">About</a>
-        <a href="/donors">Donors</a>
+        <a href="#about">About</a>
+        <a href="#donors">Donors</a>
       </div>
       <div class="footer-col">
         <h3>Contact</h3>
