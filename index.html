@@ -11,6 +11,7 @@
     <nav>
       <a href="/" class="site-name"><img src="images/layers/chalk-text.png" alt="Papert Lab"></a>
       <div class="nav-links">
+        <a href="#manifesto">Manifesto</a>
         <a href="#essays">Essays</a>
         <a href="#papers">Papers</a>
         <a href="#about">About</a>
@@ -46,27 +47,25 @@
       <h2 class="section-heading">Manifesto</h2>
       <img src="images/manifesto.png" alt="" class="manifesto-image reveal"
            loading="lazy" decoding="async" width="2406" height="1760">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-      <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+      <div class="md-content" data-src="content/manifesto.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
 
-    <!-- Anchor sections -->
+    <!-- Sections — content loaded from /content/*.md -->
     <section class="anchor-section reveal" id="essays">
       <h2 class="section-heading">Essays</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <div class="md-content" data-src="content/essays.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
     <section class="anchor-section reveal" id="papers">
       <h2 class="section-heading">Papers</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <div class="md-content" data-src="content/papers.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
     <section class="anchor-section reveal" id="about">
       <h2 class="section-heading">About</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <div class="md-content" data-src="content/about.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
     <section class="anchor-section reveal" id="donors">
       <h2 class="section-heading">Donors</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <div class="md-content" data-src="content/donors.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
   </main>
 
@@ -138,6 +137,17 @@
     } else {
       document.getElementById('site-header').classList.add('scrolled');
     }
+
+    // ── Load content from .md files ──
+    document.querySelectorAll('.md-content[data-src]').forEach(el => {
+      fetch(el.dataset.src)
+        .then(r => r.ok ? r.text() : null)
+        .then(md => {
+          if (!md) return;
+          el.innerHTML = md.split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
+        })
+        .catch(() => {}); // keep fallback lorem ipsum
+    });
   </script>
 </body>
 </html>
