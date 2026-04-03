@@ -269,8 +269,7 @@
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
       s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
-        const newTab = url.endsWith('.pdf') ? ' target="_blank" rel="noopener"' : '';
-        return '<a href="' + url + '"' + newTab + '>' + text + '</a>';
+        return '<a href="' + url + '" target="_blank" rel="noopener">' + text + '</a>';
       });
       return s;
     }
