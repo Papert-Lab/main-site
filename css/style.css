@@ -80,14 +80,16 @@ nav {
   color: var(--text);
   text-decoration: none;
   letter-spacing: 0.01em;
+  /* GSAP controls opacity via inline style during scroll animation.
+     The .scrolled class is a fallback for after the pin ends. */
   opacity: 0;
-  transition: opacity 0.35s ease;
   pointer-events: none;
 }
 
 header.scrolled .site-name {
   opacity: 1;
   pointer-events: auto;
+  transition: opacity 0.3s ease;
 }
 
 .nav-links {
@@ -127,15 +129,15 @@ main {
    ═══════════════════════════════════ */
 
 .hero {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   text-align: center;
   /* Break out of max-width */
   max-width: none;
   margin-left: calc((var(--max-width) - 85vw) / 2);
   margin-right: calc((var(--max-width) - 85vw) / 2);
-  /* Vertical breathing room */
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  /* Minimal vertical padding — the image IS the section */
+  padding-top: 0.5rem;
+  padding-bottom: 0;
 }
 
 .hero-image-wrapper {
@@ -160,17 +162,7 @@ main {
     black 100%
   );
 
-  /* Clip path for final crop to chalkboard */
-  --clip-top: 0%;
-  --clip-right: 0%;
-  --clip-bottom: 0%;
-  --clip-left: 0%;
-  clip-path: inset(
-    var(--clip-top)
-    var(--clip-right)
-    var(--clip-bottom)
-    var(--clip-left)
-  );
+  /* No clip-path needed for Approach A — mask handles the dissolve */
 }
 
 .hero-image {
@@ -351,11 +343,8 @@ footer a:hover {
 @media (prefers-reduced-motion: reduce) {
   .hero-image-wrapper {
     --mask-stop: 0% !important;
-    --clip-top: 0% !important;
-    --clip-right: 0% !important;
-    --clip-bottom: 0% !important;
-    --clip-left: 0% !important;
     transform: none !important;
+    opacity: 1 !important;
   }
 
   .site-name {

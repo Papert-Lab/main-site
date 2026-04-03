@@ -116,7 +116,6 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      // Static layout: show header name immediately, no animation
       document.getElementById('site-header').classList.add('scrolled');
     } else {
       gsap.registerPlugin(ScrollTrigger);
@@ -124,67 +123,66 @@
       const header = document.getElementById('site-header');
       const hero = document.getElementById('hero');
       const wrapper = document.getElementById('hero-image-wrapper');
-      const heroImg = wrapper.querySelector('img');
 
-      // ── APPROACH C: Simple confident sticky ──
-      // Image scrolls naturally. When chalkboard reaches header, it sticks.
-      // Apple-like restraint — no fancy dissolve, just physics.
+      // ── APPROACH A: Mask dissolve with opacity handoff ──
+      // Pinned hero dissolves over 400px. Fog rises from bottom.
+      // Image fades to background, header name appears.
 
-      // Pin the hero section during the animation
+      const siteName = document.querySelector('.site-name');
+
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
-          end: '+=500',
+          end: '+=400',
           scrub: 0.5,
           pin: true,
           anticipatePin: 1,
         }
       });
 
-      // Phase 1 (0-20%): Slight parallax
+      // Phase 1 (0-20%): Gentle parallax
       heroTl.to(wrapper, {
-        y: -30,
+        y: -15,
         ease: 'none',
         duration: 0.2,
       });
 
-      // Phase 2 (20-60%): Cream mask rises from bottom, hides desk/bookshelf
-      // Uses CSS mask-image animated via a custom property
+      // Phase 2 (10-60%): Mask rises, fog hides desk/bookshelf/turtle
       heroTl.to(wrapper, {
         '--mask-stop': '45%',
         ease: 'power1.in',
-        duration: 0.4,
-      }, 0.2);
+        duration: 0.5,
+      }, 0.1);
 
-      // Phase 3 (60-100%): Scale down + translate up toward header
+      // Phase 3 (60-85%): Continue mask + fade opacity
       heroTl.to(wrapper, {
-        scale: 0.35,
-        y: () => {
-          // Calculate distance from hero center to header center
-          const headerRect = header.getBoundingClientRect();
-          const heroRect = hero.getBoundingClientRect();
-          return -(heroRect.height * 0.3);
-        },
-        '--mask-stop': '70%',
-        '--clip-top': '0%',
-        '--clip-bottom': '55%',
-        '--clip-left': '20%',
-        '--clip-right': '20%',
-        transformOrigin: '50% 15%',
-        ease: 'power2.inOut',
-        duration: 0.4,
+        '--mask-stop': '75%',
+        opacity: 0.4,
+        y: -30,
+        ease: 'power1.in',
+        duration: 0.25,
       }, 0.6);
 
-      // Fade in header site-name as hero animation completes
-      heroTl.to('.site-name', {
-        opacity: 1,
-        pointerEvents: 'auto',
-        ease: 'power1.in',
+      // Phase 4 (85-100%): Full fade out
+      heroTl.to(wrapper, {
+        opacity: 0,
+        ease: 'power2.in',
         duration: 0.15,
       }, 0.85);
 
-      // After scroll past pinned section, keep header name visible
+      // Fade in header name starting at 70%
+      heroTl.fromTo(siteName, {
+        opacity: 0,
+        pointerEvents: 'none',
+      }, {
+        opacity: 1,
+        pointerEvents: 'auto',
+        ease: 'power1.in',
+        duration: 0.3,
+      }, 0.7);
+
+      // Maintain header state after scrolling past pin
       ScrollTrigger.create({
         trigger: hero,
         start: 'bottom top',
