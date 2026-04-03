@@ -20,36 +20,32 @@
   </header>
 
   <main>
-    <!-- Layered hero -->
-    <section class="hero-layers" id="hero">
-      <div class="layer" id="layer-chalkboard"><img src="images/layers/chalkboard.png" alt="" width="2001" height="1551"></div>
-      <div class="layer" id="layer-bookshelf"><img src="images/layers/bookshelf.png" alt="" width="2176" height="1263"></div>
-      <div class="layer" id="layer-desk"><img src="images/layers/desk.png" alt="" width="969" height="752"></div>
-      <div class="layer" id="layer-text"><img src="images/layers/chalk-text.png" alt="Papert Lab" width="1265" height="691"></div>
-      <div class="layer" id="layer-laptop"><img src="images/layers/laptop.png" alt="" width="608" height="332"></div>
-      <div class="layer" id="layer-lamp"><img src="images/layers/lamp.png" alt="" width="524" height="286"></div>
-      <div class="layer" id="layer-coffee-mug"><img src="images/layers/coffee-mug.png" alt="" width="205" height="112"></div>
-      <div class="layer" id="layer-photo-frame"><img src="images/layers/photo-frame.png" alt="" width="218" height="127"></div>
-      <div class="layer" id="layer-rubiks-cube"><img src="images/layers/rubiks-cube.png" alt="" width="264" height="292"></div>
-      <div class="layer" id="layer-floor-books"><img src="images/layers/floor-books.png" alt="" width="504" height="239"></div>
-      <div class="layer" id="layer-turtle"><img src="images/layers/turtle.png" alt="" width="339" height="250"></div>
-      <div class="layer" id="layer-small-object"><img src="images/layers/small-object.png" alt="" width="119" height="179"></div>
-    </section>
-
-    <!-- Manifesto image -->
-    <section class="manifesto-image-section reveal" id="manifesto-image">
-      <img src="images/manifesto.png"
-           alt="Students building with LEGO robotics"
-           class="manifesto-image"
-           loading="lazy"
-           decoding="async"
-           width="2406"
-           height="1760">
+    <!-- Hero: no-chalk base + chalk overlay that erases on scroll -->
+    <section class="hero" id="hero">
+      <div class="hero-container" id="hero-container">
+        <!-- Base image WITHOUT chalk text -->
+        <picture>
+          <source type="image/webp"
+                  srcset="images/hero-nochalk-600.webp 600w, images/hero-nochalk-1000.webp 1000w, images/hero-nochalk-2000.webp 2000w"
+                  sizes="(max-width: 500px) 100vw, 85vw">
+          <img src="images/hero-nochalk.png"
+               alt="Papert Lab — chalkboard, desk, bookshelf, and turtle"
+               class="hero-image"
+               loading="eager" decoding="async" fetchpriority="high"
+               width="1926" height="1192">
+        </picture>
+        <!-- Chalk text overlay — erases on scroll -->
+        <div class="hero-overlay" id="overlay-chalk">
+          <img src="images/layers/chalk-text.png" alt="Papert Lab" width="1265" height="691">
+        </div>
+      </div>
     </section>
 
     <!-- Manifesto -->
     <section class="manifesto reveal" id="manifesto">
       <h2 class="section-heading">Manifesto</h2>
+      <img src="images/manifesto.png" alt="" class="manifesto-image reveal"
+           loading="lazy" decoding="async" width="2406" height="1760">
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
       <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
       <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
@@ -58,80 +54,57 @@
     <!-- Anchor sections -->
     <section class="anchor-section reveal" id="essays">
       <h2 class="section-heading">Essays</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
     </section>
-
     <section class="anchor-section reveal" id="papers">
       <h2 class="section-heading">Papers</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
     </section>
-
     <section class="anchor-section reveal" id="about">
       <h2 class="section-heading">About</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
     </section>
-
     <section class="anchor-section reveal" id="donors">
       <h2 class="section-heading">Donors</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Papert Lab &middot; hudson [at] papertlab [dot] org &middot; <a href="https://github.com/Papert-Lab">GitHub</a></p>
+    <p>&copy; 2026 Papert Lab &middot; <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a> &middot; <a href="https://github.com/Papert-Lab">GitHub</a></p>
   </footer>
 
-  <!-- GSAP + ScrollTrigger via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 
   <script>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (prefersReducedMotion) {
-      document.getElementById('site-header').classList.add('scrolled');
-      document.querySelectorAll('.layer').forEach(el => { el.style.opacity = 1; });
-    } else {
+    // ── Scroll animations ──
+    if (!prefersReducedMotion) {
       gsap.registerPlugin(ScrollTrigger);
 
       const header = document.getElementById('site-header');
       const hero = document.getElementById('hero');
       const siteName = document.querySelector('.site-name');
 
-      // Entrance handled by CSS @keyframes (works in background tabs).
-
-      // ── Scroll dissolution: scene gently comes apart ──
-      // Floor objects fade first, chalk text last
-      const dissolveConfig = [
-        { sel: '#layer-turtle',       y: 10,  x: -15, start: 0    },
-        { sel: '#layer-floor-books',  y: 8,   x: 10,  start: 0    },
-        { sel: '#layer-small-object', y: 12,  x: -6,  start: 0.05 },
-        { sel: '#layer-rubiks-cube',  y: 12,  x: -8,  start: 0.08 },
-        { sel: '#layer-lamp',         y: -8,  x: 8,   start: 0.12 },
-        { sel: '#layer-coffee-mug',   y: 10,  x: -5,  start: 0.12 },
-        { sel: '#layer-photo-frame',  y: -5,  x: 12,  start: 0.15 },
-        { sel: '#layer-laptop',       y: 5,   x: 10,  start: 0.18 },
-        { sel: '#layer-desk',         y: 15,  x: 0,   start: 0.2  },
-        { sel: '#layer-bookshelf',    y: 10,  x: -20, start: 0.25 },
-        { sel: '#layer-chalkboard',   y: 10,  x: 0,   start: 0.3, endOpacity: 0.15 },
-        { sel: '#layer-text',         y: -15, x: 0,   start: 0.35 },
-      ];
-
-      dissolveConfig.forEach(({ sel, y, x, start, endOpacity }) => {
-        gsap.to(sel, {
-          y, x,
-          opacity: endOpacity !== undefined ? endOpacity : 0,
-          ease: 'power1.in',
+      // Chalk text erases right-to-left on scroll
+      // Uses absolute scroll position: starts at 10px scrolled, done by 400px scrolled
+      gsap.fromTo('#overlay-chalk',
+        { '--erase': '0%' },
+        {
+          '--erase': '100%',
+          ease: 'none',
           scrollTrigger: {
-            trigger: hero,
-            start: `top+=${start * 100}% top`,
-            end: 'bottom 20%',
-            scrub: 0.4,
+            trigger: 'body',
+            start: '10px top',
+            end: '280px top',
+            scrub: 0.3,
           }
-        });
-      });
+        }
+      );
 
-      // ── Header name fade-in ──
+      // Header name fades in
       ScrollTrigger.create({
         trigger: hero,
         start: 'center 30%',
@@ -156,19 +129,15 @@
         onLeaveBack: () => header.classList.remove('scrolled'),
       });
 
-      // ── Scroll-reveal for content sections ──
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-            }
-          });
-        },
+      // Scroll-reveal
+      const obs = new IntersectionObserver(
+        (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
         { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
       );
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-      document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+    } else {
+      document.getElementById('site-header').classList.add('scrolled');
     }
   </script>
 </body>

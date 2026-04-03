@@ -1,4 +1,4 @@
-/* Papert Lab — Layered hero, single-page site */
+/* Papert Lab — Single-page site with micro-animations */
 
 :root {
   --bg: #f5f0e6;
@@ -11,11 +11,7 @@
   --max-width: 640px;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
@@ -28,57 +24,39 @@ body {
   line-height: 1.7;
   color: var(--text);
   background-color: var(--bg);
-  position: relative;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Paper texture — layered grain */
+/* Paper texture */
 body::before {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: 9998;
-  opacity: 0.12;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 512px 512px;
+  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  background-size: 512px;
 }
 
 body::after {
   content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
 }
 
-
-/* ═══════════════════════════════════
-   Header
-   ═══════════════════════════════════ */
-
-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bg);
-}
+/* ── Header ── */
+header { position: sticky; top: 0; z-index: 100; background: var(--bg); }
 
 nav {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 1.4rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -110,192 +88,56 @@ header.scrolled .site-name {
   font-weight: 400;
 }
 
-.nav-links a {
-  color: var(--text-tertiary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
+.nav-links a { color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--accent); }
 
-.nav-links a:hover {
-  color: var(--accent);
-}
+/* ── Main ── */
+main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
 
-
-/* ═══════════════════════════════════
-   Main container
-   ═══════════════════════════════════ */
-
-main {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 1.5rem 2rem;
-}
-
-
-/* ═══════════════════════════════════
-   Layered Hero
-   ═══════════════════════════════════ */
-
-/*
-  Reference composition: hero.png is 1936 x 1202.
-  All layer positions are percentages of the container,
-  derived from the pixel positions in the composite.
-  Container uses the same aspect ratio: 1936/1202 = 1.61
-*/
-
-.hero-layers {
-  position: relative;
-  width: 85vw;
-  max-width: 1024px;
-  /* Maintain aspect ratio of original hero: 1202/1936 ≈ 62.1% */
-  aspect-ratio: 1936 / 1202;
-  margin: 0.5rem auto 0;
-  /* Break out of max-width */
+/* ── Hero ── */
+.hero {
+  text-align: center;
+  margin-bottom: 1rem;
+  max-width: none;
   margin-left: calc((var(--max-width) - 85vw) / 2);
   margin-right: calc((var(--max-width) - 85vw) / 2);
-  overflow: visible;
+  padding-top: 16vh;
+  padding-bottom: 8vh;
 }
 
-/* CSS entrance animation — works even in background tabs */
-@keyframes layerFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.layer {
-  position: absolute;
+.hero-container {
+  position: relative;
+  display: inline-block;
   will-change: transform, opacity;
-  animation: layerFadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
-/* Stagger: background first, furniture, desk objects, floor, text last */
-#layer-chalkboard   { animation-delay: 0.1s; }
-#layer-bookshelf    { animation-delay: 0.16s; }
-#layer-desk         { animation-delay: 0.24s; }
-#layer-laptop       { animation-delay: 0.32s; }
-#layer-lamp         { animation-delay: 0.36s; }
-#layer-coffee-mug   { animation-delay: 0.40s; }
-#layer-photo-frame  { animation-delay: 0.44s; }
-#layer-rubiks-cube  { animation-delay: 0.48s; }
-#layer-floor-books  { animation-delay: 0.52s; }
-#layer-turtle       { animation-delay: 0.56s; }
-#layer-small-object { animation-delay: 0.60s; }
-#layer-text         { animation-delay: 0.68s; animation-duration: 0.6s; }
-
-.layer img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+@keyframes heroEntrance {
+  0% { opacity: 0; transform: scale(0.96) translateY(15px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/*
-  Layer positions derived from hero.png (1936x1202).
-  All values are percentages of the hero container.
-*/
+.hero-container { animation: heroEntrance 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0.1s both; }
 
-/* Chalkboard — wide background, right of bookshelf */
-#layer-chalkboard {
-  top: 8%;
-  left: 12%;
-  width: 85%;
+.hero-image { width: 85vw; max-width: 1024px; height: auto; display: block; }
+
+/* Overlays positioned on top of composite */
+.hero-overlay { position: absolute; pointer-events: none; }
+.hero-overlay img { width: 100%; height: auto; display: block; }
+
+/* Chalk text on the chalkboard face. Clipped to the dark board area
+   so it doesn't overlap the desk/laptop baked into the base image. */
+#overlay-chalk {
+  top: -2%;
+  left: 24%;
+  width: 55%;
+  /* Clip bottom so text stays within chalkboard face only */
+  clip-path: inset(0% 0% 32% 0%);
+  --erase: 0%;
+  -webkit-mask-image: linear-gradient(to right, black 0%, black calc(100% - var(--erase)), transparent calc(100% - var(--erase) + 5%), transparent 100%);
+  mask-image: linear-gradient(to right, black 0%, black calc(100% - var(--erase)), transparent calc(100% - var(--erase) + 5%), transparent 100%);
 }
-#layer-chalkboard img { width: 100%; height: auto; }
 
-/* Bookshelf — tall, far left. Image 2176x1263 has wide transparent padding;
-   actual bookshelf ~25% of image width. Scale so shelf spans top-to-floor. */
-#layer-bookshelf {
-  top: -8%;
-  left: -18%;
-  width: 54%;
-}
-#layer-bookshelf img { width: 100%; height: auto; }
-
-/* Chalk text — on the dark face of the chalkboard */
-#layer-text {
-  top: 18%;
-  left: 28%;
-  width: 36%;
-}
-#layer-text img { width: 100%; height: auto; }
-
-/* Desk — center-right, overlapping bottom of chalkboard */
-#layer-desk {
-  top: 40%;
-  left: 38%;
-  width: 48%;
-}
-#layer-desk img { width: 100%; height: auto; }
-
-/* Laptop — on desk surface, left-center */
-#layer-laptop {
-  top: 38%;
-  left: 44%;
-  width: 22%;
-}
-#layer-laptop img { width: 100%; height: auto; }
-
-/* Lamp — on desk, right side */
-#layer-lamp {
-  top: 34%;
-  left: 68%;
-  width: 18%;
-}
-#layer-lamp img { width: 100%; height: auto; }
-
-/* Coffee mug — on desk surface, left of laptop */
-#layer-coffee-mug {
-  top: 39%;
-  left: 44%;
-  width: 7%;
-}
-#layer-coffee-mug img { width: 100%; height: auto; }
-
-/* Photo frame (LEGO arch model) — on desk, right of laptop */
-#layer-photo-frame {
-  top: 37%;
-  left: 60%;
-  width: 8%;
-}
-#layer-photo-frame img { width: 100%; height: auto; }
-
-/* Rubik's cube — on desk surface, far left */
-#layer-rubiks-cube {
-  top: 46%;
-  left: 37%;
-  width: 6%;
-}
-#layer-rubiks-cube img { width: 100%; height: auto; }
-
-/* Floor books — stacked on floor, between bookshelf and desk */
-#layer-floor-books {
-  top: 76%;
-  left: 16%;
-  width: 18%;
-}
-#layer-floor-books img { width: 100%; height: auto; }
-
-/* Turtle — floor, center-right, between desk legs */
-#layer-turtle {
-  top: 78%;
-  left: 38%;
-  width: 13%;
-}
-#layer-turtle img { width: 100%; height: auto; }
-
-/* Small object (Mindstorms book) — floor, far left below bookshelf */
-#layer-small-object {
-  top: 66%;
-  left: 7%;
-  width: 5%;
-}
-#layer-small-object img { width: 100%; height: auto; }
-
-
-/* ═══════════════════════════════════
-   Section headings
-   ═══════════════════════════════════ */
-
+/* ── Section headings ── */
 .section-heading {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -306,160 +148,60 @@ main {
   margin-bottom: 1.8rem;
 }
 
-
-/* ═══════════════════════════════════
-   Manifesto image
-   ═══════════════════════════════════ */
-
-.manifesto-image-section {
+/* ── Manifesto image (inside manifesto section, after heading) ── */
+.manifesto .manifesto-image {
+  width: 100%;
+  height: auto;
   margin-bottom: 2rem;
-  margin-top: 3rem;
+  border-radius: 4px;
 }
 
-.manifesto-image-section .manifesto-image {
-  width: calc(100% + 3rem);
-  margin-left: -1.5rem;
-  height: 280px;
-  object-fit: cover;
-  object-position: center 40%;
-  border-radius: 0;
+/* ── Manifesto text ── */
+.manifesto { margin-bottom: 4rem; }
+.manifesto p { font-size: 1rem; line-height: 1.75; color: var(--text-muted); margin-bottom: 1.2rem; }
+.manifesto p:last-child { margin-bottom: 0; }
+
+/* ── Anchor sections ── */
+.anchor-section { margin-bottom: 4rem; padding-top: 1rem; }
+.anchor-section p { font-size: 1rem; line-height: 1.75; color: var(--text-muted); }
+
+/* ── Scroll-reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.25, 0.1, 0.25, 1),
+              transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 
-
-/* ═══════════════════════════════════
-   Manifesto text
-   ═══════════════════════════════════ */
-
-.manifesto {
-  margin-bottom: 4rem;
-}
-
-.manifesto p {
-  font-size: 1rem;
-  line-height: 1.75;
-  color: var(--text-muted);
-  margin-bottom: 1.2rem;
-}
-
-.manifesto p:last-child {
-  margin-bottom: 0;
-}
-
-
-/* ═══════════════════════════════════
-   Anchor sections (placeholder)
-   ═══════════════════════════════════ */
-
-.anchor-section {
-  margin-bottom: 4rem;
-  padding-top: 1rem;
-}
-
-.anchor-section p {
-  font-size: 1rem;
-  line-height: 1.75;
-  color: var(--text-muted);
-}
-
-
-/* ═══════════════════════════════════
-   Footer
-   ═══════════════════════════════════ */
-
+/* ── Footer ── */
 footer {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 2rem 1.5rem 3rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--text-tertiary);
   border-top: 1px solid var(--card-border);
 }
+footer a { color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+footer a:hover { color: var(--accent); }
 
-footer a {
-  color: var(--text-tertiary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-footer a:hover {
-  color: var(--accent);
-}
-
-
-/* ═══════════════════════════════════
-   Scroll-reveal animations
-   ═══════════════════════════════════ */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
-              transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-/* ═══════════════════════════════════
-   Reduced motion
-   ═══════════════════════════════════ */
-
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .layer {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-  }
-
-  .site-name {
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
+  .hero-container { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .site-name { opacity: 1 !important; pointer-events: auto !important; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  #overlay-chalk { --erase: 0% !important; }
 }
 
-
-/* ═══════════════════════════════════
-   Responsive — mobile
-   ═══════════════════════════════════ */
-
+/* ── Mobile ── */
 @media (max-width: 500px) {
-  nav {
-    padding: 1rem 1rem;
-  }
-
-  .nav-links {
-    gap: 1.2rem;
-    font-size: 12px;
-    letter-spacing: 2px;
-  }
-
-  main {
-    padding: 0 1rem 2rem;
-  }
-
-  .hero-layers {
-    width: 100vw;
-    margin-left: calc((var(--max-width) - 100vw) / 2);
-    margin-right: calc((var(--max-width) - 100vw) / 2);
-  }
-
-  .manifesto-image-section .manifesto-image {
-    height: 180px;
-    width: calc(100% + 2rem);
-    margin-left: -1rem;
-  }
-
-  footer {
-    padding: 1.5rem 1rem 2rem;
-  }
+  nav { padding: 1rem; }
+  .nav-links { gap: 1.2rem; font-size: 12px; letter-spacing: 2px; }
+  main { padding: 0 1rem 2rem; }
+  .hero { margin-left: -1rem; margin-right: -1rem; }
+  .hero-image { width: 100%; max-width: none; }
+  .manifesto-image-section .manifesto-image { width: calc(100% + 2rem); margin-left: -1rem; height: 180px; }
+  footer { padding: 1.5rem 1rem 2rem; }
 }
