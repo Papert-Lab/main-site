@@ -180,9 +180,7 @@ main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
 }
 
 .content-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  display: block;
   padding: 0.6rem 0;
   border-bottom: 1px solid var(--card-border);
   font-size: 0.95rem;
