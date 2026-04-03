@@ -161,16 +161,18 @@
       }
 
       function onWheel(e) {
-        if (animating) { e.preventDefault(); return; }
-
-        // Re-engage when scrolled to top
-        if (eraseComplete && window.scrollY === 0 && e.deltaY < 0) {
-          reEngageErase();
-          autoAnimate(0, 750);
+        // Once erase is done, let scroll through immediately
+        if (eraseComplete) {
+          // Re-engage when scrolled back to top
+          if (window.scrollY === 0 && e.deltaY < 0) {
+            reEngageErase();
+            autoAnimate(0, 500);
+            e.preventDefault();
+          }
           return;
         }
 
-        if (eraseComplete) return;
+        if (animating) { e.preventDefault(); return; }
         e.preventDefault();
 
         const delta = Math.abs(e.deltaY);
@@ -178,7 +180,7 @@
 
         if (fast) {
           if (e.deltaY > 0) {
-            autoAnimate(1, 450, () => completeErase());
+            autoAnimate(1, 300, () => completeErase());
           } else {
             autoAnimate(0, 750);
           }
@@ -219,7 +221,7 @@
         const velocity = Math.abs(dy) / Math.max(dt, 1);
         if (velocity > 1.5) {
           if (dy > 0) {
-            autoAnimate(1, 450, () => completeErase());
+            autoAnimate(1, 300, () => completeErase());
           } else {
             autoAnimate(0, 750);
           }
