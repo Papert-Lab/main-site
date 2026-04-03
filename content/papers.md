@@ -1,3 +1,5 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Preprint to be posted soon...
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+---
+
+- Mitchell-Pullman, H. (2026). "Software Testing as a Pedagogical Vehicle for Requirement Engineering." *AIED BlueSky*. [PDF](#)

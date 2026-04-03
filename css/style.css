@@ -14,7 +14,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }
 
@@ -94,13 +93,10 @@ header.scrolled .site-name {
 /* ── Main ── */
 main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
 
-/* ── Hero ── */
+/* ── Hero (outside <main>, full-width) ── */
 .hero {
   text-align: center;
-  margin-bottom: 1rem;
-  max-width: none;
-  margin-left: calc((var(--max-width) - 85vw) / 2);
-  margin-right: calc((var(--max-width) - 85vw) / 2);
+  margin-bottom: 0;
   padding-top: 16vh;
   padding-bottom: 8vh;
 }
@@ -172,7 +168,52 @@ main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
 
 /* ── Anchor sections ── */
 .anchor-section { margin-bottom: 4rem; padding-top: 1rem; }
-.anchor-section p { font-size: 1rem; line-height: 1.75; color: var(--text-muted); }
+.anchor-section p { font-size: 1rem; line-height: 1.75; color: var(--text-muted); margin-bottom: 1rem; }
+.anchor-section a { color: var(--text); text-decoration: underline; text-underline-offset: 2px; }
+.anchor-section a:hover { color: var(--accent); }
+
+/* Content list (from md files) */
+.content-list {
+  list-style: none;
+  margin-top: 1.5rem;
+}
+
+.content-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.content-list li:first-child {
+  border-top: 1px solid var(--card-border);
+}
+
+.content-list li a { color: var(--text); text-decoration: none; }
+.content-list li a:hover { text-decoration: underline; }
+
+.content-list .date {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+.content-subheading {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-tertiary);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
 
 /* ── Scroll-reveal ── */
 .reveal {
@@ -209,7 +250,7 @@ footer a:hover { color: var(--accent); }
   nav { padding: 1rem; }
   .nav-links { gap: 1.2rem; font-size: 12px; letter-spacing: 2px; }
   main { padding: 0 1rem 2rem; }
-  .hero { margin-left: -1rem; margin-right: -1rem; }
+  .hero { padding-top: 8vh; padding-bottom: 4vh; }
   .hero-image { width: 100%; max-width: none; }
   .manifesto-image-section .manifesto-image { width: calc(100% + 2rem); margin-left: -1rem; height: 180px; }
   footer { padding: 1.5rem 1rem 2rem; }

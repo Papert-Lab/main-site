@@ -20,28 +20,26 @@
     </nav>
   </header>
 
-  <main>
-    <!-- Hero: no-chalk base + chalk overlay that erases on scroll -->
-    <section class="hero" id="hero">
-      <div class="hero-container" id="hero-container">
-        <!-- Base image WITHOUT chalk text -->
-        <picture>
-          <source type="image/webp"
-                  srcset="images/hero-nochalk-600.webp 600w, images/hero-nochalk-1000.webp 1000w, images/hero-nochalk-2000.webp 2000w"
-                  sizes="(max-width: 500px) 100vw, 85vw">
-          <img src="images/hero-nochalk.png"
-               alt="Papert Lab — chalkboard, desk, bookshelf, and turtle"
-               class="hero-image"
-               loading="eager" decoding="async" fetchpriority="high"
-               width="1926" height="1192">
-        </picture>
-        <!-- Chalk text overlay — erases on scroll -->
-        <div class="hero-overlay" id="overlay-chalk">
-          <img src="images/layers/chalk-text.png" alt="Papert Lab" width="1265" height="691">
-        </div>
+  <!-- Hero lives outside <main> so GSAP pin-spacer isn't constrained by max-width -->
+  <section class="hero" id="hero">
+    <div class="hero-container" id="hero-container">
+      <picture>
+        <source type="image/webp"
+                srcset="images/hero-nochalk-600.webp 600w, images/hero-nochalk-1000.webp 1000w, images/hero-nochalk-2000.webp 2000w"
+                sizes="(max-width: 500px) 100vw, 85vw">
+        <img src="images/hero-nochalk.png"
+             alt="Papert Lab — chalkboard, desk, bookshelf, and turtle"
+             class="hero-image"
+             loading="eager" decoding="async" fetchpriority="high"
+             width="1926" height="1192">
+      </picture>
+      <div class="hero-overlay" id="overlay-chalk">
+        <img src="images/layers/chalk-text.png" alt="Papert Lab" width="1265" height="691">
       </div>
-    </section>
+    </div>
+  </section>
 
+  <main>
     <!-- Manifesto -->
     <section class="manifesto reveal" id="manifesto">
       <h2 class="section-heading">Manifesto</h2>
@@ -77,6 +75,10 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 
   <script>
+    // Prevent browser from restoring scroll position on refresh (breaks pin)
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ── Scroll animations ──
@@ -87,45 +89,130 @@
       const hero = document.getElementById('hero');
       const siteName = document.querySelector('.site-name');
 
-      // Chalk text erases right-to-left on scroll
-      // Uses absolute scroll position: starts at 10px scrolled, done by 400px scrolled
-      gsap.fromTo('#overlay-chalk',
-        { '--erase': '0%' },
-        {
-          '--erase': '100%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: 'body',
-            start: '10px top',
-            end: '280px top',
-            scrub: 0.3,
-          }
-        }
-      );
+      // ── Scroll-hijack chalk erase ──
+      // Wheel/touch input erases the chalk. Page does NOT scroll until erase completes.
+      const overlay = document.getElementById('overlay-chalk');
+      let eraseProgress = 0;       // 0 → 1
+      let eraseComplete = false;
+      let animating = false;       // true while auto-animation is playing
+      const ERASE_BUDGET = 420;
+      const FAST_THRESHOLD = 80;   // deltaY above this = "fast scroll"
+      const AUTO_DURATION = 350;   // ms for the quick auto-animation
 
-      // Header name writes in sync with chalk erase
-      // Uses the same scroll range as the erase (10px–280px)
-      // Target max-width matches actual image width at 40px height
-      // Image is 1265x691, at 40px tall → width = 40 * 1265/691 ≈ 73px
-      gsap.fromTo('.site-name',
-        { maxWidth: '0px' },
-        {
-          maxWidth: '73px',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: 'body',
-            start: '10px top',
-            end: '280px top',
-            scrub: 0.3,
-            onUpdate: (self) => {
-              const p = self.progress;
-              document.querySelector('.site-name').style.pointerEvents = p > 0.3 ? 'auto' : 'none';
-            },
-            onEnter: () => header.classList.add('scrolled'),
-            onLeaveBack: () => header.classList.remove('scrolled'),
+      function applyErase(p) {
+        overlay.style.setProperty('--erase', (p * 100) + '%');
+        siteName.style.maxWidth = (p * 73) + 'px';
+        siteName.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
+        if (p > 0) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+      }
+
+      // Animate eraseProgress from current to target over duration ms
+      function autoAnimate(target, duration, cb) {
+        animating = true;
+        const start = eraseProgress;
+        const t0 = performance.now();
+        function tick(now) {
+          const t = Math.min((now - t0) / duration, 1);
+          // ease-out cubic
+          const ease = 1 - Math.pow(1 - t, 3);
+          eraseProgress = start + (target - start) * ease;
+          applyErase(eraseProgress);
+          if (t < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            eraseProgress = target;
+            applyErase(target);
+            animating = false;
+            if (cb) cb();
           }
         }
-      );
+        requestAnimationFrame(tick);
+      }
+
+      function completeErase() {
+        eraseComplete = true;
+      }
+
+      function reEngageErase() {
+        eraseComplete = false;
+        eraseProgress = 1;
+      }
+
+      function onWheel(e) {
+        if (animating) { e.preventDefault(); return; }
+
+        // Re-engage when scrolled to top
+        if (eraseComplete && window.scrollY === 0 && e.deltaY < 0) {
+          reEngageErase();
+          autoAnimate(0, 750);
+          return;
+        }
+
+        if (eraseComplete) return;
+        e.preventDefault();
+
+        const delta = Math.abs(e.deltaY);
+        const fast = delta > FAST_THRESHOLD;
+
+        if (fast) {
+          if (e.deltaY > 0) {
+            autoAnimate(1, 200, () => completeErase());
+          } else {
+            autoAnimate(0, 750);
+          }
+        } else {
+          if (e.deltaY > 0) {
+            eraseProgress = Math.min(1, eraseProgress + delta / ERASE_BUDGET);
+          } else {
+            eraseProgress = Math.max(0, eraseProgress - delta / ERASE_BUDGET);
+          }
+          applyErase(eraseProgress);
+          if (eraseProgress >= 1) completeErase();
+        }
+      }
+
+      // Touch support
+      let touchStartY = 0;
+      let lastTouchTime = 0;
+      function onTouchStart(e) {
+        touchStartY = e.touches[0].clientY;
+        lastTouchTime = performance.now();
+      }
+      function onTouchMove(e) {
+        if (animating) { e.preventDefault(); return; }
+
+        const dy = touchStartY - e.touches[0].clientY;
+        const dt = performance.now() - lastTouchTime;
+        touchStartY = e.touches[0].clientY;
+        lastTouchTime = performance.now();
+
+        if (eraseComplete && window.scrollY === 0 && dy < 0) {
+          reEngageErase();
+          autoAnimate(0, 750);
+          return;
+        }
+        if (eraseComplete) return;
+        e.preventDefault();
+
+        const velocity = Math.abs(dy) / Math.max(dt, 1);
+        if (velocity > 1.5) {
+          if (dy > 0) {
+            autoAnimate(1, 200, () => completeErase());
+          } else {
+            autoAnimate(0, 750);
+          }
+        } else {
+          if (dy > 0) eraseProgress = Math.min(1, eraseProgress + dy / ERASE_BUDGET);
+          else eraseProgress = Math.max(0, eraseProgress - Math.abs(dy) / ERASE_BUDGET);
+          applyErase(eraseProgress);
+          if (eraseProgress >= 1) completeErase();
+        }
+      }
+
+      window.addEventListener('wheel', onWheel, { passive: false });
+      window.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
 
       // Scroll-reveal
       const obs = new IntersectionObserver(
@@ -139,14 +226,57 @@
     }
 
     // ── Load content from .md files ──
+    function mdToHtml(md) {
+      const sections = md.split(/\n---\n/);
+      let html = '';
+
+      sections.forEach(section => {
+        const lines = section.trim().split('\n');
+        const isList = lines.every(l => !l.trim() || l.trim().startsWith('- '));
+
+        if (isList && lines.some(l => l.trim().startsWith('- '))) {
+          // Render as styled list
+          html += '<ul class="content-list">';
+          lines.forEach(l => {
+            l = l.trim();
+            if (!l.startsWith('- ')) return;
+            l = l.slice(2);
+            l = renderInline(l);
+            // Check for [title](url "date") pattern
+            l = l.replace(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>\s*"([^"]*)"/,
+              '<a href="$1">$2</a><span class="date">$3</span>');
+            html += '<li>' + l + '</li>';
+          });
+          html += '</ul>';
+        } else {
+          // Render as paragraphs
+          const paras = section.trim().split(/\n\n+/);
+          paras.forEach(p => {
+            p = p.trim();
+            if (!p) return;
+            if (p.startsWith('## ')) {
+              html += '<h3 class="content-subheading">' + p.slice(3) + '</h3>';
+            } else {
+              html += '<p>' + renderInline(p) + '</p>';
+            }
+          });
+        }
+      });
+      return html;
+    }
+
+    function renderInline(s) {
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      return s;
+    }
+
     document.querySelectorAll('.md-content[data-src]').forEach(el => {
       fetch(el.dataset.src)
         .then(r => r.ok ? r.text() : null)
-        .then(md => {
-          if (!md) return;
-          el.innerHTML = md.split(/\n\n+/).map(p => `<p>${p.trim()}</p>`).join('');
-        })
-        .catch(() => {}); // keep fallback lorem ipsum
+        .then(md => { if (md) el.innerHTML = mdToHtml(md); })
+        .catch(() => {});
     });
   </script>
 </body>

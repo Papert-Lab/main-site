@@ -1,3 +1,9 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+In progress...
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+In the meantime, please see [Hudson's blog](https://hudsonmp.github.io/blog).
+
+---
+
+- [Transforming Societies](# "March 2026")
+- [Why Do We Learn STEM?](# "February 2026")
+- [Who Was I (Part I)](# "January 2026")
