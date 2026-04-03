@@ -241,11 +241,16 @@
             l = l.trim();
             if (!l.startsWith('- ')) return;
             l = l.slice(2);
-            l = renderInline(l);
-            // Check for [title](url "date") pattern
-            l = l.replace(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>\s*"([^"]*)"/,
-              '<a href="$1">$2</a><span class="date">$3</span>');
-            html += '<li>' + l + '</li>';
+            // Split on | for left/right columns
+            if (l.includes('|')) {
+              const [left, right] = l.split('|').map(s => s.trim());
+              html += '<li class="two-col"><div class="li-left">' + renderInline(left) + '</div><div class="li-right">' + renderInline(right) + '</div></li>';
+            } else {
+              l = renderInline(l);
+              l = l.replace(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>\s*"([^"]*)"/,
+                '<a href="$1">$2</a><span class="date">$3</span>');
+              html += '<li>' + l + '</li>';
+            }
           });
           html += '</ul>';
         } else {
