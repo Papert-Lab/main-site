@@ -117,6 +117,7 @@
       let eraseComplete = false;
       let animating = false;       // true while auto-animation is playing
       const ERASE_BUDGET = 350;    // total wheel delta to complete erase
+      const FAST_THRESHOLD = 60;   // deltaY above this = fast flick
 
       function applyErase(p) {
         overlay.style.setProperty('--erase', (p * 100) + '%');
@@ -172,12 +173,22 @@
         if (animating) { e.preventDefault(); return; }
         e.preventDefault();
 
-        // Simple proportional — every wheel tick adds to progress uniformly
         const delta = e.deltaY;
+        const absDelta = Math.abs(delta);
+
+        // Fast flick: auto-complete the erase, then release scroll
+        if (absDelta > FAST_THRESHOLD && delta > 0 && eraseProgress < 1) {
+          // Duration proportional to remaining progress — feels uniform
+          const remaining = 1 - eraseProgress;
+          autoAnimate(1, remaining * 300, () => completeErase());
+          return;
+        }
+
+        // Normal: proportional accumulation
         if (delta > 0) {
-          eraseProgress = Math.min(1, eraseProgress + Math.abs(delta) / ERASE_BUDGET);
+          eraseProgress = Math.min(1, eraseProgress + absDelta / ERASE_BUDGET);
         } else {
-          eraseProgress = Math.max(0, eraseProgress - Math.abs(delta) / ERASE_BUDGET);
+          eraseProgress = Math.max(0, eraseProgress - absDelta / ERASE_BUDGET);
         }
         applyErase(eraseProgress);
         if (eraseProgress >= 1) completeErase();
