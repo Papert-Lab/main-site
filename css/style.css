@@ -156,11 +156,6 @@ main {
   overflow: visible;
 }
 
-.layer {
-  position: absolute;
-  will-change: transform, opacity;
-}
-
 /* CSS entrance animation — works even in background tabs */
 @keyframes layerFadeIn {
   from { opacity: 0; transform: translateY(12px); }
@@ -168,6 +163,8 @@ main {
 }
 
 .layer {
+  position: absolute;
+  will-change: transform, opacity;
   animation: layerFadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
@@ -415,6 +412,7 @@ footer a:hover {
   .layer {
     opacity: 1 !important;
     transform: none !important;
+    animation: none !important;
   }
 
   .site-name {
