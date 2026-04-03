@@ -102,6 +102,15 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 
   <script>
+    // Show chalk overlay only after base image loads
+    const heroImg = document.querySelector('.hero-image');
+    const chalkOverlay = document.getElementById('overlay-chalk');
+    if (heroImg.complete) {
+      chalkOverlay.style.opacity = '1';
+    } else {
+      heroImg.addEventListener('load', () => { chalkOverlay.style.opacity = '1'; });
+    }
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // ── Scroll animations ──

@@ -134,6 +134,8 @@ main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
 #overlay-chalk {
   top: -2%;
   left: 24%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
   width: 55%;
   /* Clip bottom so text stays within chalkboard face only */
   clip-path: inset(0% 0% 32% 0%);
