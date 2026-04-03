@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Papert Lab</title>
-
-  <!-- Preload hero image -->
-  <link rel="preload" as="image" type="image/webp" href="images/hero-1024.webp">
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -15,96 +11,74 @@
     <nav>
       <a href="/" class="site-name"><em>Papert Lab</em></a>
       <div class="nav-links">
-        <a href="/essays.html">Essays</a>
-        <a href="/papers.html">Papers</a>
-        <a href="/about.html">About</a>
-        <a href="/donors.html">Donors</a>
+        <a href="#essays">Essays</a>
+        <a href="#papers">Papers</a>
+        <a href="#about">About</a>
+        <a href="#donors">Donors</a>
       </div>
     </nav>
   </header>
 
   <main>
-    <!-- Hero with scroll animation -->
-    <section class="hero" id="hero">
-      <div class="hero-image-wrapper" id="hero-image-wrapper">
-        <picture>
-          <source type="image/webp"
-                  srcset="images/hero.webp 512w, images/hero-1024.webp 1024w"
-                  sizes="(max-width: 500px) 100vw, 70vw">
-          <img src="images/hero.png"
-               alt="Papert Lab — illustration of a chalkboard, desk, bookshelf, and turtle"
-               class="hero-image"
-               loading="eager"
-               decoding="async"
-               fetchpriority="high"
-               width="1024"
-               height="634">
-        </picture>
-      </div>
-    </section>
-
-    <!-- Lab description -->
-    <section class="blurb" id="blurb">
-      <p>Papert Lab is a research collective studying how humans learn to think with computers. We build tools, run experiments, and write about the cognitive machinery of programming, problem-solving, and self-directed learning.</p>
-    </section>
-
-    <!-- Featured work -->
-    <section class="featured" id="featured">
-      <h2 class="section-heading">Featured Work</h2>
-      <div class="card-grid">
-        <article class="card">
-          <div class="card-accent" style="--accent-color: #5C3A1E;"></div>
-          <div class="card-body">
-            <h3 class="card-title">Requirement Engineering via Software Testing in CS1</h3>
-            <p class="card-desc">Using high-level blackbox testing as a pedagogical vehicle to teach requirement specification. Students learn to discover and articulate system requirements through test-case construction.</p>
-            <span class="card-meta">AIED 2026 &middot; BlueSky</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-accent" style="--accent-color: #7B5B3A;"></div>
-          <div class="card-body">
-            <h3 class="card-title">Context Engineering for LLM-Assisted Science</h3>
-            <p class="card-desc">Investigating how the structure and selection of context supplied to language models affects the quality of scientific reasoning, analogous to how requirements shape software outcomes.</p>
-            <span class="card-meta">In Progress</span>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card-accent" style="--accent-color: #9B7D5A;"></div>
-          <div class="card-body">
-            <h3 class="card-title">LLMs as Simulated Students for Requirement Discovery</h3>
-            <p class="card-desc">Exploring whether LLMs that simulate help-seeking behaviors can teach students to write better test cases by forcing them to specify requirements for an underspecified system.</p>
-            <span class="card-meta">CHI 2027 &middot; Planned</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section class="about" id="about">
-      <h2 class="section-heading">About</h2>
-      <p>Named for Seymour Papert, who believed that the best way to learn is to build things that matter. We operate at the intersection of human-computer interaction, learning science, and artificial intelligence &mdash; asking what changes when students have powerful tools and the agency to direct their own learning.</p>
-      <p>Our work draws on cognitive science, software engineering pedagogy, and the constructionist tradition. We care less about whether students can pass a test and more about whether they can specify what a system should do, reason about why it fails, and iteratively refine their mental models until the gap between intention and artifact closes.</p>
+    <!-- Layered hero -->
+    <section class="hero-layers" id="hero">
+      <div class="layer" id="layer-chalkboard"><img src="images/layers/chalkboard.png" alt="" width="2001" height="1551"></div>
+      <div class="layer" id="layer-bookshelf"><img src="images/layers/bookshelf.png" alt="" width="2176" height="1263"></div>
+      <div class="layer" id="layer-desk"><img src="images/layers/desk.png" alt="" width="969" height="752"></div>
+      <div class="layer" id="layer-text"><img src="images/layers/chalk-text.png" alt="Papert Lab" width="1265" height="691"></div>
+      <div class="layer" id="layer-laptop"><img src="images/layers/laptop.png" alt="" width="608" height="332"></div>
+      <div class="layer" id="layer-lamp"><img src="images/layers/lamp.png" alt="" width="524" height="286"></div>
+      <div class="layer" id="layer-coffee-mug"><img src="images/layers/coffee-mug.png" alt="" width="205" height="112"></div>
+      <div class="layer" id="layer-photo-frame"><img src="images/layers/photo-frame.png" alt="" width="218" height="127"></div>
+      <div class="layer" id="layer-rubiks-cube"><img src="images/layers/rubiks-cube.png" alt="" width="264" height="292"></div>
+      <div class="layer" id="layer-floor-books"><img src="images/layers/floor-books.png" alt="" width="504" height="239"></div>
+      <div class="layer" id="layer-turtle"><img src="images/layers/turtle.png" alt="" width="339" height="250"></div>
+      <div class="layer" id="layer-small-object"><img src="images/layers/small-object.png" alt="" width="119" height="179"></div>
     </section>
 
     <!-- Manifesto image -->
-    <section class="manifesto" id="manifesto">
-      <picture>
-        <source type="image/webp"
-                srcset="images/manifesto-800.webp 800w, images/manifesto-1200.webp 1200w, images/manifesto.webp 2406w"
-                sizes="(max-width: 500px) 100vw, (max-width: 900px) 80vw, 640px">
-        <img src="images/manifesto.png"
-             alt="Students building with LEGO robotics"
-             class="manifesto-image"
-             loading="lazy"
-             decoding="async"
-             width="2406"
-             height="1760">
-      </picture>
+    <section class="manifesto-image-section reveal" id="manifesto-image">
+      <img src="images/manifesto.png"
+           alt="Students building with LEGO robotics"
+           class="manifesto-image"
+           loading="lazy"
+           decoding="async"
+           width="2406"
+           height="1760">
+    </section>
+
+    <!-- Manifesto -->
+    <section class="manifesto reveal" id="manifesto">
+      <h2 class="section-heading">Manifesto</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+      <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+    </section>
+
+    <!-- Anchor sections -->
+    <section class="anchor-section reveal" id="essays">
+      <h2 class="section-heading">Essays</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </section>
+
+    <section class="anchor-section reveal" id="papers">
+      <h2 class="section-heading">Papers</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </section>
+
+    <section class="anchor-section reveal" id="about">
+      <h2 class="section-heading">About</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </section>
+
+    <section class="anchor-section reveal" id="donors">
+      <h2 class="section-heading">Donors</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Papert Lab &middot; <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a> &middot; <a href="https://github.com/Papert-Lab">GitHub</a></p>
+    <p>&copy; 2026 Papert Lab &middot; hudson [at] papertlab [dot] org &middot; <a href="https://github.com/Papert-Lab">GitHub</a></p>
   </footer>
 
   <!-- GSAP + ScrollTrigger via CDN -->
@@ -112,54 +86,52 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 
   <script>
-    // ── Reduced motion check ──
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
       document.getElementById('site-header').classList.add('scrolled');
+      document.querySelectorAll('.layer').forEach(el => { el.style.opacity = 1; });
     } else {
       gsap.registerPlugin(ScrollTrigger);
 
       const header = document.getElementById('site-header');
       const hero = document.getElementById('hero');
-      const wrapper = document.getElementById('hero-image-wrapper');
-
-      // ── HYBRID: No-pin dissolve ──
-      // Hero scrolls naturally (no pin). As it scrolls up and exits
-      // the viewport, mask + opacity dissolve it. No dead space.
-      // Content flows immediately after the image.
-
       const siteName = document.querySelector('.site-name');
 
-      // Mask dissolve: starts when hero top hits viewport top,
-      // ends when hero bottom passes viewport top (natural scroll-out)
-      const heroTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top 20%',
-          end: 'bottom 15%',
-          scrub: 0.3,
-        }
+      // Entrance handled by CSS @keyframes (works in background tabs).
+
+      // ── Scroll dissolution: scene gently comes apart ──
+      // Floor objects fade first, chalk text last
+      const dissolveConfig = [
+        { sel: '#layer-turtle',       y: 10,  x: -15, start: 0    },
+        { sel: '#layer-floor-books',  y: 8,   x: 10,  start: 0    },
+        { sel: '#layer-small-object', y: 12,  x: -6,  start: 0.05 },
+        { sel: '#layer-rubiks-cube',  y: 12,  x: -8,  start: 0.08 },
+        { sel: '#layer-lamp',         y: -8,  x: 8,   start: 0.12 },
+        { sel: '#layer-coffee-mug',   y: 10,  x: -5,  start: 0.12 },
+        { sel: '#layer-photo-frame',  y: -5,  x: 12,  start: 0.15 },
+        { sel: '#layer-laptop',       y: 5,   x: 10,  start: 0.18 },
+        { sel: '#layer-desk',         y: 15,  x: 0,   start: 0.2  },
+        { sel: '#layer-bookshelf',    y: 10,  x: -20, start: 0.25 },
+        { sel: '#layer-chalkboard',   y: 10,  x: 0,   start: 0.3, endOpacity: 0.15 },
+        { sel: '#layer-text',         y: -15, x: 0,   start: 0.35 },
+      ];
+
+      dissolveConfig.forEach(({ sel, y, x, start, endOpacity }) => {
+        gsap.to(sel, {
+          y, x,
+          opacity: endOpacity !== undefined ? endOpacity : 0,
+          ease: 'power1.in',
+          scrollTrigger: {
+            trigger: hero,
+            start: `top+=${start * 100}% top`,
+            end: 'bottom 20%',
+            scrub: 0.4,
+          }
+        });
       });
 
-      // Fog from bottom + slight parallax (slower than scroll)
-      heroTl.to(wrapper, {
-        '--mask-stop': '50%',
-        y: 30, // moves down relative to scroll = parallax slower
-        opacity: 0.7,
-        ease: 'power1.in',
-        duration: 0.6,
-      }, 0);
-
-      // Final fade
-      heroTl.to(wrapper, {
-        '--mask-stop': '85%',
-        opacity: 0,
-        ease: 'power2.in',
-        duration: 0.4,
-      }, 0.6);
-
-      // Header name: fades in as hero scrolls out
+      // ── Header name fade-in ──
       ScrollTrigger.create({
         trigger: hero,
         start: 'center 30%',
@@ -177,13 +149,26 @@
         },
       });
 
-      // Maintain header state after hero fully exits
       ScrollTrigger.create({
         trigger: hero,
         start: 'bottom top',
         onEnter: () => header.classList.add('scrolled'),
         onLeaveBack: () => header.classList.remove('scrolled'),
       });
+
+      // ── Scroll-reveal for content sections ──
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+      );
+
+      document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
     }
   </script>
 </body>
