@@ -27,31 +27,26 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Paper texture */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9998;
-  opacity: 0.1;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
-  background-size: 512px;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 256px;
+/* Paper texture — baked into the background, not overlaid on content */
+body {
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
+  background-size: 256px, 512px;
+  background-repeat: repeat;
 }
 
 /* ── Header ── */
-header { position: sticky; top: 0; z-index: 100; background: var(--bg); }
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--bg);
+  background-image: inherit;
+  background-size: inherit;
+  background-repeat: inherit;
+}
+
 
 nav {
   max-width: var(--max-width);
@@ -63,19 +58,24 @@ nav {
 }
 
 .site-name {
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: var(--text);
-  text-decoration: none;
-  letter-spacing: 0.01em;
-  opacity: 0;
+  display: inline-block;
+  overflow: hidden;
+  max-width: 0;
+  height: 40px;
   pointer-events: none;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.site-name img {
+  height: 40px;
+  width: auto;
+  display: block;
+  filter: brightness(0.2);
 }
 
 header.scrolled .site-name {
-  opacity: 1;
   pointer-events: auto;
-  transition: opacity 0.3s ease;
 }
 
 .nav-links {
@@ -109,6 +109,10 @@ main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
   position: relative;
   display: inline-block;
   will-change: transform, opacity;
+  /* Below the header but above grain overlays — but we WANT grain on the page, not on the image.
+     Since the image has transparent bg, it naturally shows the page bg through it.
+     Keep it below the grain so the rest of the site gets texture. */
+  z-index: 5;
 }
 
 @keyframes heroEntrance {
@@ -118,7 +122,12 @@ main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
 
 .hero-container { animation: heroEntrance 1s cubic-bezier(0.25, 0.1, 0.25, 1) 0.1s both; }
 
-.hero-image { width: 85vw; max-width: 1024px; height: auto; display: block; }
+.hero-image {
+  width: 85vw;
+  max-width: 1024px;
+  height: auto;
+  display: block;
+}
 
 /* Overlays positioned on top of composite */
 .hero-overlay { position: absolute; pointer-events: none; }

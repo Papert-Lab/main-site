@@ -9,7 +9,7 @@
 <body>
   <header id="site-header">
     <nav>
-      <a href="/" class="site-name"><em>Papert Lab</em></a>
+      <a href="/" class="site-name"><img src="images/layers/chalk-text.png" alt="Papert Lab"></a>
       <div class="nav-links">
         <a href="#essays">Essays</a>
         <a href="#papers">Papers</a>
@@ -104,30 +104,29 @@
         }
       );
 
-      // Header name fades in
-      ScrollTrigger.create({
-        trigger: hero,
-        start: 'center 30%',
-        end: 'bottom top',
-        scrub: 0.3,
-        onUpdate: (self) => {
-          const p = self.progress;
-          siteName.style.opacity = Math.min(p * 2, 1);
-          siteName.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
-        },
-        onLeaveBack: () => {
-          siteName.style.opacity = 0;
-          siteName.style.pointerEvents = 'none';
-          header.classList.remove('scrolled');
-        },
-      });
-
-      ScrollTrigger.create({
-        trigger: hero,
-        start: 'bottom top',
-        onEnter: () => header.classList.add('scrolled'),
-        onLeaveBack: () => header.classList.remove('scrolled'),
-      });
+      // Header name writes in sync with chalk erase
+      // Uses the same scroll range as the erase (10px–280px)
+      // Target max-width matches actual image width at 40px height
+      // Image is 1265x691, at 40px tall → width = 40 * 1265/691 ≈ 73px
+      gsap.fromTo('.site-name',
+        { maxWidth: '0px' },
+        {
+          maxWidth: '73px',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: 'body',
+            start: '10px top',
+            end: '280px top',
+            scrub: 0.3,
+            onUpdate: (self) => {
+              const p = self.progress;
+              document.querySelector('.site-name').style.pointerEvents = p > 0.3 ? 'auto' : 'none';
+            },
+            onEnter: () => header.classList.add('scrolled'),
+            onLeaveBack: () => header.classList.remove('scrolled'),
+          }
+        }
+      );
 
       // Scroll-reveal
       const obs = new IntersectionObserver(
