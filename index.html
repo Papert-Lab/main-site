@@ -114,36 +114,37 @@
       // Page scrolls naturally. Erase is tied to scroll position.
       const overlay = document.getElementById('overlay-chalk');
 
-      gsap.to(overlay, {
-        '--erase': '100%',
-        ease: 'none',
+      // Pin the hero in place while chalk erases over 300px of scroll
+      const eraseTl = gsap.timeline({
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
-          end: 'bottom 60%',
+          end: '+=300',
+          pin: true,
           scrub: 0.2,
         }
       });
 
+      // Chalk erases
+      eraseTl.to(overlay, { '--erase': '100%', ease: 'none' }, 0);
+
       // Header name writes in sync
-      gsap.to(siteName, {
-        maxWidth: '73px',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom 60%',
-          scrub: 0.2,
-          onUpdate: (self) => {
-            siteName.style.pointerEvents = self.progress > 0.3 ? 'auto' : 'none';
-            if (self.progress > 0) header.classList.add('scrolled');
-            else header.classList.remove('scrolled');
-          },
-          onLeaveBack: () => {
-            header.classList.remove('scrolled');
-            siteName.style.pointerEvents = 'none';
-          },
-        }
+      eraseTl.to(siteName, { maxWidth: '73px', ease: 'none' }, 0);
+
+      // Track progress for header state
+      ScrollTrigger.create({
+        trigger: hero,
+        start: 'top top',
+        end: '+=300',
+        onUpdate: (self) => {
+          siteName.style.pointerEvents = self.progress > 0.3 ? 'auto' : 'none';
+          if (self.progress > 0) header.classList.add('scrolled');
+          else header.classList.remove('scrolled');
+        },
+        onLeaveBack: () => {
+          header.classList.remove('scrolled');
+          siteName.style.pointerEvents = 'none';
+        },
       });
 
       // Scroll-reveal
