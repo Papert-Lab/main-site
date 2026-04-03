@@ -110,132 +110,41 @@
       const hero = document.getElementById('hero');
       const siteName = document.querySelector('.site-name');
 
-      // ── Scroll-hijack chalk erase ──
-      // Wheel/touch input erases the chalk. Page does NOT scroll until erase completes.
+      // ── Chalk erase: pure ScrollTrigger scrub, no scroll hijacking ──
+      // Page scrolls naturally. Erase is tied to scroll position.
       const overlay = document.getElementById('overlay-chalk');
-      let eraseProgress = 0;       // 0 → 1
-      let eraseComplete = false;
-      let animating = false;       // true while auto-animation is playing
-      const ERASE_BUDGET = 420;
-      const FAST_THRESHOLD = 80;   // deltaY above this = "fast scroll"
-      const AUTO_DURATION = 350;   // ms for the quick auto-animation
 
-      function applyErase(p) {
-        overlay.style.setProperty('--erase', (p * 100) + '%');
-        siteName.style.maxWidth = (p * 73) + 'px';
-        siteName.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
-        if (p > 0) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-      }
-
-      // Animate eraseProgress from current to target over duration ms
-      function autoAnimate(target, duration, cb) {
-        animating = true;
-        const start = eraseProgress;
-        const t0 = performance.now();
-        function tick(now) {
-          const t = Math.min((now - t0) / duration, 1);
-          // ease-out cubic
-          const ease = 1 - Math.pow(1 - t, 3);
-          eraseProgress = start + (target - start) * ease;
-          applyErase(eraseProgress);
-          if (t < 1) {
-            requestAnimationFrame(tick);
-          } else {
-            eraseProgress = target;
-            applyErase(target);
-            animating = false;
-            if (cb) cb();
-          }
+      gsap.to(overlay, {
+        '--erase': '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom 60%',
+          scrub: 0.2,
         }
-        requestAnimationFrame(tick);
-      }
+      });
 
-      function completeErase() {
-        eraseComplete = true;
-      }
-
-      function reEngageErase() {
-        eraseComplete = false;
-        eraseProgress = 1;
-      }
-
-      function onWheel(e) {
-        // Once erase is done, let scroll through immediately
-        if (eraseComplete) {
-          // Re-engage when scrolled back to top
-          if (window.scrollY === 0 && e.deltaY < 0) {
-            reEngageErase();
-            autoAnimate(0, 500);
-            e.preventDefault();
-          }
-          return;
+      // Header name writes in sync
+      gsap.to(siteName, {
+        maxWidth: '73px',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom 60%',
+          scrub: 0.2,
+          onUpdate: (self) => {
+            siteName.style.pointerEvents = self.progress > 0.3 ? 'auto' : 'none';
+            if (self.progress > 0) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+          },
+          onLeaveBack: () => {
+            header.classList.remove('scrolled');
+            siteName.style.pointerEvents = 'none';
+          },
         }
-
-        if (animating) { e.preventDefault(); return; }
-        e.preventDefault();
-
-        const delta = Math.abs(e.deltaY);
-        const fast = delta > FAST_THRESHOLD;
-
-        if (fast) {
-          if (e.deltaY > 0) {
-            autoAnimate(1, 300, () => completeErase());
-          } else {
-            autoAnimate(0, 750);
-          }
-        } else {
-          if (e.deltaY > 0) {
-            eraseProgress = Math.min(1, eraseProgress + delta / ERASE_BUDGET);
-          } else {
-            eraseProgress = Math.max(0, eraseProgress - delta / ERASE_BUDGET);
-          }
-          applyErase(eraseProgress);
-          if (eraseProgress >= 1) completeErase();
-        }
-      }
-
-      // Touch support
-      let touchStartY = 0;
-      let lastTouchTime = 0;
-      function onTouchStart(e) {
-        touchStartY = e.touches[0].clientY;
-        lastTouchTime = performance.now();
-      }
-      function onTouchMove(e) {
-        if (animating) { e.preventDefault(); return; }
-
-        const dy = touchStartY - e.touches[0].clientY;
-        const dt = performance.now() - lastTouchTime;
-        touchStartY = e.touches[0].clientY;
-        lastTouchTime = performance.now();
-
-        if (eraseComplete && window.scrollY === 0 && dy < 0) {
-          reEngageErase();
-          autoAnimate(0, 750);
-          return;
-        }
-        if (eraseComplete) return;
-        e.preventDefault();
-
-        const velocity = Math.abs(dy) / Math.max(dt, 1);
-        if (velocity > 1.5) {
-          if (dy > 0) {
-            autoAnimate(1, 300, () => completeErase());
-          } else {
-            autoAnimate(0, 750);
-          }
-        } else {
-          if (dy > 0) eraseProgress = Math.min(1, eraseProgress + dy / ERASE_BUDGET);
-          else eraseProgress = Math.max(0, eraseProgress - Math.abs(dy) / ERASE_BUDGET);
-          applyErase(eraseProgress);
-          if (eraseProgress >= 1) completeErase();
-        }
-      }
-
-      window.addEventListener('wheel', onWheel, { passive: false });
-      window.addEventListener('touchstart', onTouchStart, { passive: true });
-      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      });
 
       // Scroll-reveal
       const obs = new IntersectionObserver(
