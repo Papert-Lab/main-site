@@ -157,7 +157,7 @@
 
         if (fast) {
           if (e.deltaY > 0) {
-            autoAnimate(1, 200, () => completeErase());
+            autoAnimate(1, 450, () => completeErase());
           } else {
             autoAnimate(0, 750);
           }
@@ -198,7 +198,7 @@
         const velocity = Math.abs(dy) / Math.max(dt, 1);
         if (velocity > 1.5) {
           if (dy > 0) {
-            autoAnimate(1, 200, () => completeErase());
+            autoAnimate(1, 450, () => completeErase());
           } else {
             autoAnimate(0, 750);
           }
@@ -268,7 +268,10 @@
     function renderInline(s) {
       s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
       s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
+        const newTab = url.endsWith('.pdf') ? ' target="_blank" rel="noopener"' : '';
+        return '<a href="' + url + '"' + newTab + '>' + text + '</a>';
+      });
       return s;
     }
 

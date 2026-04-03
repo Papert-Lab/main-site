@@ -1,6 +1,4 @@
-In progress...
-
-In the meantime, please see [Hudson's blog](https://hudsonmp.github.io/blog).
+Please see [Hudson's blog](https://hudsonmp.github.io/blog).
 
 ---
 
