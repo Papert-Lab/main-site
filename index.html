@@ -124,65 +124,60 @@
       const hero = document.getElementById('hero');
       const wrapper = document.getElementById('hero-image-wrapper');
 
-      // ── APPROACH A: Mask dissolve with opacity handoff ──
-      // Pinned hero dissolves over 400px. Fog rises from bottom.
-      // Image fades to background, header name appears.
+      // ── HYBRID: No-pin dissolve ──
+      // Hero scrolls naturally (no pin). As it scrolls up and exits
+      // the viewport, mask + opacity dissolve it. No dead space.
+      // Content flows immediately after the image.
 
       const siteName = document.querySelector('.site-name');
 
+      // Mask dissolve: starts when hero top hits viewport top,
+      // ends when hero bottom passes viewport top (natural scroll-out)
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: hero,
-          start: 'top top',
-          end: '+=400',
-          scrub: 0.5,
-          pin: true,
-          anticipatePin: 1,
+          start: 'top 20%',
+          end: 'bottom 15%',
+          scrub: 0.3,
         }
       });
 
-      // Phase 1 (0-20%): Gentle parallax
+      // Fog from bottom + slight parallax (slower than scroll)
       heroTl.to(wrapper, {
-        y: -15,
-        ease: 'none',
-        duration: 0.2,
-      });
-
-      // Phase 2 (10-60%): Mask rises, fog hides desk/bookshelf/turtle
-      heroTl.to(wrapper, {
-        '--mask-stop': '45%',
+        '--mask-stop': '50%',
+        y: 30, // moves down relative to scroll = parallax slower
+        opacity: 0.7,
         ease: 'power1.in',
-        duration: 0.5,
-      }, 0.1);
+        duration: 0.6,
+      }, 0);
 
-      // Phase 3 (60-85%): Continue mask + fade opacity
+      // Final fade
       heroTl.to(wrapper, {
-        '--mask-stop': '75%',
-        opacity: 0.4,
-        y: -30,
-        ease: 'power1.in',
-        duration: 0.25,
-      }, 0.6);
-
-      // Phase 4 (85-100%): Full fade out
-      heroTl.to(wrapper, {
+        '--mask-stop': '85%',
         opacity: 0,
         ease: 'power2.in',
-        duration: 0.15,
-      }, 0.85);
+        duration: 0.4,
+      }, 0.6);
 
-      // Fade in header name starting at 70%
-      heroTl.fromTo(siteName, {
-        opacity: 0,
-        pointerEvents: 'none',
-      }, {
-        opacity: 1,
-        pointerEvents: 'auto',
-        ease: 'power1.in',
-        duration: 0.3,
-      }, 0.7);
+      // Header name: fades in as hero scrolls out
+      ScrollTrigger.create({
+        trigger: hero,
+        start: 'center 30%',
+        end: 'bottom top',
+        scrub: 0.3,
+        onUpdate: (self) => {
+          const p = self.progress;
+          siteName.style.opacity = Math.min(p * 2, 1);
+          siteName.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
+        },
+        onLeaveBack: () => {
+          siteName.style.opacity = 0;
+          siteName.style.pointerEvents = 'none';
+          header.classList.remove('scrolled');
+        },
+      });
 
-      // Maintain header state after scrolling past pin
+      // Maintain header state after hero fully exits
       ScrollTrigger.create({
         trigger: hero,
         start: 'bottom top',
