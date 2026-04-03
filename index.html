@@ -12,8 +12,8 @@
       <a href="/" class="site-name"><img src="images/layers/chalk-text.png" alt="Papert Lab"></a>
       <div class="nav-links">
         <a href="#manifesto">Manifesto</a>
-        <a href="#essays">Essays</a>
-        <a href="#papers">Papers</a>
+        <!-- <a href="#essays">Essays</a> -->
+        <a href="#publications">Publications</a>
         <a href="#about">About</a>
         <a href="#donors">Donors</a>
       </div>
@@ -49,13 +49,14 @@
     </section>
 
     <!-- Sections — content loaded from /content/*.md -->
-    <section class="anchor-section reveal" id="essays">
+    <!-- Essays hidden until content exists -->
+    <section class="anchor-section reveal" id="essays" hidden>
       <h2 class="section-heading">Essays</h2>
       <div class="md-content" data-src="content/essays.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
-    <section class="anchor-section reveal" id="papers">
-      <h2 class="section-heading">Papers</h2>
-      <div class="md-content" data-src="content/papers.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
+    <section class="anchor-section reveal" id="publications">
+      <h2 class="section-heading">Publications</h2>
+      <div class="md-content" data-src="content/publications.md"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p></div>
     </section>
     <section class="anchor-section reveal" id="about">
       <h2 class="section-heading">About</h2>
@@ -75,9 +76,8 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 
   <script>
-    // Prevent browser from restoring scroll position on refresh (breaks pin)
+    // Prevent browser from restoring stale scroll position on refresh
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
