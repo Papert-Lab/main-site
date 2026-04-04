@@ -208,9 +208,11 @@
       // Touch support
       let touchStartY = 0;
       let lastTouchTime = 0;
+      let touchHijacked = false; // true once we preventDefault in this gesture
       function onTouchStart(e) {
         touchStartY = e.touches[0].clientY;
         lastTouchTime = performance.now();
+        touchHijacked = false;
       }
       function onTouchMove(e) {
         const dy = touchStartY - e.touches[0].clientY;
@@ -220,12 +222,19 @@
           if (window.scrollY === 0 && dy < 0 && !animating) {
             reEngageErase();
             autoAnimate(0, 400);
+            touchHijacked = true;
             e.preventDefault();
+          } else if (touchHijacked) {
+            // Browser won't scroll natively because we already prevented
+            // default earlier in this gesture — scroll manually instead.
+            e.preventDefault();
+            window.scrollBy(0, dy);
           }
           return;
         }
-        if (animating) { e.preventDefault(); return; }
+        if (animating) { e.preventDefault(); touchHijacked = true; return; }
         e.preventDefault();
+        touchHijacked = true;
 
         if (dy > 0) eraseProgress = Math.min(1, eraseProgress + dy / ERASE_BUDGET);
         else eraseProgress = Math.max(0, eraseProgress - Math.abs(dy) / ERASE_BUDGET);
