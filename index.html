@@ -163,6 +163,7 @@
 
       function completeErase() {
         eraseComplete = true;
+        document.body.classList.add('erase-done');
       }
 
       function reEngageErase() {
@@ -207,16 +208,41 @@
 
       // Touch support
       let touchStartY = 0;
+      let lastTouchY = 0;
       let lastTouchTime = 0;
+      let touchVelocity = 0;
       let touchHijacked = false; // true once we preventDefault in this gesture
+      const TOUCH_FAST_THRESHOLD = 0.6; // px/ms — triggers auto-complete
+
+      function simulateMomentumScroll(velocity) {
+        const friction = 0.97;
+        let v = velocity * 16; // px/ms → px/frame at ~60fps
+        function momentumTick() {
+          if (Math.abs(v) < 0.5) return;
+          window.scrollBy(0, v);
+          v *= friction;
+          requestAnimationFrame(momentumTick);
+        }
+        requestAnimationFrame(momentumTick);
+      }
+
       function onTouchStart(e) {
         touchStartY = e.touches[0].clientY;
+        lastTouchY = touchStartY;
         lastTouchTime = performance.now();
+        touchVelocity = 0;
         touchHijacked = false;
       }
       function onTouchMove(e) {
-        const dy = touchStartY - e.touches[0].clientY;
-        touchStartY = e.touches[0].clientY;
+        const currentY = e.touches[0].clientY;
+        const now = performance.now();
+        const dy = lastTouchY - currentY; // positive = scrolling down
+        const dt = now - lastTouchTime;
+
+        if (dt > 0) touchVelocity = dy / dt; // px/ms
+
+        lastTouchY = currentY;
+        lastTouchTime = now;
 
         if (eraseComplete) {
           if (window.scrollY === 0 && dy < 0 && !animating) {
@@ -225,8 +251,6 @@
             touchHijacked = true;
             e.preventDefault();
           } else if (touchHijacked) {
-            // Browser won't scroll natively because we already prevented
-            // default earlier in this gesture — scroll manually instead.
             e.preventDefault();
             window.scrollBy(0, dy);
           }
@@ -235,6 +259,24 @@
         if (animating) { e.preventDefault(); touchHijacked = true; return; }
         e.preventDefault();
         touchHijacked = true;
+
+        // Fast flick: auto-complete the erase then simulate momentum scroll
+        if (touchVelocity > TOUCH_FAST_THRESHOLD && eraseProgress < 1) {
+          const remaining = 1 - eraseProgress;
+          const savedVelocity = touchVelocity;
+          autoAnimate(1, remaining * 300, () => {
+            completeErase();
+            simulateMomentumScroll(savedVelocity);
+          });
+          return;
+        }
+
+        // Fast flick upward: auto-reverse the erase
+        if (touchVelocity < -TOUCH_FAST_THRESHOLD && eraseProgress > 0) {
+          const remaining = eraseProgress;
+          autoAnimate(0, remaining * 300);
+          return;
+        }
 
         if (dy > 0) eraseProgress = Math.min(1, eraseProgress + dy / ERASE_BUDGET);
         else eraseProgress = Math.max(0, eraseProgress - Math.abs(dy) / ERASE_BUDGET);
