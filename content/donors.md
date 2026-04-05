@@ -4,4 +4,4 @@
 
 ---
 
-If you'd like to support our work, please reach out at [hudson@papertlab.org](mailto:hudson@papertlab.org). All grants are tax-deductible :)
+If you'd like to support our work, please reach out at <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a>. All grants are tax-deductible :)
