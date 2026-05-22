@@ -48,12 +48,12 @@ header {
 
 
 nav {
-  max-width: 1400px;
+  max-width: var(--max-width);
   margin: 0 auto;
   padding: 0.8rem 1.5rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
 .site-name {
