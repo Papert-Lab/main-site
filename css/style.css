@@ -77,13 +77,13 @@ header.scrolled .site-name {
   pointer-events: auto;
 }
 
+body.subpage {
+  --max-width: 800px;
+}
+
 body.subpage .site-name {
   max-width: 73px;
   pointer-events: auto;
-}
-
-body.project-page {
-  --max-width: 800px;
 }
 
 body.subpage main > section {
@@ -120,6 +120,16 @@ body.subpage .anchor-section p {
   line-height: 1.75;
   color: var(--text-muted);
   margin-bottom: 1.2rem;
+}
+
+body.subpage .paper-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  font-weight: normal;
+  color: var(--text);
+  margin-top: 2.5rem;
+  margin-bottom: 0.5rem;
 }
 
 body.subpage .label-heading {
