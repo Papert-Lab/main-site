@@ -88,9 +88,16 @@ body.project-page .anchor-section p {
 body.subpage nav {
   max-width: 1400px;
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
   gap: 2rem;
+}
+
+body.subpage .nav-links {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 body.subpage .site-name {
