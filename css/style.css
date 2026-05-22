@@ -89,10 +89,17 @@ body.project-page .anchor-section p {
   max-width: 70ch;
 }
 
+body.subpage nav {
+  align-items: center;
+}
+
 body.subpage .site-name {
   max-width: 150px;
   height: 48px;
+  overflow: visible;
   pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
 }
 
 body.subpage .site-name img {
