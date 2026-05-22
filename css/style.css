@@ -82,6 +82,10 @@ body.subpage .site-name {
   pointer-events: auto;
 }
 
+body.project-page {
+  --max-width: 800px;
+}
+
 body.subpage main > section {
   padding-top: 4rem;
 }
