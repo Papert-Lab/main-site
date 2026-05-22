@@ -101,16 +101,20 @@ body.subpage .nav-links {
 }
 
 body.subpage .site-name {
-  max-width: 150px;
-  height: 48px;
+  max-width: none;
+  width: auto;
+  height: 60px;
   overflow: visible;
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 body.subpage .site-name img {
-  height: 48px;
+  height: 60px;
+  width: auto;
+  max-width: none;
 }
 
 body.subpage main > section {
