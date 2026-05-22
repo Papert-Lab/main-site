@@ -90,7 +90,9 @@ body.project-page .anchor-section p {
 }
 
 body.subpage nav {
+  justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 body.subpage .site-name {
@@ -100,6 +102,10 @@ body.subpage .site-name {
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 body.subpage .site-name img {
