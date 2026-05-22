@@ -87,9 +87,10 @@ body.project-page .anchor-section p {
 
 body.subpage nav {
   max-width: 1400px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 2rem;
 }
 
 body.subpage .site-name {
@@ -99,13 +100,6 @@ body.subpage .site-name {
   pointer-events: auto;
   display: inline-flex;
   align-items: center;
-  justify-self: start;
-  grid-column: 1;
-}
-
-body.subpage .nav-links {
-  justify-self: center;
-  grid-column: 2;
 }
 
 body.subpage .site-name img {
