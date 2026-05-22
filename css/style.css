@@ -77,10 +77,6 @@ header.scrolled .site-name {
   pointer-events: auto;
 }
 
-body.subpage {
-  --max-width: 1100px;
-}
-
 body.project-page {
   --max-width: 1400px;
 }
