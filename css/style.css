@@ -82,14 +82,7 @@ body.subpage .site-name {
   pointer-events: auto;
 }
 
-body.subpage main {
-  display: flex;
-  justify-content: flex-end;
-}
-
 body.subpage main > section {
-  max-width: 42ch;
-  margin-bottom: 0;
   padding-top: 4rem;
 }
 
