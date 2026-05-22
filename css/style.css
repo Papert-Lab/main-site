@@ -78,12 +78,21 @@ header.scrolled .site-name {
 }
 
 body.subpage {
-  --max-width: 800px;
+  --max-width: 1100px;
+}
+
+body.project-page {
+  --max-width: 100%;
 }
 
 body.subpage .site-name {
-  max-width: 73px;
+  max-width: 150px;
+  height: 48px;
   pointer-events: auto;
+}
+
+body.subpage .site-name img {
+  height: 48px;
 }
 
 body.subpage main > section {
