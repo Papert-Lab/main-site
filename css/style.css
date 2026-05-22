@@ -82,7 +82,11 @@ body.subpage {
 }
 
 body.project-page {
-  --max-width: 100%;
+  --max-width: 1400px;
+}
+
+body.project-page .anchor-section p {
+  max-width: 70ch;
 }
 
 body.subpage .site-name {
