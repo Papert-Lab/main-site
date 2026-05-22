@@ -27,7 +27,7 @@
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="css/style.css?v=14">
+  <link rel="stylesheet" href="css/style.css?v=15">
 </head>
 <body>
   <header id="site-header">
@@ -133,6 +133,8 @@
 
       function applyErase(p) {
         overlay.style.setProperty('--erase', (p * 100) + '%');
+        siteName.style.maxWidth = (p * 73) + 'px';
+        siteName.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
         if (p > 0) header.classList.add('scrolled');
         else header.classList.remove('scrolled');
       }
