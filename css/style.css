@@ -126,6 +126,8 @@ body.subpage .page-title {
   font-weight: normal;
   color: var(--text);
   margin-bottom: 1.5rem;
+  text-align: center;
+  text-wrap: balance;
 }
 
 body.subpage .anchor-section p {
