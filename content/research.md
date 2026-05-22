@@ -1,2 +1,0 @@
-- [Requirement Engineering Through Software Testing](/research/requirement-engineering/)
-- [Context Engineering for AI-Assisted Programming](/research/context-engineering/)
