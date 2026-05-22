@@ -60,14 +60,14 @@ nav {
   display: inline-block;
   overflow: hidden;
   max-width: 0;
-  height: 50px;
+  height: 40px;
   pointer-events: none;
   text-decoration: none;
   vertical-align: middle;
 }
 
 .site-name img {
-  height: 50px;
+  height: 40px;
   width: auto;
   display: block;
   filter: brightness(0.2);
