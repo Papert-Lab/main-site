@@ -35,6 +35,7 @@
       <a href="/" class="site-name"><img src="images/layers/chalk-text.png" alt="Papert Lab"></a>
       <div class="nav-links">
         <a href="#manifesto">Manifesto</a>
+        <a href="/research/">Research</a>
         <!-- <a href="#essays">Essays</a> -->
         <a href="#about">About</a>
         <a href="#publications">Publications</a>
@@ -246,77 +247,11 @@
       window.addEventListener('touchstart', onTouchStart, { passive: true });
       window.addEventListener('touchmove', onTouchMove, { passive: false });
 
-      // Scroll-reveal
-      const obs = new IntersectionObserver(
-        (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-        { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
-      );
-      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
     } else {
       document.getElementById('site-header').classList.add('scrolled');
     }
-
-    // ── Load content from .md files ──
-    function mdToHtml(md) {
-      const sections = md.split(/\n---\n/);
-      let html = '';
-
-      sections.forEach(section => {
-        const lines = section.trim().split('\n');
-        const isList = lines.every(l => !l.trim() || l.trim().startsWith('- '));
-
-        if (isList && lines.some(l => l.trim().startsWith('- '))) {
-          // Render as styled list
-          html += '<ul class="content-list">';
-          lines.forEach(l => {
-            l = l.trim();
-            if (!l.startsWith('- ')) return;
-            l = l.slice(2);
-            // Split on | for left/right columns
-            if (l.includes('|')) {
-              const [left, right] = l.split('|').map(s => s.trim());
-              html += '<li class="two-col"><div class="li-left">' + renderInline(left) + '</div><div class="li-right">' + renderInline(right) + '</div></li>';
-            } else {
-              l = renderInline(l);
-              l = l.replace(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>\s*"([^"]*)"/,
-                '<a href="$1">$2</a><span class="date">$3</span>');
-              html += '<li>' + l + '</li>';
-            }
-          });
-          html += '</ul>';
-        } else {
-          // Render as paragraphs
-          const paras = section.trim().split(/\n\n+/);
-          paras.forEach(p => {
-            p = p.trim();
-            if (!p) return;
-            if (p.startsWith('## ')) {
-              html += '<h3 class="content-subheading">' + p.slice(3) + '</h3>';
-            } else {
-              html += '<p>' + renderInline(p) + '</p>';
-            }
-          });
-        }
-      });
-      return html;
-    }
-
-    function renderInline(s) {
-      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text, url) => {
-        return '<a href="' + url + '" target="_blank" rel="noopener">' + text + '</a>';
-      });
-      return s;
-    }
-
-    document.querySelectorAll('.md-content[data-src]').forEach(el => {
-      fetch(el.dataset.src)
-        .then(r => r.ok ? r.text() : null)
-        .then(md => { if (md) el.innerHTML = mdToHtml(md); })
-        .catch(() => {});
-    });
   </script>
+
+  <script src="/js/site.js"></script>
 </body>
 </html>

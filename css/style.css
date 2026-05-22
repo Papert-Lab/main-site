@@ -77,6 +77,11 @@ header.scrolled .site-name {
   pointer-events: auto;
 }
 
+body.subpage .site-name {
+  max-width: 73px;
+  pointer-events: auto;
+}
+
 .nav-links {
   display: flex;
   gap: 2rem;
