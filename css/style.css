@@ -57,17 +57,17 @@ nav {
 }
 
 .site-name {
-  display: inline-block;
-  overflow: hidden;
-  max-width: 0;
-  height: 40px;
-  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  overflow: visible;
+  max-width: none;
+  height: 60px;
+  pointer-events: auto;
   text-decoration: none;
-  vertical-align: middle;
 }
 
 .site-name img {
-  height: 40px;
+  height: 60px;
   width: auto;
   display: block;
   filter: brightness(0.2);
