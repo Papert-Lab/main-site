@@ -94,6 +94,22 @@ body.project-page .anchor-section p {
   max-width: 70ch;
 }
 
+body.project-page .anchor-section ol,
+body.project-page .anchor-section ul {
+  max-width: 70ch;
+  padding-left: 1.5rem;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+body.project-page .anchor-section ol li,
+body.project-page .anchor-section ul li {
+  margin-bottom: 0.6rem;
+  padding-left: 0.4rem;
+}
+
 body.subpage .site-name {
   max-width: 73px;
   pointer-events: auto;
