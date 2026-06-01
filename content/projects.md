@@ -1,3 +1,3 @@
 - [Requirement Engineering with Teachable Agents](/projects/teachable-agents/)
 - [Specification Design and Exceptional AI-Assisted Programmers](/projects/specification-design/)
-- [Augmenting Human Cognition with Computing Forums](/projects/vt-reading-group/)
+- [Augmenting Human Cognition with Computing Discussions](/projects/vt-discussion/)
