@@ -18,6 +18,72 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <link rel="stylesheet" href="/css/style.css?v=22">
+
+  <!-- Page-scoped styles for the chalkboard scroll-reveal. Kept here (not in the shared
+       stylesheet) because this behavior exists only on this page. -->
+  <style>
+    /* Two-column shell: prose scrolls on the left, the chalkboard is pinned right. */
+    .vt-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 66ch) 1fr;
+      gap: 3.5rem;
+      align-items: start;
+    }
+    .vt-prose { min-width: 0; }            /* let the prose column shrink, never overflow */
+
+    .vt-reveal {
+      position: sticky;
+      top: var(--vt-top, 84px);
+      align-self: start;
+    }
+
+    /* Wooden frame around a slate chalkboard. */
+    .vt-frame {
+      margin: 0;
+      padding: 13px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #7c5836 0%, #5a3d21 38%, #6e4d2d 68%, #4a3219 100%);
+      box-shadow: 0 24px 50px -28px rgba(38, 26, 14, .62), inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .vt-board {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      max-height: calc(100vh - var(--vt-top, 84px) - 7rem);
+      border-radius: 3px;
+      overflow: hidden;
+      background: radial-gradient(125% 120% at 50% 32%, #3a4842 0%, #2c3833 56%, #222c28 100%);
+      box-shadow: inset 0 0 70px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.35);
+    }
+    /* faint eraser ghosts so the slate looks used */
+    .vt-board::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .5;
+      background:
+        radial-gradient(58% 40% at 28% 72%, rgba(255,255,255,.05), transparent 72%),
+        radial-gradient(48% 30% at 76% 26%, rgba(255,255,255,.045), transparent 72%);
+    }
+    .vt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
+
+    .vt-cap, .vt-hint {
+      position: absolute; bottom: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      text-transform: lowercase; letter-spacing: .12em;
+      color: #eef0ea; pointer-events: none;
+      text-shadow: 0 0 7px rgba(238,240,234,.32);
+    }
+    .vt-cap  { left: 20px;  font-size: .74rem; opacity: 0; transition: opacity .5s ease; }
+    .vt-hint { right: 18px; font-size: .66rem; color: rgba(238,240,234,.6); opacity: .6; transition: opacity .5s ease; }
+
+    /* Single-column fallback: phones, narrow widths, and reduced-motion users get the
+       finished photo, statically, with no pinning or animation. */
+    @media (max-width: 760px) {
+      .vt-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .vt-reveal { position: static; top: auto; }
+      .vt-board { max-height: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .vt-reveal { position: static; }
+    }
+  </style>
 </head>
 <body class="subpage project-page">
   <header id="site-header" class="scrolled">
@@ -33,38 +99,77 @@
   </header>
 
   <main>
-    <section class="anchor-section reveal">
-      <h1 class="page-title">Augmenting Human Cognition with Computing Discussions</h1>
+    <div class="vt-layout">
+      <section class="anchor-section reveal vt-prose">
+        <h1 class="page-title">Augmenting Human Cognition with Computing Discussions</h1>
 
-      <p class="apply-cta"><strong>Applications for our first discussion are open.</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">Please apply here</a>.</p>
+        <p class="apply-cta"><strong>Applications for our first discussion are open.</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">Please apply here</a>.</p>
 
-      <p>I started <a href="https://papertlab.org">Papert Lab</a> after observing the lack of interest among many academics, researchers, and students in exploring the potential of computers&mdash;particularly artificial intelligence systems&mdash;in augmenting human cognition and problem solving. As cognitive scientists, HCI researchers, students, and academics, we are uniquely positioned to design AI systems that improve how we learn, work, research, and communicate. Yet, as I become more involved with academia and higher education, I worry that we often get absorbed by the minutia of a Ph.D. or class and forget about the societal implications of our research. <em>If we call ourselves &ldquo;human-computer interaction&rdquo; researchers, we cannot fail to address one of history&rsquo;s most transformative technologies and its implications on human cognition.</em></p>
+        <p>I started <a href="https://papertlab.org">Papert Lab</a> after observing the lack of interest among many academics, researchers, and students in exploring the potential of computers&mdash;particularly artificial intelligence systems&mdash;in augmenting human cognition and problem solving. As cognitive scientists, HCI researchers, students, and academics, we are uniquely positioned to design AI systems that improve how we learn, work, research, and communicate. Yet, as I become more involved with academia and higher education, I worry that we often get absorbed by the minutia of a Ph.D. or class and forget about the societal implications of our research. <em>If we call ourselves &ldquo;human-computer interaction&rdquo; researchers, we cannot fail to address one of history&rsquo;s most transformative technologies and its implications on human cognition.</em></p>
 
-      <p>Unfortunately, this is (like all things) more easily said than done, especially given the demanding workload of being a student researcher. However, since many of us are (hopefully) slightly less busy over the summer, this seems like an optimal opportunity to establish an ongoing ritual of addressing the issue of augmenting human cognition. Specifically, I am doing this through a weekly discussion group, where we will read essays and papers, discuss their implications, and create tools that actualize some of these broader challenges through discussing actionable projects. Thus, the purpose of the discussion group is twofold:</p>
+        <p>Unfortunately, this is (like all things) more easily said than done, especially given the demanding workload of being a student researcher. However, since many of us are (hopefully) slightly less busy over the summer, this seems like an optimal opportunity to establish an ongoing ritual of addressing the issue of augmenting human cognition. Specifically, I am doing this through a weekly discussion group, where we will read essays and papers, discuss their implications, and create tools that actualize some of these broader challenges through discussing actionable projects. Thus, the purpose of the discussion group is twofold:</p>
 
-      <ol>
-        <li>Studying past inflection points of fields deciding to pursue important questions (rather than more trivial ones), how they were approached, and the motivations of the researchers who chose to tackle the complex problems prepares us to make similar choices when the opportunities present themselves. Indeed <em>luck favors the prepared mind,</em> and by studying history, we are artificially increasing our probability of luck by preparing ourselves for taking decisive action.</li>
-        <li>Creating an intellectually vibrant <a href="https://www.henrikkarlsson.xyz/p/first-we-shape-our-social-graph-then" target="_blank" rel="noopener">milieu</a> (the culture contained in your unique set of connections) of academics, students, and practitioners who relentlessly explore the unglamorous and non-trivial topics lying at the intersection between artificial intelligence and human cognition is essential to developing a culture that values these sorts of existential questions. When institutions stop valuing the <em>ethos</em> of their student&rsquo;s research and fail to reward these non-trivial topics, we gravitate towards more trivial research that doesn&rsquo;t achieve what we set out to do.</li>
-      </ol>
+        <ol>
+          <li>Studying past inflection points of fields deciding to pursue important questions (rather than more trivial ones), how they were approached, and the motivations of the researchers who chose to tackle the complex problems prepares us to make similar choices when the opportunities present themselves. Indeed <em>luck favors the prepared mind,</em> and by studying history, we are artificially increasing our probability of luck by preparing ourselves for taking decisive action.</li>
+          <li>Creating an intellectually vibrant <a href="https://www.henrikkarlsson.xyz/p/first-we-shape-our-social-graph-then" target="_blank" rel="noopener">milieu</a> (the culture contained in your unique set of connections) of academics, students, and practitioners who relentlessly explore the unglamorous and non-trivial topics lying at the intersection between artificial intelligence and human cognition is essential to developing a culture that values these sorts of existential questions. When institutions stop valuing the <em>ethos</em> of their student&rsquo;s research and fail to reward these non-trivial topics, we gravitate towards more trivial research that doesn&rsquo;t achieve what we set out to do.</li>
+        </ol>
 
-      <p>I am researching AI-assisted programming education with Prof. David H. Smith this summer at Virginia Tech, and while I&rsquo;m here (and onwards), I find it important to dedicate a considerable amount of time exploring the broader implications of my work, which revolves around augmenting human cognition. I suspect this underlying objective is similar for many of my peers in HCI. For example, I am currently exploring AI systems that augment human cognition through <a href="http://www.papert.org/articles/SituatingConstructionism.html" target="_blank" rel="noopener">constructionism</a>, scaffolded metacognition, and interactive scenarios. I also situate my <a href="https://ascend3.cs.vt.edu/" target="_blank" rel="noopener">current research</a> in the context of these future paradigms, and take notes on thought leaders like <a href="https://andymatuschak.org/" target="_blank" rel="noopener">Andy Matuschak</a>, <a href="https://michaelnotebook.com/" target="_blank" rel="noopener">Michael Nielsen</a>, <a href="http://www.papert.org/" target="_blank" rel="noopener">Seymour Papert</a>, and <a href="https://dougengelbart.org/" target="_blank" rel="noopener">Douglas Engelbart</a>, all researchers who have done <em>great work</em> at the intersection of computers and human cognition.</p>
+        <p>I am researching AI-assisted programming education with Prof. David H. Smith this summer at Virginia Tech, and while I&rsquo;m here (and onwards), I find it important to dedicate a considerable amount of time exploring the broader implications of my work, which revolves around augmenting human cognition. I suspect this underlying objective is similar for many of my peers in HCI. For example, I am currently exploring AI systems that augment human cognition through <a href="http://www.papert.org/articles/SituatingConstructionism.html" target="_blank" rel="noopener">constructionism</a>, scaffolded metacognition, and interactive scenarios. I also situate my <a href="https://ascend3.cs.vt.edu/" target="_blank" rel="noopener">current research</a> in the context of these future paradigms, and take notes on thought leaders like <a href="https://andymatuschak.org/" target="_blank" rel="noopener">Andy Matuschak</a>, <a href="https://michaelnotebook.com/" target="_blank" rel="noopener">Michael Nielsen</a>, <a href="http://www.papert.org/" target="_blank" rel="noopener">Seymour Papert</a>, and <a href="https://dougengelbart.org/" target="_blank" rel="noopener">Douglas Engelbart</a>, all researchers who have done <em>great work</em> at the intersection of computers and human cognition.</p>
 
-      <h2 class="paper-title">The Logistics</h2>
+        <h2 class="paper-title">The Logistics</h2>
 
-      <p>I am hosting a discussion group on augmenting human cognition with computers. Here are the details:</p>
+        <p>I am hosting a discussion group on augmenting human cognition with computers. Here are the details:</p>
 
-      <p>
-        <strong>Day:</strong> Saturday<br>
-        <strong>Time:</strong> 11am<br>
-        <strong>Location:</strong> Mill Mountain Coffee and Tea<br>
-        <strong>Who:</strong> Undergraduate and graduate researchers (e.g. REU participants, Ph.D. students, etc.)<br>
-        <strong>Link:</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">luma.com/papertlab</a>
-      </p>
+        <p>
+          <strong>Day:</strong> Saturday<br>
+          <strong>Time:</strong> 11am<br>
+          <strong>Location:</strong> Mill Mountain Coffee and Tea<br>
+          <strong>Who:</strong> Undergraduate and graduate researchers (e.g. REU participants, Ph.D. students, etc.)<br>
+          <strong>Link:</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">luma.com/papertlab</a>
+        </p>
 
-      <p>We are initially limiting attendance to ten attendees, and may increase spots as we gauge interest.</p>
+        <p>We are initially limiting attendance to ten attendees, and may increase spots as we gauge interest.</p>
 
-      <p>&mdash; Hudson, Papert Lab</p>
-    </section>
+        <p>&mdash; Hudson, Papert Lab</p>
+      </section>
+
+      <!-- Pinned chalkboard. As the prose scrolls, the group is drawn in chalk along a
+           serpentine path, then the finished sketch dissolves into the real photograph.
+           Decorative → aria-hidden. -->
+      <aside class="vt-reveal" aria-hidden="true">
+        <figure class="vt-frame">
+          <div class="vt-board">
+            <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
+              <defs>
+                <!-- the chalk shows only where this trail has been drawn -->
+                <mask id="vt-pen" maskUnits="userSpaceOnUse" x="-220" y="-220" width="1640" height="1340">
+                  <path id="vt-trail" fill="none" stroke="#fff" stroke-width="216"
+                        stroke-linecap="round" stroke-linejoin="round"></path>
+                </mask>
+                <radialGradient id="vt-tipg">
+                  <stop offset="0%" stop-color="#fbfbf6" stop-opacity="0.95"/>
+                  <stop offset="55%" stop-color="#eef0ea" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#eef0ea" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- the chalk drawing, revealed progressively -->
+              <image id="vt-chalk" href="img/first-discussion-chalk.webp" x="0" y="0" width="1200" height="900"
+                     preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
+
+              <!-- the real photograph, crossfaded in over the last stretch of scroll -->
+              <image id="vt-photo" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
+                     preserveAspectRatio="xMidYMid slice" opacity="0"></image>
+
+              <!-- fresh-chalk glow at the drawing tip (no mascot) -->
+              <circle id="vt-tip" r="30" fill="url(#vt-tipg)" opacity="0"></circle>
+            </svg>
+            <figcaption class="vt-cap" id="vt-cap">first discussion &middot; mill mountain coffee &middot; roanoke</figcaption>
+            <span class="vt-hint" id="vt-hint">scroll to draw</span>
+          </div>
+        </figure>
+      </aside>
+    </div>
   </main>
 
   <footer>
@@ -72,5 +177,106 @@
   </footer>
 
   <script src="/js/site.js"></script>
+
+  <!-- Chalkboard scroll-reveal controller. Vanilla + rAF-throttled (no GSAP). One serpentine
+       path drives the chalk mask and the glowing tip; the real photo crossfades in at the end. -->
+  <script>
+  (function () {
+    var svg   = document.querySelector('.vt-svg');
+    var trail = document.getElementById('vt-trail');
+    var chalk = document.getElementById('vt-chalk');
+    var photo = document.getElementById('vt-photo');
+    var tip   = document.getElementById('vt-tip');
+    var layout = document.querySelector('.vt-layout');
+    var aside  = document.querySelector('.vt-reveal');
+    var cap   = document.getElementById('vt-cap');
+    var hint  = document.getElementById('vt-hint');
+    if (!svg || !trail || !layout || !aside) return;
+
+    var VB_W = 1200, VB_H = 900, ROWS = 6;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function topOffset() {
+      return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top')) || 84;
+    }
+    function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+    function smooth(e0, e1, x) { var t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); }
+
+    // Boustrophedon (serpentine) route with semicircular turns — the chalk "stroke".
+    function buildPath() {
+      var gap = VB_H / ROWS, r = gap / 2, d = '';
+      for (var i = 0; i < ROWS; i++) {
+        var y = gap / 2 + i * gap;
+        var l2r = (i % 2 === 0);
+        var xStart = l2r ? 0 : VB_W, xEnd = l2r ? VB_W : 0;
+        if (i === 0) d += 'M ' + xStart + ' ' + y + ' ';
+        d += 'L ' + xEnd + ' ' + y + ' ';
+        if (i < ROWS - 1) {
+          var yNext = gap / 2 + (i + 1) * gap;
+          d += 'A ' + r + ' ' + r + ' 0 0 ' + (l2r ? 1 : 0) + ' ' + xEnd + ' ' + yNext + ' ';
+        }
+      }
+      return d;
+    }
+
+    trail.setAttribute('d', buildPath());
+    var L = trail.getTotalLength();
+    trail.style.strokeDasharray = L;
+
+    // Progress: 0 when the panel engages, 1 when the container bottom meets the viewport
+    // bottom (prose runs out) — so the photo is always finished by the time there's
+    // nothing left to read.
+    function progress() {
+      var top = topOffset();
+      var rect = layout.getBoundingClientRect();
+      var absTop = rect.top + window.scrollY;
+      var startY = absTop - top;
+      var endY = absTop + layout.offsetHeight - window.innerHeight;
+      if (endY <= startY) return 1;
+      return clamp((window.scrollY - startY) / (endY - startY), 0, 1);
+    }
+
+    function render() {
+      var isStatic = reduceMotion || window.innerWidth <= 760;
+      var p = isStatic ? 1 : progress();
+
+      // draw the chalk in
+      trail.style.strokeDashoffset = L * (1 - p);
+
+      // dissolve chalk -> real photo over the last stretch
+      var photoOp = smooth(0.80, 1.0, p);
+      if (photo) photo.setAttribute('opacity', photoOp);
+
+      // glowing chalk tip rides the leading edge during the pure-chalk phase, fading out
+      // before the dissolve begins so it never sits on top of the emerging photo
+      if (tip) {
+        var tipOp = clamp((0.78 - p) / 0.08, 0, 1) * 0.9;
+        if (isStatic || p <= 0.004 || tipOp <= 0) {
+          tip.setAttribute('opacity', 0);
+        } else {
+          var pt = trail.getPointAtLength(L * p);
+          tip.setAttribute('cx', pt.x);
+          tip.setAttribute('cy', pt.y);
+          tip.setAttribute('opacity', tipOp);
+        }
+      }
+
+      if (cap)  cap.style.opacity  = p > 0.84 ? (p - 0.84) / 0.16 : 0;
+      if (hint) hint.style.opacity = isStatic ? 0 : (1 - clamp(p / 0.15, 0, 1)) * 0.6;
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { render(); ticking = false; });
+    }
+    if (!reduceMotion) {
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+    }
+    render();
+  })();
+  </script>
 </body>
 </html>
