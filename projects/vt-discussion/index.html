@@ -19,70 +19,71 @@
 
   <link rel="stylesheet" href="/css/style.css?v=22">
 
-  <!-- Page-scoped styles for the chalkboard scroll-reveal. Kept here (not in the shared
-       stylesheet) because this behavior exists only on this page. -->
+  <!-- Page-scoped styles for the gold-framed turtle scroll-reveal. -->
   <style>
-    /* Two-column shell: prose scrolls on the left, the chalkboard is pinned right. */
+    /* Two-column shell: prose scrolls on the left; the framed picture is a pinned
+       panel on the right (its own div — the gutter is no longer just whitespace). */
     .vt-layout {
       display: grid;
       grid-template-columns: minmax(0, 66ch) 1fr;
       gap: 3.5rem;
       align-items: start;
     }
-    .vt-prose { min-width: 0; }            /* let the prose column shrink, never overflow */
+    .vt-prose { min-width: 0; }
 
-    .vt-reveal {
+    .vt-pane {
       position: sticky;
       top: var(--vt-top, 84px);
       align-self: start;
     }
 
-    /* Wooden frame around a slate chalkboard. */
+    /* Gilded gold molding. Thin gradient band + bevel highlight + drop shadow.
+       SWAP-IN HOOK: to use a real ornate frame image instead, set
+       `border: <n>px solid transparent; border-image: url(img/gold-frame.png) <slice> stretch;`
+       on .vt-frame and remove the `padding`/`background` below. */
     .vt-frame {
+      position: relative;
       margin: 0;
-      padding: 13px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #7c5836 0%, #5a3d21 38%, #6e4d2d 68%, #4a3219 100%);
-      box-shadow: 0 24px 50px -28px rgba(38, 26, 14, .62), inset 0 1px 0 rgba(255,255,255,.12);
+      padding: 11px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #f0db8e 0%, #cba33f 22%, #a87f28 50%, #dcbb5c 72%, #9a7423 100%);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.5),
+        inset 0 0 0 11px rgba(0,0,0,.04),
+        0 16px 40px -20px rgba(40,28,10,.62);
     }
     .vt-board {
       position: relative;
       aspect-ratio: 4 / 3;
-      max-height: calc(100vh - var(--vt-top, 84px) - 7rem);
-      border-radius: 3px;
+      max-height: calc(100vh - var(--vt-top, 84px) - 8.5rem);
       overflow: hidden;
-      background: radial-gradient(125% 120% at 50% 32%, #3a4842 0%, #2c3833 56%, #222c28 100%);
-      box-shadow: inset 0 0 70px rgba(0,0,0,.55), inset 0 0 0 1px rgba(0,0,0,.35);
-    }
-    /* faint eraser ghosts so the slate looks used */
-    .vt-board::before {
-      content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .5;
-      background:
-        radial-gradient(58% 40% at 28% 72%, rgba(255,255,255,.05), transparent 72%),
-        radial-gradient(48% 30% at 76% 26%, rgba(255,255,255,.045), transparent 72%);
+      border-radius: 2px;
+      background: #efe9dc;                       /* blank canvas before the turtle draws */
+      box-shadow: inset 0 0 0 2px #6b531f, inset 0 0 16px rgba(0,0,0,.16);
     }
     .vt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
 
-    .vt-cap, .vt-hint {
-      position: absolute; bottom: 14px;
+    .vt-cap {
+      margin: 0.9rem auto 0;
+      width: fit-content;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      text-transform: lowercase; letter-spacing: .12em;
-      color: #eef0ea; pointer-events: none;
-      text-shadow: 0 0 7px rgba(238,240,234,.32);
+      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-tertiary);
+      opacity: 0; transition: opacity .5s ease;
     }
-    .vt-cap  { left: 20px;  font-size: .74rem; opacity: 0; transition: opacity .5s ease; }
-    .vt-hint { right: 18px; font-size: .66rem; color: rgba(238,240,234,.6); opacity: .6; transition: opacity .5s ease; }
+    .vt-hint {
+      display: block; margin: .4rem auto 0; width: fit-content;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-size: .64rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-tertiary); opacity: .65; transition: opacity .5s ease;
+    }
 
-    /* Single-column fallback: phones, narrow widths, and reduced-motion users get the
-       finished photo, statically, with no pinning or animation. */
     @media (max-width: 760px) {
       .vt-layout { grid-template-columns: 1fr; gap: 2rem; }
-      .vt-reveal { position: static; top: auto; }
+      .vt-pane { position: static; top: auto; }
       .vt-board { max-height: none; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .vt-reveal { position: static; }
-    }
+    @media (prefers-reduced-motion: reduce) { .vt-pane { position: static; } }
   </style>
 </head>
 <body class="subpage project-page">
@@ -133,40 +134,35 @@
         <p>&mdash; Hudson, Papert Lab</p>
       </section>
 
-      <!-- Pinned chalkboard. As the prose scrolls, the group is drawn in chalk along a
-           serpentine path, then the finished sketch dissolves into the real photograph.
-           Decorative → aria-hidden. -->
-      <aside class="vt-reveal" aria-hidden="true">
+      <!-- Pinned gold-framed picture. The turtle drives along a serpentine path, drawing the
+           first-discussion photo onto the blank canvas as the prose scrolls. -->
+      <aside class="vt-pane" aria-hidden="true">
         <figure class="vt-frame">
           <div class="vt-board">
             <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
               <defs>
-                <!-- the chalk shows only where this trail has been drawn -->
                 <mask id="vt-pen" maskUnits="userSpaceOnUse" x="-220" y="-220" width="1640" height="1340">
                   <path id="vt-trail" fill="none" stroke="#fff" stroke-width="216"
                         stroke-linecap="round" stroke-linejoin="round"></path>
                 </mask>
-                <radialGradient id="vt-tipg">
-                  <stop offset="0%" stop-color="#fbfbf6" stop-opacity="0.95"/>
-                  <stop offset="55%" stop-color="#eef0ea" stop-opacity="0.35"/>
-                  <stop offset="100%" stop-color="#eef0ea" stop-opacity="0"/>
-                </radialGradient>
+                <filter id="vt-tshadow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#2b241d" flood-opacity="0.30"/>
+                </filter>
               </defs>
-
-              <!-- the chalk drawing, revealed progressively -->
-              <image id="vt-chalk" href="img/first-discussion-chalk.webp" x="0" y="0" width="1200" height="900"
-                     preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
-
-              <!-- the real photograph, crossfaded in over the last stretch of scroll -->
+              <!-- faint ghost so the canvas isn't dead before the turtle arrives -->
+              <image id="vt-ghost" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
+                     preserveAspectRatio="xMidYMid slice" opacity="0.05"></image>
+              <!-- the photo, revealed through the turtle's drawn trail -->
               <image id="vt-photo" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
-                     preserveAspectRatio="xMidYMid slice" opacity="0"></image>
-
-              <!-- fresh-chalk glow at the drawing tip (no mascot) -->
-              <circle id="vt-tip" r="30" fill="url(#vt-tipg)" opacity="0"></circle>
+                     preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
+              <!-- the turtle. SWAP-IN HOOK: replace href with a Gemini top-down turtle and the
+                   controller will rotate it to its heading (set TOP_DOWN = true below). -->
+              <image id="vt-turtle" href="/images/layers/turtle-robot.png" filter="url(#vt-tshadow)"
+                     width="240" height="210" style="visibility:hidden"></image>
             </svg>
-            <figcaption class="vt-cap" id="vt-cap">first discussion &middot; mill mountain coffee &middot; roanoke</figcaption>
-            <span class="vt-hint" id="vt-hint">scroll to draw</span>
           </div>
+          <figcaption class="vt-cap" id="vt-cap">First discussion &middot; Mill Mountain Coffee &amp; Tea &middot; Roanoke</figcaption>
+          <span class="vt-hint" id="vt-hint">scroll &mdash; the turtle is drawing</span>
         </figure>
       </aside>
     </div>
@@ -178,36 +174,31 @@
 
   <script src="/js/site.js"></script>
 
-  <!-- Chalkboard scroll-reveal controller. Vanilla + rAF-throttled (no GSAP). One serpentine
-       path drives the chalk mask and the glowing tip; the real photo crossfades in at the end. -->
+  <!-- Gold-framed turtle reveal controller. Vanilla + rAF-throttled (no GSAP). One serpentine
+       path drives the photo mask and the turtle's position/heading. -->
   <script>
   (function () {
-    var svg   = document.querySelector('.vt-svg');
-    var trail = document.getElementById('vt-trail');
-    var chalk = document.getElementById('vt-chalk');
-    var photo = document.getElementById('vt-photo');
-    var tip   = document.getElementById('vt-tip');
+    var trail  = document.getElementById('vt-trail');
+    var turtle = document.getElementById('vt-turtle');
     var layout = document.querySelector('.vt-layout');
-    var aside  = document.querySelector('.vt-reveal');
-    var cap   = document.getElementById('vt-cap');
-    var hint  = document.getElementById('vt-hint');
-    if (!svg || !trail || !layout || !aside) return;
+    var pane   = document.querySelector('.vt-pane');
+    var cap    = document.getElementById('vt-cap');
+    var hint   = document.getElementById('vt-hint');
+    if (!trail || !turtle || !layout || !pane) return;
 
     var VB_W = 1200, VB_H = 900, ROWS = 6;
+    // The current cutout is a ¾ view, so we lean it (never invert). Set TOP_DOWN = true once a
+    // true overhead turtle is dropped in, and it will fully rotate to face its heading.
+    var TOP_DOWN = false;
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function topOffset() {
-      return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top')) || 84;
-    }
+    function topOffset() { return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top')) || 84; }
     function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
-    function smooth(e0, e1, x) { var t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); }
 
-    // Boustrophedon (serpentine) route with semicircular turns — the chalk "stroke".
     function buildPath() {
       var gap = VB_H / ROWS, r = gap / 2, d = '';
       for (var i = 0; i < ROWS; i++) {
-        var y = gap / 2 + i * gap;
-        var l2r = (i % 2 === 0);
+        var y = gap / 2 + i * gap, l2r = (i % 2 === 0);
         var xStart = l2r ? 0 : VB_W, xEnd = l2r ? VB_W : 0;
         if (i === 0) d += 'M ' + xStart + ' ' + y + ' ';
         d += 'L ' + xEnd + ' ' + y + ' ';
@@ -218,14 +209,20 @@
       }
       return d;
     }
-
     trail.setAttribute('d', buildPath());
     var L = trail.getTotalLength();
     trail.style.strokeDasharray = L;
 
-    // Progress: 0 when the panel engages, 1 when the container bottom meets the viewport
-    // bottom (prose runs out) — so the photo is always finished by the time there's
-    // nothing left to read.
+    var tw = 240, th = 210, turtleReady = false, TURTLE_H = 230;
+    var probe = new Image();
+    probe.onload = function () {
+      th = TURTLE_H; tw = TURTLE_H * (probe.naturalWidth / probe.naturalHeight);
+      turtle.setAttribute('width', tw); turtle.setAttribute('height', th);
+      turtleReady = true; render();
+    };
+    probe.onerror = function () { turtleReady = true; render(); };
+    probe.src = turtle.getAttribute('href');
+
     function progress() {
       var top = topOffset();
       var rect = layout.getBoundingClientRect();
@@ -239,38 +236,33 @@
     function render() {
       var isStatic = reduceMotion || window.innerWidth <= 760;
       var p = isStatic ? 1 : progress();
-
-      // draw the chalk in
       trail.style.strokeDashoffset = L * (1 - p);
 
-      // dissolve chalk -> real photo over the last stretch
-      var photoOp = smooth(0.80, 1.0, p);
-      if (photo) photo.setAttribute('opacity', photoOp);
-
-      // glowing chalk tip rides the leading edge during the pure-chalk phase, fading out
-      // before the dissolve begins so it never sits on top of the emerging photo
-      if (tip) {
-        var tipOp = clamp((0.78 - p) / 0.08, 0, 1) * 0.9;
-        if (isStatic || p <= 0.004 || tipOp <= 0) {
-          tip.setAttribute('opacity', 0);
+      if (turtleReady) {
+        if (isStatic) {
+          turtle.style.visibility = 'hidden';
         } else {
+          turtle.style.visibility = 'visible';
           var pt = trail.getPointAtLength(L * p);
-          tip.setAttribute('cx', pt.x);
-          tip.setAttribute('cy', pt.y);
-          tip.setAttribute('opacity', tipOp);
+          var ahead = trail.getPointAtLength(Math.min(L, L * p + 2));
+          var dxn = ahead.x - pt.x, dyn = ahead.y - pt.y, ang;
+          if (TOP_DOWN) {
+            ang = Math.atan2(dyn, dxn) * 180 / Math.PI + 90;     // overhead turtle faces its heading
+          } else {
+            ang = clamp(Math.atan2(dyn, Math.abs(dxn) + 1e-4) * 180 / Math.PI * 0.55, -20, 20); // ¾ lean
+          }
+          turtle.setAttribute('transform',
+            'translate(' + pt.x + ',' + pt.y + ') rotate(' + ang + ') translate(' + (-tw / 2) + ',' + (-th / 2) + ')');
+          turtle.style.opacity = p > 0.94 ? Math.max(0, 1 - (p - 0.94) / 0.06) : 1;  // park + fade at the end
         }
       }
 
-      if (cap)  cap.style.opacity  = p > 0.84 ? (p - 0.84) / 0.16 : 0;
-      if (hint) hint.style.opacity = isStatic ? 0 : (1 - clamp(p / 0.15, 0, 1)) * 0.6;
+      if (cap)  cap.style.opacity  = p > 0.85 ? (p - 0.85) / 0.15 : 0;
+      if (hint) hint.style.opacity = isStatic ? 0 : (1 - clamp(p / 0.15, 0, 1)) * 0.65;
     }
 
     var ticking = false;
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () { render(); ticking = false; });
-    }
+    function onScroll() { if (ticking) return; ticking = true; requestAnimationFrame(function () { render(); ticking = false; }); }
     if (!reduceMotion) {
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll, { passive: true });
