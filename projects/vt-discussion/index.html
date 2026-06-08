@@ -21,19 +21,20 @@
   <style>
     /* full-width on this page: prose hugs the left, frame is fixed right, and the GAP between
        them grows on larger screens (instead of empty margins on the outer sides) */
-    /* centered content (outer padding grows on large screens); two-column grid inside */
+    /* centered content (outer padding grows on large screens) */
     .vt-pagetitle { text-align:center; margin:0 0 2.2rem; padding-top:1.5rem; }
-    .vt-layout { display:grid; grid-template-columns:minmax(0,64ch) 1fr; gap:3rem; align-items:start; }
-    .vt-prose { max-width:none; min-width:0; }
+    .vt-layout { display:block; }
+    .vt-prose { max-width:64ch; }
 
-    /* Sticky framed photo: pinned (vertically centred) while you scroll the essay, then
-       releases once the essay column ends — i.e. exactly when the turtle reaches the bottom.
-       Only the left text column scrolls. */
+    /* Fixed framed photo on the right — pinned, never moves; only the left text scrolls. */
     .vt-pane {
-      position:sticky; z-index:1; top:var(--vt-top,84px); height:calc(100vh - var(--vt-top,84px));
-      display:flex; align-items:center; justify-content:flex-end; padding-right:3vw;
+      position:fixed; z-index:1;
+      top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
+      right:3vw; transform:translateY(-50%);
+      width:min(34vw,480px);
+      display:flex; flex-direction:column; align-items:center; gap:0;
     }
-    .vt-figure { margin:0; width:min(34vw,480px); display:flex; flex-direction:column; align-items:center; gap:0; }
+    .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
 
     /* gold frame, tilted ~10° counter-clockwise */
     .vt-frame {
