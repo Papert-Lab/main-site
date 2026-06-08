@@ -20,7 +20,7 @@
 
   <style>
     .vt-layout { display:block; }
-    .vt-prose { max-width:48ch; }
+    .vt-prose { max-width:60ch; }
 
     /* The framed photo is FIXED on the right — it never moves; only the essay scrolls.
        No background (the page shows through). The pencil/colour reveal happens inside it. */
@@ -28,7 +28,7 @@
       position:fixed; z-index:1;
       top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
       right:3vw; transform:translateY(-50%);
-      width:min(48vw,720px);
+      width:min(40vw,560px);
       display:flex; flex-direction:column; align-items:center; gap:.8rem;
     }
     .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
@@ -111,14 +111,22 @@
           <div class="vt-frame">
             <div class="vt-stage">
               <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
-                <defs><mask id="vt-pen" maskUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1420">
-                  <path id="vt-trail" fill="none" stroke="#fff" stroke-width="250" stroke-linecap="round" stroke-linejoin="round"></path>
-                </mask></defs>
+                <defs>
+                  <mask id="vt-pen" maskUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1420">
+                    <path id="vt-trail" fill="none" stroke="#fff" stroke-width="250" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </mask>
+                  <filter id="vt-tsh" x="-60%" y="-60%" width="220%" height="220%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#2a241d" flood-opacity="0.35"/>
+                  </filter>
+                </defs>
                 <image id="vt-pencil" href="img/first-discussion-pencil.webp" x="0" y="0" width="1200" height="900"
                        preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
                 <image id="vt-color" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
                        preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)" opacity="0"></image>
-                <image id="vt-turtle" href="img/turtle.png" width="240" height="220" style="visibility:hidden"></image>
+                <g id="vt-turtle" filter="url(#vt-tsh)" style="visibility:hidden">
+                  <path d="M 0 -64 L 44 64 L 0 35 L -44 64 Z" fill="#2f2a23"></path>
+                  <path d="M 0 -64 L 44 64 L 0 35 L -44 64 Z" fill="none" stroke="#6a5f4f" stroke-width="2.4" opacity="0.45"></path>
+                </g>
               </svg>
             </div>
           </div>
@@ -164,25 +172,18 @@
     function target(){var top=topOffset(),rc=layout.getBoundingClientRect(),at=rc.top+window.scrollY;
       var s=at-top,e=at+layout.offsetHeight-window.innerHeight; if(e<=s)return 1; return clamp((window.scrollY-s)/(e-s),0,1);}
 
-    var tw=240,th=220,ready=false,TH=235;
-    var probe=new Image();
-    probe.onload=function(){th=TH;tw=TH*(probe.naturalWidth/probe.naturalHeight);turtle.setAttribute('width',tw);turtle.setAttribute('height',th);ready=true;};
-    probe.onerror=function(){ready=true;};
-    probe.src='img/turtle.png';
-
-    // double-whammy: the zig-zag reveals the pencil sketch, and colour fades in toward the bottom
+    // double-whammy: the zig-zag reveals the pencil sketch, colour fades in toward the bottom.
+    // the iconographic Logo turtle (arrowhead) points along its travel direction.
     function draw(p){
       trail.style.strokeDashoffset=L*(1-p);
       colorEl.setAttribute('opacity', smooth(0.55,1.0,p));
-      if(ready){
-        if(p>0.001 && p<0.999){
-          turtle.style.visibility='visible';
-          var pt=trail.getPointAtLength(L*p), a=trail.getPointAtLength(Math.min(L,L*p+2));
-          var flip=(a.x-pt.x)>=-0.01?1:-1;
-          turtle.setAttribute('transform','translate('+pt.x+','+pt.y+') scale('+flip+',1) translate('+(-tw/2)+','+(-th/2)+')');
-          turtle.style.opacity = p>0.94 ? Math.max(0,1-(p-0.94)/0.06) : 1;
-        } else { turtle.style.visibility='hidden'; }
-      }
+      if(p>0.001 && p<0.999){
+        turtle.style.visibility='visible';
+        var pt=trail.getPointAtLength(L*p), a=trail.getPointAtLength(Math.min(L,L*p+3));
+        var ang=Math.atan2(a.y-pt.y,a.x-pt.x)*180/Math.PI+90;
+        turtle.setAttribute('transform','translate('+pt.x+','+pt.y+') rotate('+ang+')');
+        turtle.style.opacity = p>0.94 ? Math.max(0,1-(p-0.94)/0.06) : 1;
+      } else { turtle.style.visibility='hidden'; }
       if(cap) cap.style.opacity = p>0.9 ? (p-0.9)/0.1 : 0;
     }
 
