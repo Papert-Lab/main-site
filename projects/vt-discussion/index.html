@@ -33,7 +33,7 @@
       position:fixed; z-index:1;
       top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
       right:3vw; transform:translateY(-50%);
-      width:min(34vw,480px);
+      width:min(36vw,620px);          /* grows on wide screens to fill some of the gap */
       display:flex; flex-direction:column; align-items:center; gap:0;
     }
     .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
@@ -47,7 +47,7 @@
     /* black-and-green CRT screen (LOGO-era terminal); hides the scrolling page behind the frame */
     .vt-stage { position:relative; aspect-ratio:4/3; overflow:hidden; background:#070b08; }
     .vt-stage::after{
-      content:""; position:absolute; inset:0; pointer-events:none; z-index:3; opacity:.45;
+      content:""; position:absolute; inset:0; pointer-events:none; z-index:3; opacity:var(--scan,.45);
       background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.25) 2px 3px);
     }
 
@@ -56,12 +56,12 @@
     /* caption is horizontal (not tilted with the frame) */
     .vt-cap {
       margin-top:11%;                 /* clear the tilted frame's lowest corner; scales with frame width */
-      font:.74rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.14em;
+      font:.92rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.12em;
       text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
     }
 
     /* too narrow to sit side by side without overlapping -> stack the framed photo ON TOP */
-    @media (max-width:1100px){
+    @media (max-width:1280px){
       .vt-layout{ display:flex; flex-direction:column; }
       .vt-prose{ max-width:none; }
       .vt-pane{ position:static; order:-1; width:100%; height:auto; transform:none; justify-content:center; margin:0 0 1.6rem; padding:0; }
@@ -153,6 +153,7 @@
     var prose=document.querySelector('.vt-prose');
     var trail=document.getElementById('vt-trail');
     var colorEl=document.getElementById('vt-color');
+    var stage=document.querySelector('.vt-stage');
     var turtle=document.getElementById('vt-turtle');
     var cap=document.getElementById('vt-cap');
     if(prose) prose.classList.add('visible');
@@ -160,7 +161,7 @@
 
     var VB_W=1200, VB_H=900, ROWS=14;
     var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var isStatic=reduce||innerWidth<=1100;
+    var isStatic=reduce||innerWidth<=1280;
     var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
     var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);};
     function topOffset(){return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;}
@@ -181,6 +182,7 @@
     function draw(p){
       trail.style.strokeDashoffset=L*(1-p);
       colorEl.setAttribute('opacity', smooth(0.55,1.0,p));
+      if(stage) stage.style.setProperty('--scan', (0.45*(1-smooth(0.72,1.0,p))).toFixed(3));  // scanlines fade out as colour resolves
       if(p>0.001 && p<0.999){
         turtle.style.visibility='visible';
         var pt=trail.getPointAtLength(L*p), a=trail.getPointAtLength(Math.min(L,L*p+3));
