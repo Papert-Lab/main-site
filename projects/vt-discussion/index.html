@@ -41,25 +41,23 @@
        SWAP-IN HOOK: to use a real ornate frame image instead, set
        `border: <n>px solid transparent; border-image: url(img/gold-frame.png) <slice> stretch;`
        on .vt-frame and remove the `padding`/`background` below. */
+    /* Real Gemini-generated gilded frame, sliced as a border-image (molding only;
+       the watermarked center is discarded). */
     .vt-frame {
       position: relative;
       margin: 0;
-      padding: 11px;
-      border-radius: 4px;
-      background: linear-gradient(135deg, #f0db8e 0%, #cba33f 22%, #a87f28 50%, #dcbb5c 72%, #9a7423 100%);
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,.5),
-        inset 0 0 0 11px rgba(0,0,0,.04),
-        0 16px 40px -20px rgba(40,28,10,.62);
+      padding: 0;
+      border: 17px solid transparent;
+      border-image: url("img/gold-frame.webp") 72 stretch;
+      box-shadow: 0 16px 40px -20px rgba(40,28,10,.62);
     }
     .vt-board {
       position: relative;
       aspect-ratio: 4 / 3;
       max-height: calc(100vh - var(--vt-top, 84px) - 8.5rem);
       overflow: hidden;
-      border-radius: 2px;
       background: #efe9dc;                       /* blank canvas before the turtle draws */
-      box-shadow: inset 0 0 0 2px #6b531f, inset 0 0 16px rgba(0,0,0,.16);
+      box-shadow: inset 0 0 16px rgba(0,0,0,.18);
     }
     .vt-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; }
 
@@ -185,6 +183,11 @@
     var cap    = document.getElementById('vt-cap');
     var hint   = document.getElementById('vt-hint');
     if (!trail || !turtle || !layout || !pane) return;
+
+    // Guarantee the essay is visible even if the shared .reveal IntersectionObserver
+    // doesn't fire for this tall section (e.g. on restored scroll positions).
+    var prose = document.querySelector('.vt-prose');
+    if (prose) prose.classList.add('visible');
 
     var VB_W = 1200, VB_H = 900, ROWS = 6;
     // The current cutout is a ¾ view, so we lean it (never invert). Set TOP_DOWN = true once a
