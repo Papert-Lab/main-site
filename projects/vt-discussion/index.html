@@ -20,22 +20,27 @@
 
   <style>
     .vt-layout { display:block; }
-    .vt-prose { max-width:70ch; }
+    .vt-prose { max-width:min(66ch,44vw); }
 
     /* The framed photo is FIXED on the right — it never moves; only the essay scrolls.
        No background (the page shows through). The pencil/colour reveal happens inside it. */
+    /* the ENTIRE right half is a pinned panel (its own paper background) — it never moves;
+       only the left text column scrolls. */
     .vt-pane {
       position:fixed; z-index:1;
-      top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
-      right:3vw; transform:translateY(-50%);
-      width:min(34vw,480px);
-      display:flex; flex-direction:column; align-items:center; gap:.8rem;
+      top:var(--vt-top,84px); right:0; width:50vw; height:calc(100vh - var(--vt-top,84px));
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;
+      background-color:#f5f0e6;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
+      background-size:256px,512px; background-repeat:repeat;
     }
-    .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
+    .vt-figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:0; }
 
     /* gold frame, tilted ~10° counter-clockwise */
     .vt-frame {
-      width:100%; transform:rotate(-10deg);
+      width:min(34vw,460px); transform:rotate(-10deg);
       border:18px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
       box-shadow:0 26px 56px -28px rgba(40,28,10,.5);
     }
@@ -109,7 +114,7 @@
               <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
                 <defs>
                   <mask id="vt-pen" maskUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1420">
-                    <path id="vt-trail" fill="none" stroke="#fff" stroke-width="92" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path id="vt-trail" fill="none" stroke="#fff" stroke-width="92" stroke-linecap="butt" stroke-linejoin="round"></path>
                   </mask>
                   <filter id="vt-tsh" x="-150%" y="-150%" width="400%" height="400%">
                     <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#5cf07a" flood-opacity="0.9"/>
@@ -158,9 +163,10 @@
     function topOffset(){return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;}
 
     // horizontal zig-zag stepping down (boustrophedon) — the turtle's route
-    function buildPath(){var g=VB_H/ROWS,r=g/2,d='';for(var i=0;i<ROWS;i++){var y=g/2+i*g,l2r=i%2===0,
-      xs=l2r?0:VB_W,xe=l2r?VB_W:0;if(i===0)d+='M '+xs+' '+y+' ';d+='L '+xe+' '+y+' ';
-      if(i<ROWS-1){var yn=g/2+(i+1)*g;d+='A '+r+' '+r+' 0 0 '+(l2r?1:0)+' '+xe+' '+yn+' ';}}return d;}
+    function buildPath(){var g=VB_H/ROWS,r=g/2,d='M -300 '+(g/2)+' ';   // begin off-screen (left) and drive in
+      for(var i=0;i<ROWS;i++){var y=g/2+i*g,l2r=i%2===0,xe=l2r?VB_W:0;
+        d+='L '+xe+' '+y+' ';
+        if(i<ROWS-1){var yn=g/2+(i+1)*g;d+='A '+r+' '+r+' 0 0 '+(l2r?1:0)+' '+xe+' '+yn+' ';}}return d;}
     trail.setAttribute('d',buildPath());
     var L=trail.getTotalLength(); trail.style.strokeDasharray=L;
 
