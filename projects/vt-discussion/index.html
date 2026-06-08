@@ -19,37 +19,33 @@
   <link rel="stylesheet" href="/css/style.css?v=22">
 
   <style>
-    .vt-layout { display:grid; grid-template-columns:minmax(0,60ch) 1fr; gap:3rem; align-items:start; }
-    .vt-prose { min-width:0; }
+    .vt-layout { display:block; }
+    .vt-prose { max-width:48ch; }
 
-    /* right container: its own sticky region, no background (page shows through);
-       only the left column scrolls. */
+    /* The framed photo is FIXED on the right — it never moves; only the essay scrolls.
+       No background (the page shows through). The pencil/colour reveal happens inside it. */
     .vt-pane {
-      position:sticky; top:var(--vt-top,84px); height:calc(100vh - var(--vt-top,84px));
-      display:flex; align-items:center; justify-content:center; padding-right:1.5rem;
+      position:fixed; z-index:1;
+      top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
+      right:3vw; transform:translateY(-50%);
+      width:min(48vw,720px);
+      display:flex; flex-direction:column; align-items:center; gap:.8rem;
     }
-    .vt-figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:.7rem; }
+    .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:.8rem; }
 
-    /* gold frame, tilted counter-clockwise */
+    /* gold frame, tilted ~10° counter-clockwise */
     .vt-frame {
-      width:min(86%,540px); transform:rotate(-17deg);
-      border:16px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
-      box-shadow:0 24px 52px -26px rgba(40,28,10,.5);
+      width:100%; transform:rotate(-10deg);
+      border:18px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
+      box-shadow:0 26px 56px -28px rgba(40,28,10,.5);
     }
     .vt-stage { position:relative; aspect-ratio:4/3; overflow:hidden; }
 
-    /* the photo reveals as a pencil shade-in; colour fades in toward the bottom */
-    .vt-reveal {
-      position:absolute; inset:0;
-      -webkit-mask-image:linear-gradient(to bottom,#000 calc(var(--rev,0)*100% - 9%), transparent calc(var(--rev,0)*100%));
-      mask-image:linear-gradient(to bottom,#000 calc(var(--rev,0)*100% - 9%), transparent calc(var(--rev,0)*100%));
-    }
-    .vt-pencil, .vt-color { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
-    .vt-color { opacity:var(--color,0); }
+    .vt-svg { position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible; }
 
+    /* caption is horizontal (not tilted with the frame) */
     .vt-cap {
-      transform:rotate(-17deg);
-      font:.62rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.14em;
+      font:.64rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.14em;
       text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
     }
 
@@ -104,10 +100,16 @@
         <figure class="vt-figure">
           <div class="vt-frame">
             <div class="vt-stage">
-              <div class="vt-reveal" id="vt-reveal">
-                <img class="vt-pencil" src="img/first-discussion-pencil.webp" alt="">
-                <img class="vt-color"  src="img/first-discussion-1600.jpg" alt="">
-              </div>
+              <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
+                <defs><mask id="vt-pen" maskUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1420">
+                  <path id="vt-trail" fill="none" stroke="#fff" stroke-width="250" stroke-linecap="round" stroke-linejoin="round"></path>
+                </mask></defs>
+                <image id="vt-pencil" href="img/first-discussion-pencil.webp" x="0" y="0" width="1200" height="900"
+                       preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
+                <image id="vt-color" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
+                       preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)" opacity="0"></image>
+                <image id="vt-turtle" href="img/turtle.png" width="240" height="220" style="visibility:hidden"></image>
+              </svg>
             </div>
           </div>
           <figcaption class="vt-cap" id="vt-cap">first discussion &middot; mill mountain coffee &middot; roanoke</figcaption>
@@ -128,37 +130,57 @@
   (function(){
     var layout=document.querySelector('.vt-layout');
     var prose=document.querySelector('.vt-prose');
-    var reveal=document.getElementById('vt-reveal');
+    var trail=document.getElementById('vt-trail');
+    var colorEl=document.getElementById('vt-color');
+    var turtle=document.getElementById('vt-turtle');
     var cap=document.getElementById('vt-cap');
     if(prose) prose.classList.add('visible');
-    if(!layout||!reveal) return;
+    if(!layout||!trail) return;
 
+    var VB_W=1200, VB_H=900, ROWS=6;
     var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
     var isStatic=reduce||innerWidth<=760;
     var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
     var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);};
     function topOffset(){return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;}
 
-    function progress(){
-      var top=topOffset(), rc=layout.getBoundingClientRect(), at=rc.top+window.scrollY;
-      var s=at-top, e=at+layout.offsetHeight-window.innerHeight;
-      if(e<=s) return 1;
-      return clamp((window.scrollY-s)/(e-s),0,1);
-    }
-    function render(){
-      var p=isStatic?1:progress();
-      reveal.style.setProperty('--rev', p);                 // pencil shades in top -> bottom
-      reveal.style.setProperty('--color', smooth(0.6,1.0,p)); // colour fades in toward the bottom
+    // horizontal zig-zag stepping down (boustrophedon) — the turtle's route
+    function buildPath(){var g=VB_H/ROWS,r=g/2,d='';for(var i=0;i<ROWS;i++){var y=g/2+i*g,l2r=i%2===0,
+      xs=l2r?0:VB_W,xe=l2r?VB_W:0;if(i===0)d+='M '+xs+' '+y+' ';d+='L '+xe+' '+y+' ';
+      if(i<ROWS-1){var yn=g/2+(i+1)*g;d+='A '+r+' '+r+' 0 0 '+(l2r?1:0)+' '+xe+' '+yn+' ';}}return d;}
+    trail.setAttribute('d',buildPath());
+    var L=trail.getTotalLength(); trail.style.strokeDasharray=L;
+
+    function target(){var top=topOffset(),rc=layout.getBoundingClientRect(),at=rc.top+window.scrollY;
+      var s=at-top,e=at+layout.offsetHeight-window.innerHeight; if(e<=s)return 1; return clamp((window.scrollY-s)/(e-s),0,1);}
+
+    var tw=240,th=220,ready=false,TH=235;
+    var probe=new Image();
+    probe.onload=function(){th=TH;tw=TH*(probe.naturalWidth/probe.naturalHeight);turtle.setAttribute('width',tw);turtle.setAttribute('height',th);ready=true;};
+    probe.onerror=function(){ready=true;};
+    probe.src='img/turtle.png';
+
+    // double-whammy: the zig-zag reveals the pencil sketch, and colour fades in toward the bottom
+    function draw(p){
+      trail.style.strokeDashoffset=L*(1-p);
+      colorEl.setAttribute('opacity', smooth(0.55,1.0,p));
+      if(ready){
+        if(p>0.001 && p<0.999){
+          turtle.style.visibility='visible';
+          var pt=trail.getPointAtLength(L*p), a=trail.getPointAtLength(Math.min(L,L*p+2));
+          var flip=(a.x-pt.x)>=-0.01?1:-1;
+          turtle.setAttribute('transform','translate('+pt.x+','+pt.y+') scale('+flip+',1) translate('+(-tw/2)+','+(-th/2)+')');
+          turtle.style.opacity = p>0.94 ? Math.max(0,1-(p-0.94)/0.06) : 1;
+        } else { turtle.style.visibility='hidden'; }
+      }
       if(cap) cap.style.opacity = p>0.9 ? (p-0.9)/0.1 : 0;
     }
 
-    if(isStatic){ render(); }
+    if(isStatic){ draw(1); turtle.style.visibility='hidden'; }
     else {
-      var ticking=false;
-      function onScroll(){ if(ticking)return; ticking=true; requestAnimationFrame(function(){render();ticking=false;}); }
-      addEventListener('scroll',onScroll,{passive:true});
-      addEventListener('resize',onScroll,{passive:true});
-      render();
+      var shown=0;                                   // damped: ease toward scroll target so fast scrolls don't teleport
+      function loop(){ var t=target(); shown += (t-shown)*0.12; if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
+      requestAnimationFrame(loop);
     }
   })();
   </script>
