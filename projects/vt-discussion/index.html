@@ -19,30 +19,47 @@
   <link rel="stylesheet" href="/css/style.css?v=22">
 
   <style>
-    .vt-layout { display:grid; grid-template-columns:minmax(0,60ch) 1fr; gap:3.5rem; align-items:start; }
+    .vt-layout { display:grid; grid-template-columns:minmax(0,60ch) 1fr; gap:3rem; align-items:start; }
     .vt-prose { min-width:0; }
-    .vt-wall {
+
+    /* right container: its own sticky region, no background (page shows through);
+       only the left column scrolls. */
+    .vt-pane {
       position:sticky; top:var(--vt-top,84px); height:calc(100vh - var(--vt-top,84px));
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.6rem;
-      background:radial-gradient(120% 90% at 50% 35%, #efe7d7, #e3d9c4);
-      box-shadow:inset 0 0 70px rgba(120,98,60,.13);
+      display:flex; align-items:center; justify-content:center; padding-right:1.5rem;
     }
+    .vt-figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:.7rem; }
+
+    /* gold frame, tilted counter-clockwise */
     .vt-frame {
-      margin:0; border:17px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
-      box-shadow:0 18px 44px -22px rgba(40,28,10,.55); width:min(82%,620px);
+      width:min(86%,540px); transform:rotate(-17deg);
+      border:16px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
+      box-shadow:0 24px 52px -26px rgba(40,28,10,.5);
     }
-    .vt-stage { position:relative; aspect-ratio:4/3; overflow:hidden; background:#efe9dc; }
-    .vt-svg { position:absolute; inset:0; width:100%; height:100%; display:block; }
-    .vt-bot { position:absolute; left:0; top:0; pointer-events:none; will-change:transform; }
+    .vt-stage { position:relative; aspect-ratio:4/3; overflow:hidden; }
+
+    /* the photo reveals as a pencil shade-in; colour fades in toward the bottom */
+    .vt-reveal {
+      position:absolute; inset:0;
+      -webkit-mask-image:linear-gradient(to bottom,#000 calc(var(--rev,0)*100% - 9%), transparent calc(var(--rev,0)*100%));
+      mask-image:linear-gradient(to bottom,#000 calc(var(--rev,0)*100% - 9%), transparent calc(var(--rev,0)*100%));
+    }
+    .vt-pencil, .vt-color { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+    .vt-color { opacity:var(--color,0); }
+
     .vt-cap {
+      transform:rotate(-17deg);
       font:.62rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.14em;
       text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
     }
+
     @media (max-width:760px){
       .vt-layout{grid-template-columns:1fr;gap:2rem}
-      .vt-wall{position:static;height:auto;background:none;box-shadow:none}
+      .vt-pane{position:static;height:auto;padding-right:0}
+      .vt-frame{transform:none}
+      .vt-cap{transform:none}
     }
-    @media (prefers-reduced-motion:reduce){ .vt-wall{position:static;height:auto} }
+    @media (prefers-reduced-motion:reduce){ .vt-pane{position:static;height:auto} }
   </style>
 </head>
 <body class="subpage project-page">
@@ -83,20 +100,18 @@
         <p>&mdash; Hudson, Papert Lab</p>
       </section>
 
-      <aside class="vt-wall" aria-hidden="true">
-        <figure class="vt-frame">
-          <div class="vt-stage">
-            <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
-              <defs><mask id="vt-pen" maskUnits="userSpaceOnUse" x="-220" y="-220" width="1640" height="1340">
-                <path id="vt-trail" fill="none" stroke="#fff" stroke-width="236" stroke-linecap="round" stroke-linejoin="round"></path>
-              </mask></defs>
-              <image id="vt-photo" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
-                     preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
-            </svg>
-            <canvas class="vt-bot" id="vt-bot"></canvas>
+      <aside class="vt-pane" aria-hidden="true">
+        <figure class="vt-figure">
+          <div class="vt-frame">
+            <div class="vt-stage">
+              <div class="vt-reveal" id="vt-reveal">
+                <img class="vt-pencil" src="img/first-discussion-pencil.webp" alt="">
+                <img class="vt-color"  src="img/first-discussion-1600.jpg" alt="">
+              </div>
+            </div>
           </div>
+          <figcaption class="vt-cap" id="vt-cap">first discussion &middot; mill mountain coffee &middot; roanoke</figcaption>
         </figure>
-        <figcaption class="vt-cap" id="vt-cap">first discussion &middot; mill mountain coffee &middot; roanoke</figcaption>
       </aside>
     </div>
   </main>
@@ -107,133 +122,45 @@
 
   <script src="/js/site.js"></script>
 
-  <script type="importmap">{"imports":{
-    "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }}</script>
+  <!-- Scroll-driven pencil shade-in -> colour fade. Vanilla, rAF-throttled on scroll only
+       (no continuous loop). Static (reduced-motion / mobile) shows the finished colour photo. -->
+  <script>
+  (function(){
+    var layout=document.querySelector('.vt-layout');
+    var prose=document.querySelector('.vt-prose');
+    var reveal=document.getElementById('vt-reveal');
+    var cap=document.getElementById('vt-cap');
+    if(prose) prose.classList.add('visible');
+    if(!layout||!reveal) return;
 
-  <!-- A real-time 3D dome-bot (transparent WebGL canvas, rendered centred in a small square that
-       is CSS-translated along the serpentine path) draws the photo into view through an SVG mask.
-       Damped drive + intro spin + flip-to-face. Static photo fallback without WebGL/motion. -->
-  <script type="module">
-  const layout=document.querySelector('.vt-layout');
-  const prose=document.querySelector('.vt-prose');
-  const trail=document.getElementById('vt-trail');
-  const stage=document.querySelector('.vt-stage');
-  const botCanvas=document.getElementById('vt-bot');
-  const cap=document.getElementById('vt-cap');
-  if(prose) prose.classList.add('visible');
+    var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var isStatic=reduce||innerWidth<=760;
+    var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
+    var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);};
+    function topOffset(){return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;}
 
-  const VB_W=1200, VB_H=900, ROWS=6;
-  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const isStatic=reduce||innerWidth<=760;
-  const topOffset=()=>parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;
-  const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
-
-  function buildPath(){let g=VB_H/ROWS,r=g/2,d='';for(let i=0;i<ROWS;i++){let y=g/2+i*g,l2r=i%2===0,
-    xs=l2r?0:VB_W,xe=l2r?VB_W:0;if(i===0)d+='M '+xs+' '+y+' ';d+='L '+xe+' '+y+' ';
-    if(i<ROWS-1){let yn=g/2+(i+1)*g;d+='A '+r+' '+r+' 0 0 '+(l2r?1:0)+' '+xe+' '+yn+' ';}}return d;}
-  trail.setAttribute('d',buildPath());
-  const L=trail.getTotalLength(); trail.style.strokeDasharray=L;
-
-  function targetProgress(){const t=topOffset(),rc=layout.getBoundingClientRect(),at=rc.top+scrollY,
-    s=at-t,e=at+layout.offsetHeight-innerHeight; if(e<=s)return 1; return clamp((scrollY-s)/(e-s),0,1);}
-
-  if(isStatic){
-    trail.style.strokeDashoffset=0; botCanvas.style.display='none'; if(cap) cap.style.opacity=1;
-  } else {
-    const THREE = await import('three');
-    const {RoomEnvironment} = await import('three/addons/environments/RoomEnvironment.js');
-    const {RGBELoader} = await import('three/addons/loaders/RGBELoader.js');
-
-    const renderer=new THREE.WebGLRenderer({canvas:botCanvas,antialias:true,alpha:true});
-    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-    renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
-    renderer.outputColorSpace=THREE.SRGBColorSpace;
-
-    const scene=new THREE.Scene();
-    const pmrem=new THREE.PMREMGenerator(renderer);
-    scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
-    new RGBELoader().load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/equirectangular/venice_sunset_1k.hdr',
-      h=>{h.mapping=THREE.EquirectangularReflectionMapping; scene.environment=pmrem.fromEquirectangular(h).texture; h.dispose();});
-
-    const camera=new THREE.PerspectiveCamera(32,1,0.1,100);
-    camera.position.set(0,2.2,5.6); camera.lookAt(0,0.42,0);
-    scene.add(new THREE.AmbientLight(0xffffff,0.14));
-    const key=new THREE.DirectionalLight(0xfff1da,1.9); key.position.set(3,6,5); scene.add(key);
-
-    const bot=new THREE.Group(); scene.add(bot);
-    const pts=[new THREE.Vector2(0,0),new THREE.Vector2(1.06,0),new THREE.Vector2(1.18,0.10),
-      new THREE.Vector2(1.20,0.30),new THREE.Vector2(1.16,0.56),new THREE.Vector2(1.08,0.62),new THREE.Vector2(0,0.62)];
-    bot.add(new THREE.Mesh(new THREE.LatheGeometry(pts,96),
-      new THREE.MeshStandardMaterial({color:0xb0a07e,metalness:1,roughness:0.45})));
-    const tp=new THREE.Mesh(new THREE.CylinderGeometry(1.05,1.05,0.015,72),
-      new THREE.MeshStandardMaterial({color:0x4f4a40,metalness:1,roughness:0.62})); tp.position.y=0.625; bot.add(tp);
-
-    const dark=new THREE.MeshStandardMaterial({color:0x2e2a24,metalness:0.65,roughness:0.5});
-    const green=new THREE.MeshStandardMaterial({color:0x2f6b3a,roughness:0.6,metalness:0.1});
-    const brass=new THREE.MeshStandardMaterial({color:0xb98c3a,metalness:0.85,roughness:0.34});
-    const mech=new THREE.Group(); mech.position.y=0.635; bot.add(mech);
-    const motor=new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.28,0.28,36),dark); motor.position.y=0.14; mech.add(motor);
-    const spool=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.05,36),brass); spool.position.y=0.3; mech.add(spool);
-    const pcb=new THREE.Mesh(new THREE.RingGeometry(0.42,0.92,64),green); pcb.rotation.x=-Math.PI/2; pcb.position.y=0.03; mech.add(pcb);
-    for(let k=0;k<6;k++){const a=k*Math.PI/3; const p=new THREE.Mesh(new THREE.CylinderGeometry(0.028,0.028,0.2,12),brass);
-      p.position.set(Math.cos(a)*0.62,0.1,Math.sin(a)*0.62); mech.add(p);}
-    for(let k=0;k<12;k++){const a=k*0.52,rr=(k%2)?0.6:0.78;
-      const c=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.05,0.05), k%3?new THREE.MeshStandardMaterial({color:0xc0452f,roughness:0.5}):new THREE.MeshStandardMaterial({color:0xd9c24a,metalness:0.7,roughness:0.4}));
-      c.position.set(Math.cos(a)*rr,0.045,Math.sin(a)*rr); mech.add(c);}
-
-    const dg=new THREE.SphereGeometry(1.12,96,56,0,Math.PI*2,0,Math.PI/2); dg.scale(1,0.84,1);
-    const dome=new THREE.Mesh(dg,new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:1,thickness:0.22,
-      roughness:0.05,ior:1.47,metalness:0,transparent:true,clearcoat:1,clearcoatRoughness:0.06,
-      envMapIntensity:0.9,attenuationColor:0xfff2e0,attenuationDistance:12})); dome.position.y=0.63; bot.add(dome);
-
-    const rubber=new THREE.MeshStandardMaterial({color:0x2a2620,roughness:0.92});
-    const tan=new THREE.MeshStandardMaterial({color:0xbda06a,roughness:0.5,metalness:0.25});
-    const capMat=new THREE.MeshStandardMaterial({color:0x6b5a36,metalness:0.6,roughness:0.4});
-    const wheels=[];
-    for(const sx of[-1,1]){const w=new THREE.Group(); w.position.set(sx*1.2,0.34,0);
-      const t=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.26,48),rubber); t.rotation.z=Math.PI/2; w.add(t);
-      for(let k=0;k<26;k++){const rb=new THREE.Mesh(new THREE.BoxGeometry(0.28,0.05,0.06),rubber); rb.rotation.x=k*(Math.PI*2/26); w.add(rb);}
-      for(const fx of[-1,1]){const h=new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.32,0.02,40),tan); h.rotation.z=Math.PI/2; h.position.x=fx*0.135; w.add(h);
-        const cp=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,0.05,20),capMat); cp.rotation.z=Math.PI/2; cp.position.x=fx*0.155; w.add(cp);}
-      bot.add(w); wheels.push(w);}
-    const pen=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.085,0.5,16),
-      new THREE.MeshStandardMaterial({color:0x1b1712,roughness:0.5,metalness:0.2})); pen.position.set(0,0.1,-1.22); bot.add(pen);
-
-    let S=200;
-    function sizeBot(){const r=stage.getBoundingClientRect(); S=Math.max(120,Math.round(r.width*0.36));
-      renderer.setSize(S,S,false); botCanvas.style.width=S+'px'; botCanvas.style.height=S+'px';}
-    sizeBot(); addEventListener('resize',sizeBot,{passive:true});
-
-    let shown=0, EASE=0.1, MAX_STEP=0.013, prevLen=0, wheelDeg=0, facing=1;
-    let phase='intro', introT=null, SPIN=1150;
-    function place(p){
-      const pt=trail.getPointAtLength(L*p), a=trail.getPointAtLength(Math.min(L,L*p+2));
-      const r=stage.getBoundingClientRect();
-      const px=(pt.x/VB_W)*r.width, py=(pt.y/VB_H)*r.height;
-      if(a.x-pt.x<-0.01) facing=-1; else if(a.x-pt.x>0.01) facing=1;
-      botCanvas.style.transform='translate('+(px-S/2)+'px,'+(py-S/2)+'px) scaleX('+facing+')';
+    function progress(){
+      var top=topOffset(), rc=layout.getBoundingClientRect(), at=rc.top+window.scrollY;
+      var s=at-top, e=at+layout.offsetHeight-window.innerHeight;
+      if(e<=s) return 1;
+      return clamp((window.scrollY-s)/(e-s),0,1);
     }
-    function frame(ts){
-      if(phase==='intro'){
-        if(introT===null)introT=ts; const k=clamp((ts-introT)/SPIN,0,1);
-        bot.rotation.y=k*Math.PI*2; wheelDeg-=8; wheels.forEach(w=>w.rotation.x=wheelDeg*Math.PI/180);
-        place(0);
-        if(k>=1){phase='draw'; bot.rotation.y=0;}
-      } else {
-        const d=clamp((targetProgress()-shown)*EASE,-MAX_STEP,MAX_STEP); shown=clamp(shown+d,0,1);
-        trail.style.strokeDashoffset=L*(1-shown);
-        place(shown);
-        const dl=Math.abs(L*shown-prevLen); prevLen=L*shown; wheelDeg-=dl*1.1+0.5;
-        wheels.forEach(w=>w.rotation.x=wheelDeg*Math.PI/180);
-        if(cap) cap.style.opacity = shown>0.9 ? (shown-0.9)/0.1 : 0;
-        botCanvas.style.opacity = shown>0.95 ? Math.max(0,1-(shown-0.95)/0.05) : 1;  // clear the finished photo
-      }
-      renderer.render(scene,camera); requestAnimationFrame(frame);
+    function render(){
+      var p=isStatic?1:progress();
+      reveal.style.setProperty('--rev', p);                 // pencil shades in top -> bottom
+      reveal.style.setProperty('--color', smooth(0.6,1.0,p)); // colour fades in toward the bottom
+      if(cap) cap.style.opacity = p>0.9 ? (p-0.9)/0.1 : 0;
     }
-    requestAnimationFrame(frame);
-  }
+
+    if(isStatic){ render(); }
+    else {
+      var ticking=false;
+      function onScroll(){ if(ticking)return; ticking=true; requestAnimationFrame(function(){render();ticking=false;}); }
+      addEventListener('scroll',onScroll,{passive:true});
+      addEventListener('resize',onScroll,{passive:true});
+      render();
+    }
+  })();
   </script>
 </body>
 </html>
