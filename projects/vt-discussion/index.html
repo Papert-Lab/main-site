@@ -59,11 +59,13 @@
       text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
     }
 
+    /* too narrow to sit side by side -> stack the framed photo ON TOP of the essay */
     @media (max-width:760px){
-      .vt-layout{grid-template-columns:1fr;gap:2rem}
-      .vt-pane{position:static;height:auto;padding-right:0}
-      .vt-frame{transform:none}
-      .vt-cap{transform:none}
+      .vt-layout{ display:flex; flex-direction:column; }
+      .vt-prose{ max-width:none; }
+      .vt-pane{ position:static; order:-1; width:100%; height:auto; transform:none; margin:0 0 1.6rem; padding:0; }
+      .vt-frame{ width:min(90%,500px); transform:none; }
+      .vt-cap{ transform:none; margin-top:.6rem; }
     }
     @media (prefers-reduced-motion:reduce){ .vt-pane{position:static;height:auto} }
   </style>
