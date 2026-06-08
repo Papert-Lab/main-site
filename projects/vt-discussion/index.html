@@ -24,7 +24,9 @@
     /* centered content (outer padding grows on large screens) */
     .vt-pagetitle { text-align:center; margin:0 0 2.2rem; padding-top:1.5rem; }
     .vt-layout { display:block; }
-    .vt-prose { max-width:64ch; }
+    .vt-prose { max-width:78ch; }
+    /* let the text fill the wider column (override the global 70ch paragraph cap) */
+    .vt-prose p, .vt-prose ol, .vt-prose ul { max-width:none; }
 
     /* Fixed framed photo on the right — pinned, never moves; only the left text scrolls. */
     .vt-pane {
@@ -131,7 +133,7 @@
               </svg>
             </div>
           </div>
-          <figcaption class="vt-cap" id="vt-cap">first discussion &middot; mill mountain coffee &middot; roanoke</figcaption>
+          <figcaption class="vt-cap" id="vt-cap">first discussion, virginia tech CHCI, summer &rsquo;26</figcaption>
         </figure>
       </aside>
     </div>
