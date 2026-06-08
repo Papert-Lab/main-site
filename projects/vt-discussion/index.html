@@ -51,7 +51,7 @@
     /* caption is horizontal (not tilted with the frame) */
     .vt-cap {
       margin-top:11%;                 /* clear the tilted frame's lowest corner; scales with frame width */
-      font:.64rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.14em;
+      font:.74rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.14em;
       text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
     }
 
@@ -185,7 +185,8 @@
     if(isStatic){ draw(1); turtle.style.visibility='hidden'; }
     else {
       var shown=0;                                   // damped: ease toward scroll target so fast scrolls don't teleport
-      function loop(){ var t=target(); shown += (t-shown)*0.2; if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
+      function loop(){ var t=target(); var d=(t-shown)*0.2, m=0.01; if(d>m)d=m; else if(d<-m)d=-m; shown+=d;
+        if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
       requestAnimationFrame(loop);
     }
   })();
