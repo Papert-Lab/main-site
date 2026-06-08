@@ -20,7 +20,7 @@
 
   <style>
     .vt-layout { display:block; }
-    .vt-prose { max-width:60ch; }
+    .vt-prose { max-width:70ch; }
 
     /* The framed photo is FIXED on the right — it never moves; only the essay scrolls.
        No background (the page shows through). The pencil/colour reveal happens inside it. */
@@ -28,7 +28,7 @@
       position:fixed; z-index:1;
       top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
       right:3vw; transform:translateY(-50%);
-      width:min(40vw,560px);
+      width:min(34vw,480px);
       display:flex; flex-direction:column; align-items:center; gap:.8rem;
     }
     .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
@@ -39,15 +39,11 @@
       border:18px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
       box-shadow:0 26px 56px -28px rgba(40,28,10,.5);
     }
-    /* opaque paper backing = the page's starting background, frozen inside the frame,
-       so the scrolling page is never visible through the not-yet-revealed photo */
-    .vt-stage {
-      position:relative; aspect-ratio:4/3; overflow:hidden;
-      background-color:#f5f0e6;
-      background-image:
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
-      background-size:256px,512px; background-repeat:repeat;
+    /* black-and-green CRT screen (LOGO-era terminal); hides the scrolling page behind the frame */
+    .vt-stage { position:relative; aspect-ratio:4/3; overflow:hidden; background:#070b08; }
+    .vt-stage::after{
+      content:""; position:absolute; inset:0; pointer-events:none; z-index:3; opacity:.45;
+      background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.25) 2px 3px);
     }
 
     .vt-svg { position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible; }
@@ -113,19 +109,18 @@
               <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
                 <defs>
                   <mask id="vt-pen" maskUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1420">
-                    <path id="vt-trail" fill="none" stroke="#fff" stroke-width="250" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path id="vt-trail" fill="none" stroke="#fff" stroke-width="92" stroke-linecap="round" stroke-linejoin="round"></path>
                   </mask>
-                  <filter id="vt-tsh" x="-60%" y="-60%" width="220%" height="220%">
-                    <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#2a241d" flood-opacity="0.35"/>
+                  <filter id="vt-tsh" x="-150%" y="-150%" width="400%" height="400%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#5cf07a" flood-opacity="0.9"/>
                   </filter>
                 </defs>
-                <image id="vt-pencil" href="img/first-discussion-pencil.webp" x="0" y="0" width="1200" height="900"
+                <image id="vt-pencil" href="img/first-discussion-code.webp" x="0" y="0" width="1200" height="900"
                        preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
                 <image id="vt-color" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
                        preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)" opacity="0"></image>
                 <g id="vt-turtle" filter="url(#vt-tsh)" style="visibility:hidden">
-                  <path d="M 0 -64 L 44 64 L 0 35 L -44 64 Z" fill="#2f2a23"></path>
-                  <path d="M 0 -64 L 44 64 L 0 35 L -44 64 Z" fill="none" stroke="#6a5f4f" stroke-width="2.4" opacity="0.45"></path>
+                  <path d="M 0 -20 L 14 20 L 0 11 L -14 20 Z" fill="#6cf58a"></path>
                 </g>
               </svg>
             </div>
@@ -155,7 +150,7 @@
     if(prose) prose.classList.add('visible');
     if(!layout||!trail) return;
 
-    var VB_W=1200, VB_H=900, ROWS=6;
+    var VB_W=1200, VB_H=900, ROWS=14;
     var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
     var isStatic=reduce||innerWidth<=760;
     var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
@@ -190,7 +185,7 @@
     if(isStatic){ draw(1); turtle.style.visibility='hidden'; }
     else {
       var shown=0;                                   // damped: ease toward scroll target so fast scrolls don't teleport
-      function loop(){ var t=target(); shown += (t-shown)*0.12; if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
+      function loop(){ var t=target(); shown += (t-shown)*0.2; if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
       requestAnimationFrame(loop);
     }
   })();
