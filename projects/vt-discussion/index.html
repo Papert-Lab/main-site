@@ -9,7 +9,6 @@
   <meta property="og:description" content="Weekly discussions on augmenting human cognition with artificial intelligence, hosted by Papert Lab.">
   <meta property="og:url" content="https://papertlab.org/projects/vt-discussion/">
   <meta property="og:type" content="article">
-
   <meta name="description" content="Augmenting Human Cognition with Computing Discussions — Papert Lab.">
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -18,6 +17,60 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <link rel="stylesheet" href="/css/style.css?v=22">
+
+  <style>
+    /* full-width on this page: prose hugs the left, frame is fixed right, and the GAP between
+       them grows on larger screens (instead of empty margins on the outer sides) */
+    /* centered content (outer padding grows on large screens) */
+    .vt-pagetitle { text-align:center; margin:0 0 2.2rem; padding-top:1.5rem; }
+    .vt-layout { display:block; }
+    .vt-prose { max-width:78ch; }
+    /* let the text fill the wider column (override the global 70ch paragraph cap) */
+    .vt-prose p, .vt-prose ol, .vt-prose ul { max-width:none; }
+
+    /* Fixed framed photo on the right — pinned, never moves; only the left text scrolls. */
+    .vt-pane {
+      position:fixed; z-index:1;
+      top:calc(var(--vt-top,84px) + (100vh - var(--vt-top,84px)) / 2);
+      right:3vw; transform:translateY(-50%);
+      width:min(36vw,620px);          /* grows on wide screens to fill some of the gap */
+      display:flex; flex-direction:column; align-items:center; gap:0;
+    }
+    .vt-figure { margin:0; width:100%; display:flex; flex-direction:column; align-items:center; gap:0; }
+
+    /* gold frame, tilted ~10° counter-clockwise */
+    .vt-frame {
+      width:100%; transform:rotate(-10deg);
+      border:18px solid transparent; border-image:url("img/gold-frame.webp") 72 stretch;
+      box-shadow:0 26px 56px -28px rgba(40,28,10,.5);
+    }
+    /* black-and-green CRT screen (LOGO-era terminal); hides the scrolling page behind the frame */
+    .vt-stage { position:relative; aspect-ratio:4/3; overflow:hidden; background:#070b08; }
+    .vt-stage::after{
+      content:""; position:absolute; inset:0; pointer-events:none; z-index:3; opacity:var(--scan,.45);
+      background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.25) 2px 3px);
+    }
+
+    .vt-svg { position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible; }
+
+    /* caption is horizontal (not tilted with the frame) */
+    .vt-cap {
+      margin-top:11%;                 /* clear the tilted frame's lowest corner; scales with frame width */
+      font:.92rem/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:.12em;
+      text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
+    }
+
+    /* too narrow to sit side by side without overlapping -> stack the framed photo ON TOP */
+    @media (max-width:1280px){
+      .vt-layout{ display:flex; flex-direction:column; }
+      .vt-prose{ max-width:none; }
+      .vt-pane{ position:static; order:-1; width:100%; height:auto; transform:none; justify-content:center; margin:0 0 1.6rem; padding:0; }
+      .vt-figure{ width:100%; }
+      .vt-frame{ width:min(90%,500px); transform:none; }
+      .vt-cap{ transform:none; margin-top:.6rem; }
+    }
+    @media (prefers-reduced-motion:reduce){ .vt-pane{position:static;height:auto} }
+  </style>
 </head>
 <body class="subpage project-page">
   <header id="site-header" class="scrolled">
@@ -33,38 +86,57 @@
   </header>
 
   <main>
-    <section class="anchor-section reveal">
-      <h1 class="page-title">Augmenting Human Cognition with Computing Discussions</h1>
+    <h1 class="page-title vt-pagetitle">Augmenting Human Cognition with Computing Discussions</h1>
+    <div class="vt-layout">
+      <section class="anchor-section reveal vt-prose">
+        <p class="apply-cta"><strong>Applications for our first discussion are open.</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">Please apply here</a>.</p>
+        <p>I started <a href="https://papertlab.org">Papert Lab</a> after observing the lack of interest among many academics, researchers, and students in exploring the potential of computers&mdash;particularly artificial intelligence systems&mdash;in augmenting human cognition and problem solving. As cognitive scientists, HCI researchers, students, and academics, we are uniquely positioned to design AI systems that improve how we learn, work, research, and communicate. Yet, as I become more involved with academia and higher education, I worry that we often get absorbed by the minutia of a Ph.D. or class and forget about the societal implications of our research. <em>If we call ourselves &ldquo;human-computer interaction&rdquo; researchers, we cannot fail to address one of history&rsquo;s most transformative technologies and its implications on human cognition.</em></p>
+        <p>Unfortunately, this is (like all things) more easily said than done, especially given the demanding workload of being a student researcher. However, since many of us are (hopefully) slightly less busy over the summer, this seems like an optimal opportunity to establish an ongoing ritual of addressing the issue of augmenting human cognition. Specifically, I am doing this through a weekly discussion group, where we will read essays and papers, discuss their implications, and create tools that actualize some of these broader challenges through discussing actionable projects. Thus, the purpose of the discussion group is twofold:</p>
+        <ol>
+          <li>Studying past inflection points of fields deciding to pursue important questions (rather than more trivial ones), how they were approached, and the motivations of the researchers who chose to tackle the complex problems prepares us to make similar choices when the opportunities present themselves. Indeed <em>luck favors the prepared mind,</em> and by studying history, we are artificially increasing our probability of luck by preparing ourselves for taking decisive action.</li>
+          <li>Creating an intellectually vibrant <a href="https://www.henrikkarlsson.xyz/p/first-we-shape-our-social-graph-then" target="_blank" rel="noopener">milieu</a> (the culture contained in your unique set of connections) of academics, students, and practitioners who relentlessly explore the unglamorous and non-trivial topics lying at the intersection between artificial intelligence and human cognition is essential to developing a culture that values these sorts of existential questions. When institutions stop valuing the <em>ethos</em> of their student&rsquo;s research and fail to reward these non-trivial topics, we gravitate towards more trivial research that doesn&rsquo;t achieve what we set out to do.</li>
+        </ol>
+        <p>I am researching AI-assisted programming education with Prof. David H. Smith this summer at Virginia Tech, and while I&rsquo;m here (and onwards), I find it important to dedicate a considerable amount of time exploring the broader implications of my work, which revolves around augmenting human cognition. I suspect this underlying objective is similar for many of my peers in HCI. For example, I am currently exploring AI systems that augment human cognition through <a href="http://www.papert.org/articles/SituatingConstructionism.html" target="_blank" rel="noopener">constructionism</a>, scaffolded metacognition, and interactive scenarios. I also situate my <a href="https://ascend3.cs.vt.edu/" target="_blank" rel="noopener">current research</a> in the context of these future paradigms, and take notes on thought leaders like <a href="https://andymatuschak.org/" target="_blank" rel="noopener">Andy Matuschak</a>, <a href="https://michaelnotebook.com/" target="_blank" rel="noopener">Michael Nielsen</a>, <a href="http://www.papert.org/" target="_blank" rel="noopener">Seymour Papert</a>, and <a href="https://dougengelbart.org/" target="_blank" rel="noopener">Douglas Engelbart</a>, all researchers who have done <em>great work</em> at the intersection of computers and human cognition.</p>
+        <h2 class="paper-title">The Logistics</h2>
+        <p>I am hosting a discussion group on augmenting human cognition with computers. Here are the details:</p>
+        <p>
+          <strong>Day:</strong> Saturday<br>
+          <strong>Time:</strong> 11am<br>
+          <strong>Location:</strong> Mill Mountain Coffee and Tea<br>
+          <strong>Who:</strong> Undergraduate and graduate researchers (e.g. REU participants, Ph.D. students, etc.)<br>
+          <strong>Link:</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">luma.com/papertlab</a>
+        </p>
+        <p>We are initially limiting attendance to ten attendees, and may increase spots as we gauge interest.</p>
+        <p>&mdash; Hudson, Papert Lab</p>
+      </section>
 
-      <p class="apply-cta"><strong>Applications for our first discussion are open.</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">Please apply here</a>.</p>
-
-      <p>I started <a href="https://papertlab.org">Papert Lab</a> after observing the lack of interest among many academics, researchers, and students in exploring the potential of computers&mdash;particularly artificial intelligence systems&mdash;in augmenting human cognition and problem solving. As cognitive scientists, HCI researchers, students, and academics, we are uniquely positioned to design AI systems that improve how we learn, work, research, and communicate. Yet, as I become more involved with academia and higher education, I worry that we often get absorbed by the minutia of a Ph.D. or class and forget about the societal implications of our research. <em>If we call ourselves &ldquo;human-computer interaction&rdquo; researchers, we cannot fail to address one of history&rsquo;s most transformative technologies and its implications on human cognition.</em></p>
-
-      <p>Unfortunately, this is (like all things) more easily said than done, especially given the demanding workload of being a student researcher. However, since many of us are (hopefully) slightly less busy over the summer, this seems like an optimal opportunity to establish an ongoing ritual of addressing the issue of augmenting human cognition. Specifically, I am doing this through a weekly discussion group, where we will read essays and papers, discuss their implications, and create tools that actualize some of these broader challenges through discussing actionable projects. Thus, the purpose of the discussion group is twofold:</p>
-
-      <ol>
-        <li>Studying past inflection points of fields deciding to pursue important questions (rather than more trivial ones), how they were approached, and the motivations of the researchers who chose to tackle the complex problems prepares us to make similar choices when the opportunities present themselves. Indeed <em>luck favors the prepared mind,</em> and by studying history, we are artificially increasing our probability of luck by preparing ourselves for taking decisive action.</li>
-        <li>Creating an intellectually vibrant <a href="https://www.henrikkarlsson.xyz/p/first-we-shape-our-social-graph-then" target="_blank" rel="noopener">milieu</a> (the culture contained in your unique set of connections) of academics, students, and practitioners who relentlessly explore the unglamorous and non-trivial topics lying at the intersection between artificial intelligence and human cognition is essential to developing a culture that values these sorts of existential questions. When institutions stop valuing the <em>ethos</em> of their student&rsquo;s research and fail to reward these non-trivial topics, we gravitate towards more trivial research that doesn&rsquo;t achieve what we set out to do.</li>
-      </ol>
-
-      <p>I am researching AI-assisted programming education with Prof. David H. Smith this summer at Virginia Tech, and while I&rsquo;m here (and onwards), I find it important to dedicate a considerable amount of time exploring the broader implications of my work, which revolves around augmenting human cognition. I suspect this underlying objective is similar for many of my peers in HCI. For example, I am currently exploring AI systems that augment human cognition through <a href="http://www.papert.org/articles/SituatingConstructionism.html" target="_blank" rel="noopener">constructionism</a>, scaffolded metacognition, and interactive scenarios. I also situate my <a href="https://ascend3.cs.vt.edu/" target="_blank" rel="noopener">current research</a> in the context of these future paradigms, and take notes on thought leaders like <a href="https://andymatuschak.org/" target="_blank" rel="noopener">Andy Matuschak</a>, <a href="https://michaelnotebook.com/" target="_blank" rel="noopener">Michael Nielsen</a>, <a href="http://www.papert.org/" target="_blank" rel="noopener">Seymour Papert</a>, and <a href="https://dougengelbart.org/" target="_blank" rel="noopener">Douglas Engelbart</a>, all researchers who have done <em>great work</em> at the intersection of computers and human cognition.</p>
-
-      <h2 class="paper-title">The Logistics</h2>
-
-      <p>I am hosting a discussion group on augmenting human cognition with computers. Here are the details:</p>
-
-      <p>
-        <strong>Day:</strong> Saturday<br>
-        <strong>Time:</strong> 11am<br>
-        <strong>Location:</strong> Mill Mountain Coffee and Tea<br>
-        <strong>Who:</strong> Undergraduate and graduate researchers (e.g. REU participants, Ph.D. students, etc.)<br>
-        <strong>Link:</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">luma.com/papertlab</a>
-      </p>
-
-      <p>We are initially limiting attendance to ten attendees, and may increase spots as we gauge interest.</p>
-
-      <p>&mdash; Hudson, Papert Lab</p>
-    </section>
+      <aside class="vt-pane" aria-hidden="true">
+        <figure class="vt-figure">
+          <div class="vt-frame">
+            <div class="vt-stage">
+              <svg class="vt-svg" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" role="img">
+                <defs>
+                  <mask id="vt-pen" maskUnits="userSpaceOnUse" x="-260" y="-260" width="1720" height="1420">
+                    <path id="vt-trail" fill="none" stroke="#fff" stroke-width="92" stroke-linecap="butt" stroke-linejoin="round"></path>
+                  </mask>
+                  <filter id="vt-tsh" x="-150%" y="-150%" width="400%" height="400%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#5cf07a" flood-opacity="0.9"/>
+                  </filter>
+                </defs>
+                <image id="vt-pencil" href="img/first-discussion-code.webp" x="0" y="0" width="1200" height="900"
+                       preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)"></image>
+                <image id="vt-color" href="img/first-discussion-1600.jpg" x="0" y="0" width="1200" height="900"
+                       preserveAspectRatio="xMidYMid slice" mask="url(#vt-pen)" opacity="0"></image>
+                <g id="vt-turtle" filter="url(#vt-tsh)" style="visibility:hidden">
+                  <path d="M 0 -20 L 14 20 L 0 11 L -14 20 Z" fill="#6cf58a"></path>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <figcaption class="vt-cap" id="vt-cap">first discussion, virginia tech CHCI, summer &rsquo;26</figcaption>
+        </figure>
+      </aside>
+    </div>
   </main>
 
   <footer>
@@ -72,5 +144,63 @@
   </footer>
 
   <script src="/js/site.js"></script>
+
+  <!-- Scroll-driven pencil shade-in -> colour fade. Vanilla, rAF-throttled on scroll only
+       (no continuous loop). Static (reduced-motion / mobile) shows the finished colour photo. -->
+  <script>
+  (function(){
+    var layout=document.querySelector('.vt-layout');
+    var prose=document.querySelector('.vt-prose');
+    var trail=document.getElementById('vt-trail');
+    var colorEl=document.getElementById('vt-color');
+    var stage=document.querySelector('.vt-stage');
+    var turtle=document.getElementById('vt-turtle');
+    var cap=document.getElementById('vt-cap');
+    if(prose) prose.classList.add('visible');
+    if(!layout||!trail) return;
+
+    var VB_W=1200, VB_H=900, ROWS=14;
+    var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var isStatic=reduce||innerWidth<=1280;
+    var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
+    var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);};
+    function topOffset(){return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;}
+
+    // horizontal zig-zag stepping down (boustrophedon) — the turtle's route
+    function buildPath(){var g=VB_H/ROWS,r=g/2,d='M -900 '+(g/2)+' ';   // begin well off-screen (left) and drive in
+      for(var i=0;i<ROWS;i++){var y=g/2+i*g,l2r=i%2===0,xe=l2r?VB_W:0;
+        d+='L '+xe+' '+y+' ';
+        if(i<ROWS-1){var yn=g/2+(i+1)*g;d+='A '+r+' '+r+' 0 0 '+(l2r?1:0)+' '+xe+' '+yn+' ';}}return d;}
+    trail.setAttribute('d',buildPath());
+    var L=trail.getTotalLength(); trail.style.strokeDasharray=L;
+
+    function target(){var top=topOffset(),rc=layout.getBoundingClientRect(),at=rc.top+window.scrollY;
+      var s=at-top,e=at+layout.offsetHeight-window.innerHeight; if(e<=s)return 1; return clamp((window.scrollY-s)/(e-s),0,1);}
+
+    // double-whammy: the zig-zag reveals the pencil sketch, colour fades in toward the bottom.
+    // the iconographic Logo turtle (arrowhead) points along its travel direction.
+    function draw(p){
+      trail.style.strokeDashoffset=L*(1-p);
+      colorEl.setAttribute('opacity', smooth(0.55,1.0,p));
+      if(stage) stage.style.setProperty('--scan', (0.45*(1-smooth(0.72,1.0,p))).toFixed(3));  // scanlines fade out as colour resolves
+      if(p>0.001 && p<0.999){
+        turtle.style.visibility='visible';
+        var pt=trail.getPointAtLength(L*p), a=trail.getPointAtLength(Math.min(L,L*p+3));
+        var ang=Math.atan2(a.y-pt.y,a.x-pt.x)*180/Math.PI+90;
+        turtle.setAttribute('transform','translate('+pt.x+','+pt.y+') rotate('+ang+')');
+        turtle.style.opacity = p>0.94 ? Math.max(0,1-(p-0.94)/0.06) : 1;
+      } else { turtle.style.visibility='hidden'; }
+      if(cap) cap.style.opacity = p>0.9 ? (p-0.9)/0.1 : 0;
+    }
+
+    if(isStatic){ draw(1); turtle.style.visibility='hidden'; }
+    else {
+      var shown=0;                                   // damped: ease toward scroll target so fast scrolls don't teleport
+      function loop(){ var t=target(); var d=(t-shown)*0.2, m=0.01; if(d>m)d=m; else if(d<-m)d=-m; shown+=d;
+        if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
+      requestAnimationFrame(loop);
+    }
+  })();
+  </script>
 </body>
 </html>
