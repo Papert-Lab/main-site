@@ -60,16 +60,29 @@
       text-transform:lowercase; color:var(--text-tertiary); opacity:0; transition:opacity .5s;
     }
 
-    /* too narrow to sit side by side without overlapping -> stack the framed photo ON TOP */
+    /* too narrow to sit side by side -> the framed photo becomes a full-screen "hero":
+       it fills the first viewport, scroll input drives the reveal (see JS hijack), and
+       only when the turtle finishes does the page scroll down into the title + essay. */
     @media (max-width:1280px){
       .vt-layout{ display:flex; flex-direction:column; }
-      .vt-prose{ max-width:none; }
-      .vt-pane{ position:static; order:-1; width:100%; height:auto; transform:none; justify-content:center; margin:0 0 1.6rem; padding:0; }
+      .vt-prose{ order:3; max-width:none; }
+      .vt-pagetitle{ order:2; padding-top:0; }
+      .vt-pane{
+        order:1; position:static; width:100%; transform:none; margin:0; padding:0;
+        min-height:calc(100dvh - var(--vt-top,84px) + 1px);   /* fill the screen below the sticky header (dvh + measured header: nothing peeks) */
+        display:flex; align-items:center; justify-content:center;
+      }
       .vt-figure{ width:100%; }
-      .vt-frame{ width:min(90%,500px); transform:none; }
-      .vt-cap{ transform:none; margin-top:.6rem; }
+      .vt-frame{ width:min(86vw,62dvh); transform:none; }   /* size so the 4:3 frame + caption fit one screen */
+      .vt-cap{ transform:none; margin-top:.7rem; }
     }
-    @media (prefers-reduced-motion:reduce){ .vt-pane{position:static;height:auto} }
+    /* while the reveal runs, the page is frozen — ONLY the photo is on screen until the turtle finishes */
+    html.vt-takeover, html.vt-takeover body{ overscroll-behavior-y:none; }
+    html.vt-locked, html.vt-locked body{ overflow:hidden; height:100%; touch-action:none; }
+    /* reduced motion (any width): finished colour photo, no hijack, no turtle */
+    @media (prefers-reduced-motion:reduce){
+      .vt-pane{ position:static; min-height:0; height:auto; }
+    }
   </style>
 </head>
 <body class="subpage project-page">
@@ -86,8 +99,8 @@
   </header>
 
   <main>
-    <h1 class="page-title vt-pagetitle">Augmenting Human Cognition with Computing Discussions</h1>
     <div class="vt-layout">
+      <h1 class="page-title vt-pagetitle">Augmenting Human Cognition with Computing Discussions</h1>
       <section class="anchor-section reveal vt-prose">
         <p class="apply-cta"><strong>Applications for our first discussion are open.</strong> <a href="https://luma.com/papertlab" target="_blank" rel="noopener">Please apply here</a>.</p>
         <p>I started <a href="https://papertlab.org">Papert Lab</a> after observing the lack of interest among many academics, researchers, and students in exploring the potential of computers&mdash;particularly artificial intelligence systems&mdash;in augmenting human cognition and problem solving. As cognitive scientists, HCI researchers, students, and academics, we are uniquely positioned to design AI systems that improve how we learn, work, research, and communicate. Yet, as I become more involved with academia and higher education, I worry that we often get absorbed by the minutia of a Ph.D. or class and forget about the societal implications of our research. <em>If we call ourselves &ldquo;human-computer interaction&rdquo; researchers, we cannot fail to address one of history&rsquo;s most transformative technologies and its implications on human cognition.</em></p>
@@ -159,9 +172,15 @@
     if(prose) prose.classList.add('visible');
     if(!layout||!trail) return;
 
+    // feed the REAL sticky-header height into --vt-top (drives both the mobile pane height and the desktop frame centering)
+    var hdr=document.getElementById('site-header');
+    function setTop(){ if(hdr) document.documentElement.style.setProperty('--vt-top', hdr.offsetHeight+'px'); }
+    setTop();
+
     var VB_W=1200, VB_H=900, ROWS=14;
     var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var isStatic=reduce||innerWidth<=1280;
+    // phone OR small laptop window: the framed photo becomes a full-screen hijack-hero
+    var takeover = !reduce && innerWidth<=1280;
     var clamp=function(v,a,b){return v<a?a:(v>b?b:v);};
     var smooth=function(e0,e1,x){var t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);};
     function topOffset(){return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--vt-top'))||84;}
@@ -174,10 +193,11 @@
     trail.setAttribute('d',buildPath());
     var L=trail.getTotalLength(); trail.style.strokeDasharray=L;
 
-    function target(){var top=topOffset(),rc=layout.getBoundingClientRect(),at=rc.top+window.scrollY;
+    // desktop reveal progress = where you are in the scroll of the essay column
+    function scrollTarget(){var top=topOffset(),rc=layout.getBoundingClientRect(),at=rc.top+window.scrollY;
       var s=at-top,e=at+layout.offsetHeight-window.innerHeight; if(e<=s)return 1; return clamp((window.scrollY-s)/(e-s),0,1);}
 
-    // double-whammy: the zig-zag reveals the pencil sketch, colour fades in toward the bottom.
+    // double-whammy: the zig-zag reveals the green code, colour fades in toward the bottom.
     // the iconographic Logo turtle (arrowhead) points along its travel direction.
     function draw(p){
       trail.style.strokeDashoffset=L*(1-p);
@@ -193,12 +213,79 @@
       if(cap) cap.style.opacity = p>0.9 ? (p-0.9)/0.1 : 0;
     }
 
-    if(isStatic){ draw(1); turtle.style.visibility='hidden'; }
-    else {
-      var shown=0;                                   // damped: ease toward scroll target so fast scrolls don't teleport
-      function loop(){ var t=target(); var d=(t-shown)*0.2, m=0.01; if(d>m)d=m; else if(d<-m)d=-m; shown+=d;
-        if(Math.abs(t-shown)<0.0004) shown=t; draw(shown); requestAnimationFrame(loop); }
+    // ── reload if the window crosses the desktop/takeover boundary (clean controller swap) ──
+    var wasTakeover=takeover, rT;
+    addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(function(){
+      setTop();
+      if((!reduce && innerWidth<=1280)!==wasTakeover) location.reload();
+    },250);});
+
+    // ── damped renderer shared by both motion modes (turtle can never teleport) ──
+    function damped(getTarget,maxStep,k){
+      var shown=0;
+      function loop(){var t=getTarget(),d=(t-shown)*k,m=maxStep; if(d>m)d=m; else if(d<-m)d=-m; shown+=d;
+        if(Math.abs(t-shown)<0.0005) shown=t; draw(shown); requestAnimationFrame(loop);}
       requestAnimationFrame(loop);
+    }
+
+    if(reduce){
+      draw(1); turtle.style.visibility='hidden';
+    } else if(takeover){
+      // ── MOBILE / SMALL-WINDOW: scroll-hijack hero (same pattern as the main page chalkboard) ──
+      // The page is FROZEN (only the photo visible) until the turtle FINISHES drawing the photo
+      // on screen; then scroll releases into the title + essay.
+      var html=document.documentElement;
+      html.classList.add('vt-takeover');
+      html.classList.add('vt-locked');                  // page can't scroll until the sweep is done
+      var prog=0, shown=0, complete=false, animating=false;
+      var BUDGET=720;          // wheel/touch delta to fully reveal
+      var FAST=55;             // fast-flick threshold -> auto-finish
+
+      // damped renderer; releases scroll ONLY once the DISPLAYED reveal has finished (not the input)
+      function loop(){
+        var d=(prog-shown)*0.18, m=0.012; if(d>m)d=m; else if(d<-m)d=-m; shown+=d;
+        if(Math.abs(prog-shown)<0.0005) shown=prog;
+        draw(shown);
+        if(!complete && prog>=1 && shown>=0.999){ complete=true; html.classList.remove('vt-locked'); }
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      function autoFinish(){animating=true;var t0=null,from=prog,dur=Math.max(240,(1-from)*460);
+        function tick(now){if(t0===null)t0=now;var t=clamp((now-t0)/dur,0,1);
+          prog=from+(1-from)*(1-Math.pow(1-t,3));
+          if(t<1){requestAnimationFrame(tick);} else {prog=1;animating=false;}}   // complete is flipped by loop, after the sweep
+        requestAnimationFrame(tick);}
+
+      function advance(dy){prog=clamp(prog+dy/BUDGET,0,1);}
+      function rearm(){complete=false;html.classList.add('vt-locked');}
+
+      function onWheel(e){
+        if(complete){ if(window.scrollY===0 && e.deltaY<0 && !animating){rearm();prog=clamp(1+e.deltaY/BUDGET,0,1);e.preventDefault();} return; }
+        e.preventDefault();
+        if(animating) return;
+        if(Math.abs(e.deltaY)>FAST && e.deltaY>0){autoFinish();return;}
+        advance(e.deltaY);
+      }
+      var ty=0, hijacked=false;
+      function onTouchStart(e){ty=e.touches[0].clientY;hijacked=false;}
+      function onTouchMove(e){var y=e.touches[0].clientY,dy=ty-y;ty=y;
+        if(complete){
+          if(window.scrollY===0 && dy<0 && !animating){rearm();prog=clamp(1+dy/BUDGET,0,1);hijacked=true;e.preventDefault();}
+          else if(hijacked){e.preventDefault();window.scrollBy(0,dy);}   // let the finishing swipe flow into the body
+          return;
+        }
+        e.preventDefault();hijacked=true;
+        if(animating) return;
+        if(Math.abs(dy)>FAST && dy>0){autoFinish();return;}
+        advance(dy);
+      }
+      addEventListener('wheel',onWheel,{passive:false});
+      addEventListener('touchstart',onTouchStart,{passive:true});
+      addEventListener('touchmove',onTouchMove,{passive:false});
+    } else {
+      // ── DESKTOP: reveal driven by essay scroll position ──
+      damped(scrollTarget, 0.01, 0.2);
     }
   })();
   </script>
