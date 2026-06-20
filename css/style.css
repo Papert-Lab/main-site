@@ -332,6 +332,17 @@ main { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem 2rem; }
   margin-bottom: 1rem;
 }
 
+/* ── Markdown content fade-in ──
+   Containers ship empty and are populated by site.js after fetching their
+   markdown. .md-loading hides the empty box (JS-gated, so no-JS still renders
+   any static markup); .md-loaded fades the real content in. Default state
+   (no class) stays visible so content is never trapped hidden. */
+.md-content.md-loading { opacity: 0; }
+.md-content.md-loaded {
+  opacity: 1;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
 /* ── Scroll-reveal ── */
 .reveal {
   opacity: 0;
@@ -359,6 +370,8 @@ footer a:hover { color: var(--accent); }
   .hero-container { animation: none !important; opacity: 1 !important; transform: none !important; }
   .site-name { opacity: 1 !important; pointer-events: auto !important; }
   .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .md-content.md-loading { opacity: 1 !important; }
+  .md-content.md-loaded { transition: none !important; }
   #overlay-chalk { --erase: 0% !important; }
 }
 
