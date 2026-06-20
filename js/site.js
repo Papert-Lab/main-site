@@ -50,10 +50,21 @@
   }
 
   document.querySelectorAll('.md-content[data-src]').forEach(function (el) {
+    // Hide the (empty) container until its markdown arrives, then fade the real
+    // content in. Hiding is JS-gated via a class — a no-JS visitor never gets the
+    // .md-loading rule, so the section degrades to whatever static markup exists
+    // rather than staying invisible.
+    el.classList.add('md-loading');
     fetch(el.dataset.src)
       .then(function (r) { return r.ok ? r.text() : null; })
       .then(function (md) { if (md) el.innerHTML = mdToHtml(md); })
-      .catch(function () {});
+      .catch(function () {})
+      .then(function () {
+        // Runs on success, failure, or 404 — always reveal so a section can never
+        // get trapped hidden.
+        el.classList.remove('md-loading');
+        el.classList.add('md-loaded');
+      });
   });
 
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
