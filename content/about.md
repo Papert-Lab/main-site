@@ -1,5 +1,5 @@
-Papert Lab is an applied learning science lab that investigates the impact of AI on learning, memory, curiosity, and intelligent tutoring systems.
+Papert Lab is an applied cognitive science research nonprofit that uses experiments to model how humans solve problems and the implications on designing computational mediums that augment memory, learning, and curiosity. We do this through designing intelligent tutoring systems and exploring new interaction paradigms between artificial intelligence systems and humans.
 
-Currently, Papert Lab investigates problem specification in AI-assisted programming and the role of software testing in facilitating high-level, computational thinking.
+Our current research focuses on characterizing how novices design specifications when interacting with agentic coding systems. We ground these empirical findings in previous theories of scientific discovery and productive struggle. We submit to HCI and computing education venues, run qualitative think-aloud studies, pilot new pedagogical paradigms in undergraduate courses, and host weekly discussion forums on augmenting cognition with computers.
 
 Papert Lab was founded in 2025 by [Hudson Mitchell-Pullman](https://hudsonmp.github.io), an independent researcher and high school student. Hudson collaborates with and is mentored by [David H. Smith](https://hamiltonfour.tech/), [Annapurna Vadaparty](https://apvadaparty.github.io/), [Qianou Ma](https://qianouma.com/), among others.
