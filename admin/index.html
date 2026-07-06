@@ -200,8 +200,21 @@
     var $ = function (id) { return document.getElementById(id); };
     var tokenEl = $('token'), rememberEl = $('remember');
 
-    var saved = localStorage.getItem('pl-admin-token');
+    var saved = null;
+    try { saved = localStorage.getItem('pl-admin-token'); } catch (e) {}
     if (saved) tokenEl.value = saved;
+
+    // persist the token as soon as it's entered — not only on Generate —
+    // so it survives visits where nothing is generated
+    function persistToken() {
+      try {
+        var t = tokenEl.value.trim();
+        if (rememberEl.checked && t) localStorage.setItem('pl-admin-token', t);
+        else if (!rememberEl.checked) localStorage.removeItem('pl-admin-token');
+      } catch (e) {}
+    }
+    tokenEl.addEventListener('input', persistToken);
+    rememberEl.addEventListener('change', persistToken);
 
     function ghHeaders() {
       return {
@@ -345,8 +358,7 @@
       var base = slugify(name);
       if (!base) return fail('Name must contain at least one letter or digit.');
 
-      if (rememberEl.checked) localStorage.setItem('pl-admin-token', token);
-      else localStorage.removeItem('pl-admin-token');
+      persistToken();
 
       $('go').disabled = true;
 
