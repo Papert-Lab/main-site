@@ -75,8 +75,52 @@
       background-repeat: repeat;
     }
 
-    /* header band carries the paper texture, like production */
-    header { background-image: inherit; background-size: inherit; background-repeat: inherit; }
+    /* ── Site header — identical to the main page ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background-color: var(--bg);
+      /* texture painted explicitly — header's parent is the page wrapper,
+         not body, so background-image: inherit would resolve to none */
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
+      background-size: 256px, 512px;
+      background-repeat: repeat;
+    }
+    header nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .site-name {
+      display: inline-block;
+      overflow: hidden;
+      max-width: 73px;
+      height: 40px;
+      text-decoration: none;
+      vertical-align: middle;
+    }
+    .site-name img { height: 40px; width: auto; display: block; filter: brightness(0.2); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-weight: 400;
+    }
+    .nav-links a, .nav-links a:visited { color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    @media (max-width: 500px) {
+      header nav { padding: 1rem; }
+      .nav-links { gap: 1.2rem; font-size: 12px; letter-spacing: 2px; }
+    }
 
     h1, h2, h3 { font-family: var(--font-body); font-weight: normal; color: var(--text); }
 
@@ -116,12 +160,15 @@
 <body>
 <div style="position: relative">
 
-  <header style="position: sticky; top: 0; z-index: 30; background-color: var(--bg);">
-    <nav style="max-width: 640px; margin: 0 auto; padding: 13px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
-      <a href="/" style="display: block;">
-        <img src="/images/layers/chalk-text.png" alt="Papert Lab" style="height: 26px; width: auto; display: block; filter: brightness(0.25);">
-      </a>
-      <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 2.2px; text-transform: uppercase; color: var(--text-tertiary); white-space: nowrap;">For patrons · <span id="letter-date">July 2026</span></span>
+  <header id="site-header">
+    <nav>
+      <a href="/" class="site-name"><img src="/images/layers/chalk-text.png" alt="Papert Lab"></a>
+      <div class="nav-links">
+        <a href="/#manifesto">Manifesto</a>
+        <a href="https://essays.papertlab.org">Essays</a>
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+      </div>
     </nav>
   </header>
 
@@ -162,7 +209,7 @@
     <section id="sec-vision" data-screen-label="The vision" style="padding-top: 56px;">
       <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 0 0 18px;">Papert Lab</h2>
       <p>Papert Lab is an applied cognitive science research nonprofit investigating the role of computers on how humans learn, solve problems, and conduct scientific research.</p>
-      <blockquote style="margin: 30px 0; padding: 0; font-weight: bold; font-size: 1rem; line-height: 1.75; color: var(--text);">We envision a world where every person feels empowered and excited to use computers to augment their cognition and learning.</blockquote>
+      <blockquote style="margin: 30px 0; padding: 0; font-style: italic; font-size: 1rem; line-height: 1.75; color: var(--text);">We envision a world where every person feels empowered and excited to use computers to augment their cognition and learning.</blockquote>
       <p>Previous research blending cognitive and computer science yielded artifacts like the <a href="https://dougengelbart.org/content/view/209/" target="_blank" rel="noopener">GUI and computer mouse</a>, <a href="https://el.media.mit.edu/logo-foundation/what_is_logo/history.html" target="_blank" rel="noopener">LOGO</a>, <a href="https://www.media.mit.edu/people/mres/overview/" target="_blank" rel="noopener">Scratch</a> and the <a href="https://dynabook.com/global/en/history.html" target="_blank" rel="noopener">Dynabook</a>. A post-AGI world must focus on fostering a community of continual building, learning, and disseminating knowledge. Papert Lab is researching, building, and piloting the next generation of computational paradigms that augment human cognition and learning.</p>
       <figure style="margin: 36px 0;">
         <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/B6rKUf9DWRI" title="Douglas Engelbart — The Mother of All Demos (1968)" style="width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; border-radius: 4px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>
@@ -226,7 +273,7 @@
           <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Hosting weekly discussion groups on augmenting human cognition with computers</span>
         </div>
       </div>
-      <div id="zoom-scene" style="height: 100vh; margin: 36px 0;">
+      <div id="zoom-scene" style="height: 500vh; margin: 36px 0 calc((min(84vh, 620px) - 100vh) / 2 + 24px);">
         
       <div style="position: sticky; top: 0; height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); display: flex; align-items: center; justify-content: center; overflow: hidden;">
         <div style="position: relative; width: min(84vh, 620px);">
@@ -583,7 +630,7 @@
           <span style="flex: 1; font-size: 16px; color: var(--text);">Virginia Tech (summer)</span>
           <span style="font-size: 16px; color: var(--text);">Emergent Ventures</span>
         </div>
-        <div id="row-s3" style="display: flex; gap: 18px; align-items: baseline; padding: 9px 2px; transform-origin: 0 50%; opacity: 0; transform: translateY(10px) scale(1); transition: opacity 0.6s var(--ease-out) 0.3s, transform 0.6s var(--ease-out) 0.22s;">
+        <div id="row-s3" style="display: flex; gap: 18px; align-items: baseline; padding: 9px 2px; transform-origin: 50% 50%; opacity: 0; transform: translateY(10px) scale(1); transition: opacity 0.6s var(--ease-out) 0.3s, transform 0.6s var(--ease-out) 0.22s;">
           <span style="font-size: 22px; color: var(--text); min-width: 124px; white-space: nowrap;">Season III</span>
           <span style="flex: 1; font-size: 16px; color: var(--text);">Virginia Tech (semester)</span>
           <span style="font-size: 16px; color: var(--text);">Patron-funded</span>
@@ -654,11 +701,6 @@
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-
-  /* ── letter date ── */
-  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var now = new Date();
-  $('#letter-date').textContent = MONTHS[now.getMonth()] + ' ' + now.getFullYear();
 
   /* ── personalization: /funding/patrons/<slug> → patrons.json lookup ── */
   var VARIANTS = { a: 'var-agi', f: 'var-flourish', t: 'var-tools' };
@@ -775,7 +817,22 @@
 
   /* ── scrollspy ── */
   var IDS = ['sec-hello', 'sec-vision', 'sec-work', 'sec-patrons'];
-  var pY = null, aligning = false;
+
+  /* Scroll-driven scene (scrollytelling pattern): the step is a pure
+     function of progress through the 500vh scene block. No wheel
+     hijacking, no momentum classification — trackpad jitter can't
+     reset the zoom, and touch/keyboard/scrollbar all work. Leading
+     and trailing bands show the overview; eight equal bands between
+     them map to the vignettes. */
+  function sceneStep() {
+    if (!scene) return 0;
+    var r = scene.getBoundingClientRect();
+    var travel = r.height - window.innerHeight;
+    if (travel <= 0) return 0;
+    var p = Math.min(1, Math.max(0, -r.top / travel));
+    if (p < 0.05 || p >= 0.96) return 0;
+    return Math.min(8, 1 + Math.floor((p - 0.05) / (0.91 / 8)));
+  }
 
   function spy() {
     var probe = window.scrollY + Math.min(window.innerHeight * 0.3, 220);
@@ -789,17 +846,7 @@
     var doc = document.documentElement;
     if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) act = IDS[IDS.length - 1];
 
-    var dyV = window.scrollY - (pY === null ? window.scrollY : pY);
-    pY = window.scrollY;
-
-    // scrolling up, or scene left the viewport: static image, sequence resets
-    // (aligning = our own smooth-scroll nudge; never treat it as user intent)
-    var step = state.step;
-    if (scene) {
-      var r = scene.getBoundingClientRect();
-      var vh = window.innerHeight;
-      if ((dyV < -4 && !aligning) || r.bottom < vh * 0.4 || r.top > vh * 0.6) step = 0;
-    }
+    var step = sceneStep();
 
     var fold = state.fold;
     var seasonsEl = document.getElementById('seasons');
@@ -815,109 +862,6 @@
     if (fold !== state.fold) { state.fold = fold; applySeasons(); }
   }
 
-  /* ── wheel stepper: one downward gesture = one step ── */
-  var lastWheelT, vel = 0, decayN = 0, prevDelta;
-  var gestStepped = false, gestSkip = false, gestAccum = 0;
-  var lastUpT = 0, lastStepT = 0, pending = false, pendT, alignT;
-
-  function onWheel(e) {
-    if (!scene) return;
-    var now = performance.now();
-    var dt = now - (lastWheelT === undefined ? now - 1000 : lastWheelT);
-    lastWheelT = now;
-    var d = e.deltaY;
-    var newGesture = dt > 220;
-    if (d > 0) {
-      // rolling velocity (px/ms) — survives chained gestures but decays with real time
-      vel = (vel || 0) * Math.exp(-dt / 300);
-      var dtc = Math.max(8, Math.min(dt, 120));
-      vel = 0.65 * vel + 0.35 * (d / dtc);
-    } else {
-      vel = 0;
-    }
-    if (d > 0) {
-      // a fresh swipe over a decaying momentum tail = sharply rising delta after decay
-      if (!newGesture && (decayN || 0) >= 2 && d > (prevDelta || 0) * 1.5 + 12) newGesture = true;
-      decayN = d <= (prevDelta === undefined ? Infinity : prevDelta) + 0.5 ? (decayN || 0) + 1 : 0;
-      prevDelta = d;
-    }
-    if (newGesture) {
-      // new gesture: classified exactly once as a step or a skip
-      gestStepped = false;
-      gestSkip = false;
-      gestAccum = 0;
-    }
-
-    if (e.deltaY <= 0) {
-      // scrolling up: never hijack — plain fast scrolling, static image
-      lastUpT = now;
-      if (state.step !== 0) setStep(0);
-      return;
-    }
-    // jitter guard: an upward gesture's tail can wobble positive — never
-    // let that (or anything within 350ms of an up-scroll) start the catch
-    if (state.step === 0 && now - (lastUpT || 0) < 350) return;
-
-    var r = scene.getBoundingClientRect();
-    var vh = window.innerHeight;
-    var engaged = r.top < vh * 0.35 && r.bottom > vh * 0.65;
-    if (!engaged) return;
-    var step = state.step;
-    if (step >= 8) {
-      // sequence finished: the gesture that reached 8 still holds the page;
-      // only a FRESH gesture scrolls on through
-      if (gestStepped) e.preventDefault();
-      return;
-    }
-
-    if (gestSkip) {
-      // this gesture was classified as a skip: fly past as a static image
-      if (step !== 0) setStep(0);
-      return;
-    }
-
-    e.preventDefault(); // hold the page still while stepping
-    gestAccum += e.deltaY;
-
-    // one gesture = one step, period. Momentum tails of any size are
-    // swallowed until a genuinely fresh gesture arrives.
-    if (gestStepped) return;
-
-    // momentum only matters at the catch (step 0) — once in the sequence,
-    // any gesture is exactly one step, no matter how hard it's thrown
-    if (step === 0 && vel > 7.0) {
-      gestStepped = true;
-      gestSkip = true;
-      clearTimeout(pendT);
-      pending = false;
-      if (aligning) { window.scrollTo({ top: window.scrollY }); aligning = false; } // cancel any nudge
-      return;
-    }
-
-    if (!pending) {
-      // wait out the classification window, then step exactly once
-      pending = true;
-      pendT = setTimeout(function () {
-        pending = false;
-        if (gestSkip || gestStepped) return;
-        if ((gestAccum || 0) < 25) return; // not a committed downward gesture
-        if (performance.now() - (lastUpT || 0) < 350) return;
-        if (performance.now() - (lastStepT || 0) < 450) return; // global step rate limit
-        gestStepped = true;
-        lastStepT = performance.now();
-        var r2 = scene.getBoundingClientRect();
-        if (Math.abs(r2.top) > 2) {
-          aligning = true;
-          window.scrollTo({ top: window.scrollY + r2.top, behavior: 'smooth' });
-          clearTimeout(alignT);
-          alignT = setTimeout(function () { aligning = false; }, 650);
-        }
-        setStep(Math.min(8, state.step + 1));
-      }, 170);
-    }
-  }
-
-  window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('scroll', spy, { passive: true });
   window.addEventListener('resize', spy, { passive: true });
   spy();
