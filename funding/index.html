@@ -202,7 +202,6 @@
       <p>I received <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">$20,000 from Emergent Ventures</a> earlier this year and moved to Virginia Tech shortly after to collaborate with <a href="https://hamiltonfour.tech/" target="_blank" rel="noopener">Prof.&nbsp;David Smith</a>.</p>
       <figure style="margin: 40px 0 0;">
         <img src="/images/lab.jpg" alt="The lab — a desk between two whiteboards, Blacksburg, Virginia" style="width: 100%; height: auto; display: block; border-radius: 4px; animation: pl-heroEntrance 1s var(--ease-out) 0.1s both;">
-        <figcaption style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--text-tertiary); margin-top: 10px;">My desk and whiteboards at Virginia Tech.</figcaption>
       </figure>
     </section>
 
@@ -275,7 +274,7 @@
       </div>
       <div id="zoom-scene" style="height: 500vh; margin: 36px 0 calc((min(84vh, 620px) - 100vh) / 2 + 24px);">
         
-      <div style="position: sticky; top: 0; height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+      <div id="scene-stage" style="position: sticky; top: 0; height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); display: flex; align-items: center; justify-content: center; overflow: hidden;">
         <div style="position: relative; width: min(84vh, 620px);">
         <svg id="scene-svg" viewBox="0 0 760 760" style="width: 100%; height: auto; display: block; transform-origin: 0 0; transform: translate(0%, 0%) scale(1); transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);" role="img" aria-label="Notebook sketch of the Papert Lab research cycle">
           <g stroke="#5b3a22" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -820,7 +819,8 @@
 
   /* ── scrollspy ── */
   var IDS = ['sec-hello', 'sec-vision', 'sec-work', 'sec-patrons'];
-  var lastY = null, dir = 'down', jumping = false, jumpT;
+  var lastY = null, lastT = null, fastN = 0, jumping = false, jumpT;
+  var sceneMode = 'sequence';
 
   /* Scroll-driven scene (scrollytelling pattern): the step is a pure
      function of progress through the 500vh scene block. No wheel
@@ -828,7 +828,29 @@
      reset the zoom, and touch/keyboard/scrollbar all work. Leading
      and trailing bands show the overview; eight equal bands between
      them map to the vignettes. */
+  function enterImageMode() {
+    if (sceneMode === 'image' || !scene) return;
+    sceneMode = 'image';
+    var sceneTopAbs = scene.getBoundingClientRect().top + window.scrollY;
+    var oldH = scene.getBoundingClientRect().height;
+    var stage = document.getElementById('scene-stage');
+    scene.style.height = 'auto';
+    scene.style.marginBottom = '36px';
+    if (stage) stage.style.height = 'auto';
+    var newH = scene.getBoundingClientRect().height;
+    // keep what's on screen where it is: viewport below the scene shifts by
+    // the removed height; viewport inside it pins to the image top
+    if (window.scrollY >= sceneTopAbs + oldH - window.innerHeight) {
+      window.scrollTo({ top: window.scrollY - (oldH - newH), behavior: 'instant' });
+    } else if (window.scrollY > sceneTopAbs) {
+      window.scrollTo({ top: sceneTopAbs, behavior: 'instant' });
+    }
+    lastY = window.scrollY;
+    if (state.step !== 0) { state.step = 0; applyScene(); }
+  }
+
   function sceneStep() {
+    if (sceneMode === 'image') return 0;
     if (!scene) return 0;
     var r = scene.getBoundingClientRect();
     var travel = r.height - window.innerHeight;
@@ -850,14 +872,24 @@
     var doc = document.documentElement;
     if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) act = IDS[IDS.length - 1];
 
-    // scrolling up shows the overview as a plain image — the sequence only
-    // plays forward. Direction persists across events at unchanged scrollY
-    // (coalesced scroll, resize) so the latch can't be undone without real
-    // downward movement. Rail jumps don't flash steps.
-    if (lastY === null || window.scrollY > lastY + 1) dir = 'down';
-    else if (window.scrollY < lastY - 1) dir = 'up';
+    // The zoom sequence is a slow-scroll experience: position maps to the
+    // step, so scrolling down advances icons and scrolling up walks back to
+    // the previous icon (overview below the first). Scrolling FAST in either
+    // direction collapses the scene into a plain image for the rest of the
+    // visit — no rapid step-flashing, no 500vh of scroll debt left behind.
+    var nowT = performance.now();
+    var dy = lastY === null ? 0 : window.scrollY - lastY;
+    var dt = lastT === null ? 1000 : Math.max(1, nowT - lastT);
     lastY = window.scrollY;
-    var step = (dir === 'up' || jumping) ? 0 : sceneStep();
+    lastT = nowT;
+    if (dy !== 0) fastN = (Math.abs(dy) / dt > 3) ? fastN + 1 : 0; // zero-motion events don't vote
+
+    if (sceneMode === 'sequence' && scene && !jumping) {
+      var sr = scene.getBoundingClientRect();
+      var inScene = sr.top < window.innerHeight * 0.6 && sr.bottom > 0;
+      if (inScene && fastN >= 2) enterImageMode();
+    }
+    var step = jumping ? 0 : sceneStep();
 
     var fold = state.fold;
     var seasonsEl = document.getElementById('seasons');
