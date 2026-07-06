@@ -25,13 +25,19 @@
     // local-testing fallback (no rewrites on a plain static server).
     (function () {
       var m = location.pathname.match(/^\/funding\/patrons\/([^\/]+)\/?$/);
-      var q = new URLSearchParams(location.search).get('patron');
-      window.__patronSlug = (m && decodeURIComponent(m[1])) || q || null;
-      if (window.__patronSlug) {
+      var q = new URLSearchParams(location.search);
+      window.__patronSlug = (m && decodeURIComponent(m[1])) || q.get('patron') || null;
+      // named variant routes: /funding/safety | /funding/flourishing | /funding/pedagogy
+      var vm = location.pathname.match(/^\/funding\/(safety|flourishing|pedagogy)\/?$/);
+      var VMAP = { safety: 'a', flourishing: 'f', pedagogy: 't' };
+      window.__variantOverride = VMAP[(vm && vm[1]) || q.get('v')] || null;
+      if (window.__patronSlug || window.__variantOverride) {
         var s = document.createElement('style');
         s.id = 'patron-gate';
-        s.textContent = '#patron-name, #var-agi { visibility: hidden; }';
+        s.textContent = '#var-agi { visibility: hidden; }';
         document.head.appendChild(s);
+      }
+      if (window.__patronSlug) {
         var r = document.createElement('meta');
         r.name = 'robots';
         r.content = 'noindex';
@@ -197,7 +203,7 @@
   <main style="max-width: 640px; margin: 0 auto; padding: 0 24px 40px;">
 
     <section id="sec-hello" data-screen-label="Hello" style="padding-top: 64px;">
-      <h1 style="font-family: var(--font-body); font-weight: normal; font-size: clamp(34px, 6vw, 44px); line-height: 1.12; color: var(--text); margin: 0 0 26px;">hi <span id="patron-name">friend</span>!</h1>
+      <h1 style="font-family: var(--font-body); font-weight: normal; font-size: clamp(34px, 6vw, 44px); line-height: 1.12; color: var(--text); margin: 0 0 26px;">hi<span id="patron-name"></span>!</h1>
       <p>My name is Hudson. I’m 16, left high school this spring, and moved across the country alone to pursue learning science research.</p>
       <p>I received <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">$20,000 from Emergent Ventures</a> earlier this year and moved to Virginia Tech shortly after to collaborate with <a href="https://hamiltonfour.tech/" target="_blank" rel="noopener">Prof.&nbsp;David Smith</a>.</p>
       <figure style="margin: 40px 0 0;">
@@ -725,13 +731,16 @@
           return String(x.slug || '').toLowerCase() === slug;
         })[0];
         if (p) {
-          $('#patron-name').textContent = p.name;
+          $('#patron-name').textContent = ' ' + p.name;
           showVariant(VARIANTS[p.v] ? p.v : 'a');
           document.title = 'Papert Lab — a letter for ' + p.name;
         }
         ungate();
       })
       .catch(ungate);
+  } else if (window.__variantOverride) {
+    showVariant(window.__variantOverride);
+    ungate();
   }
 
   /* ── bookmark rail: smooth-scroll + scrollspy ── */
