@@ -16,5 +16,12 @@
       "source": "/funding/pedagogy",
       "destination": "/funding/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/funding",
+      "destination": "/funding/pedagogy",
+      "permanent": false
+    }
   ]
 }

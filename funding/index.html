@@ -7,10 +7,10 @@
 
   <meta property="og:title" content="Papert Lab — a letter for patrons">
   <meta property="og:description" content="Papert Lab is an applied cognitive science research nonprofit. A letter for patrons.">
-  <meta property="og:url" content="https://papertlab.org/funding/">
+  <meta property="og:url" content="https://papertlab.org/funding/pedagogy">
   <meta property="og:type" content="website">
   <meta name="description" content="Papert Lab — a letter for patrons.">
-  <link rel="canonical" href="https://papertlab.org/funding/">
+  <link rel="canonical" href="https://papertlab.org/funding/pedagogy">
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -34,7 +34,7 @@
       if (window.__patronSlug || window.__variantOverride) {
         var s = document.createElement('style');
         s.id = 'patron-gate';
-        s.textContent = '#var-agi { visibility: hidden; }';
+        s.textContent = '#var-tools { visibility: hidden; }';
         document.head.appendChild(s);
       }
       if (window.__patronSlug) {
@@ -220,7 +220,7 @@
         <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/B6rKUf9DWRI" title="Douglas Engelbart — The Mother of All Demos (1968)" style="width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; border-radius: 4px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>
         <figcaption style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--text-tertiary); margin-top: 10px;">Douglas Engelbart, Mother of All Demos.</figcaption>
       </figure>
-      <div id="var-agi">
+      <div id="var-agi" hidden>
         <div>
           <h3 style="font-family: var(--font-body); font-weight: normal; font-size: 26px; line-height: 1.3; color: var(--text); margin: 40px 0 16px;">Moving Humanity From Consumption to Creation</h3>
           <p>A world where AI conducts scientific research, writes code, and solves complex problems usually invokes a fear-based response among “outsiders,” or people who lack control over AI progress. This can manifest as some false sense of human intellectual superiority over AI, but I doubt this will sustainably uphold a contributive society as it becomes clear that AI is far superior to us in essentially all domains. That is, we can not forever be delusional in valuing human cognition over machine intelligence.</p>
@@ -238,7 +238,7 @@
           <p>We can increase human autonomy by enabling technical and non-technical people to design systems that augment how they solve problems and learn in <em>their own domains</em> by describing the system’s behavior. This would enable people to work on more meaningful problems and utilize AI to accelerate progress and discovery, thus aligning one’s vision and time. In practice, this would mean that the limiting factor to making change would be one’s ability to choose non-trivial problems instead of their proficiency at performing specific tasks, which increases autonomy by enabling people to create more useful tools.</p>
         </div>
       </div>
-      <div id="var-tools" hidden>
+      <div id="var-tools">
         <div>
           <h3 style="font-family: var(--font-body); font-weight: normal; font-size: 26px; line-height: 1.3; color: var(--text); margin: 40px 0 16px;">Accessibility Doesn’t Mean Empowerment</h3>
           <p>Although the GUI made computing more accessible to more people, it also masked the divide between the haves (technical) and the have-nots (non-technical). What is particularly problematic now is that because non-technical people can still use computers and computer programs (thanks to the internet), non-technical people are not cognizant that they lack technical skills and are at a disadvantage; their deficiencies are unknown-unknowns.</p>
@@ -732,7 +732,7 @@
         })[0];
         if (p) {
           $('#patron-name').textContent = ' ' + p.name;
-          showVariant(VARIANTS[p.v] ? p.v : 'a');
+          showVariant(VARIANTS[p.v] ? p.v : 't');
           document.title = 'Papert Lab — a letter for ' + p.name;
         }
         ungate();
