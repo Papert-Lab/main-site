@@ -218,6 +218,9 @@ body.funding-page .anchor-section {
   margin-left: auto;
   margin-right: auto;
 }
+body.funding-page .anchor-section p {
+  text-align: center;
+}
 body.funding-page .subsection-heading {
   text-align: center;
 }
