@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/funding/patrons/:slug", "destination": "/funding/index.html" }
+  ]
+}
