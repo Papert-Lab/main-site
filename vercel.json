@@ -1,0 +1,27 @@
+{
+  "rewrites": [
+    {
+      "source": "/funding/patrons/:slug",
+      "destination": "/funding/index.html"
+    },
+    {
+      "source": "/funding/safety",
+      "destination": "/funding/index.html"
+    },
+    {
+      "source": "/funding/flourishing",
+      "destination": "/funding/index.html"
+    },
+    {
+      "source": "/funding/pedagogy",
+      "destination": "/funding/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/funding",
+      "destination": "/funding/pedagogy",
+      "permanent": false
+    }
+  ]
+}

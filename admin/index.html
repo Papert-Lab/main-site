@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patrons admin — Papert Lab</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+
+  <style>
+    :root {
+      --bg: #f5f0e6;
+      --text: #3D3530;
+      --text-muted: #6B6358;
+      --text-tertiary: #9B9488;
+      --accent: #5C3A1E;
+      --card-bg: #FAF8F3;
+      --card-border: #E8E2D8;
+      --font-body: Georgia, "Times New Roman", serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text);
+      background-color: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
+      background-size: 256px, 512px;
+      background-repeat: repeat;
+    }
+    main { max-width: 640px; margin: 0 auto; padding: 48px 24px 64px; }
+    h1 { font-weight: normal; font-size: 28px; margin-bottom: 6px; }
+    .sub { font-family: var(--font-sans); font-size: 12.5px; color: var(--text-tertiary); margin-bottom: 32px; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin: 14px 0 5px;
+    }
+    label:first-child { margin-top: 0; }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 16px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 3px;
+      padding: 8px 10px;
+    }
+    input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .radios { display: flex; flex-direction: column; gap: 6px; }
+    .radios label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-body);
+      font-size: 15.5px;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+      margin: 0;
+      cursor: pointer;
+    }
+    .radios input { accent-color: var(--accent); }
+    .remember {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-sans); font-size: 12.5px; color: var(--text-muted);
+      margin-top: 8px; cursor: pointer;
+    }
+    button {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      border: 0;
+      border-radius: 3px;
+      padding: 11px 20px;
+      margin-top: 18px;
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.5; cursor: default; }
+    button.small {
+      padding: 4px 10px;
+      font-size: 10.5px;
+      letter-spacing: 1px;
+      margin: 0;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--card-border);
+    }
+    #result { display: none; }
+    #result.on { display: block; }
+    .url {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 14px;
+      word-break: break-all;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 3px;
+      padding: 10px 12px;
+      margin: 8px 0 10px;
+    }
+    .status { font-family: var(--font-sans); font-size: 12.5px; color: var(--text-tertiary); }
+    .status.ok { color: #3d6b3d; }
+    .err { font-family: var(--font-sans); font-size: 13px; color: #9c3a2e; margin-top: 12px; display: none; }
+    .err.on { display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; }
+    th {
+      font-family: var(--font-sans); font-size: 10.5px; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--text-tertiary);
+      text-align: left; font-weight: 500; padding: 6px 8px 6px 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+    td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--card-border); vertical-align: baseline; }
+    td.mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; }
+    details { margin-top: 14px; font-family: var(--font-sans); font-size: 12.5px; color: var(--text-muted); }
+    details summary { cursor: pointer; color: var(--text-tertiary); }
+    details ol { margin: 8px 0 0 18px; line-height: 1.8; }
+    details code { background: #efe9dc; padding: 1px 5px; border-radius: 3px; font-size: 11.5px; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Patrons</h1>
+    <p class="sub">Generates personalized patron-letter URLs. Each add is a commit to <code>funding/patrons.json</code> on <code>Papert-Lab/main-site</code>; Vercel redeploys automatically (~1&nbsp;min).</p>
+
+    <div class="card">
+      <label for="token">Access token</label>
+      <input type="password" id="token" autocomplete="off" placeholder="github_pat_…">
+      <label class="remember" style="display:flex"><input type="checkbox" id="remember" checked> remember on this device</label>
+      <details>
+        <summary>How to create the token (one time)</summary>
+        <ol>
+          <li>GitHub → Settings → Developer settings → Personal access tokens → <strong>Fine-grained tokens</strong> → Generate new token</li>
+          <li>Resource owner: <code>Papert-Lab</code> · Repository access: <strong>Only</strong> <code>main-site</code></li>
+          <li>Permissions → Repository permissions → <strong>Contents: Read and write</strong> (nothing else)</li>
+          <li>Paste it here. It never leaves this browser (kept in localStorage when “remember” is checked).</li>
+        </ol>
+      </details>
+    </div>
+
+    <div class="card">
+      <label for="fname">First name</label>
+      <input type="text" id="fname" autocomplete="off" placeholder="e.g. Tyler">
+      <label>Letter emphasis</label>
+      <div class="radios">
+        <label><input type="radio" name="variant" value="a" checked> AGI / AI safety</label>
+        <label><input type="radio" name="variant" value="f"> Human flourishing</label>
+        <label><input type="radio" name="variant" value="t"> Tools for thought</label>
+      </div>
+      <button id="go">Generate URL</button>
+      <div class="err" id="err"></div>
+      <div id="result">
+        <label style="margin-top:22px">Patron URL</label>
+        <div class="url" id="url"></div>
+        <button class="small" id="copy">Copy</button>
+        <a class="status" id="preview" href="#" target="_blank" rel="noopener" style="margin-left:10px">open preview</a>
+        <div class="status" id="deploy" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Existing patrons</label>
+      <table id="list"><tbody><tr><td class="status">loading…</td></tr></tbody></table>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    'use strict';
+    var OWNER = 'Papert-Lab', REPO = 'main-site', BRANCH = 'main';
+    var PATH = 'funding/patrons.json';
+    var SITE = 'https://papertlab.org';
+    var VARIANT_LABEL = { a: 'AGI / AI safety', f: 'Human flourishing', t: 'Tools for thought' };
+
+    // testing escape hatch: /admin/?branch=some-branch commits there instead of main
+    var qBranch = new URLSearchParams(location.search).get('branch');
+    if (qBranch) BRANCH = qBranch;
+
+    var $ = function (id) { return document.getElementById(id); };
+    var tokenEl = $('token'), rememberEl = $('remember');
+
+    var saved = localStorage.getItem('pl-admin-token');
+    if (saved) tokenEl.value = saved;
+
+    function ghHeaders() {
+      return {
+        'Authorization': 'Bearer ' + tokenEl.value.trim(),
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      };
+    }
+
+    function apiUrl() {
+      return 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + PATH + '?ref=' + encodeURIComponent(BRANCH);
+    }
+
+    // fetch registry from GitHub (source of truth pre-deploy)
+    function getRegistry() {
+      return fetch(apiUrl(), { headers: ghHeaders() }).then(function (r) {
+        if (r.status === 404) return { patrons: [], sha: null };
+        if (r.status === 401) throw new Error('Token rejected (401). Check it hasn’t expired.');
+        if (r.status === 403) throw new Error('Forbidden (403). Token needs Contents read/write on ' + OWNER + '/' + REPO + '.');
+        if (!r.ok) throw new Error('GitHub error ' + r.status);
+        return r.json().then(function (j) {
+          var data = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g, '')))));
+          return { patrons: data.patrons || [], sha: j.sha };
+        });
+      });
+    }
+
+    function slugify(name) {
+      return name.trim().toLowerCase().normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]/g, '');
+    }
+
+    // first duplicate becomes name1, then name2, …
+    function dedupe(base, patrons) {
+      var taken = {};
+      patrons.forEach(function (p) { taken[String(p.slug).toLowerCase()] = true; });
+      if (!taken[base]) return base;
+      var n = 1;
+      while (taken[base + n]) n++;
+      return base + n;
+    }
+
+    function commit(patrons, sha, slug) {
+      var body = {
+        message: 'patrons: add ' + slug,
+        content: btoa(unescape(encodeURIComponent(JSON.stringify({ patrons: patrons }, null, 2) + '\n'))),
+        branch: BRANCH
+      };
+      if (sha) body.sha = sha;
+      return fetch('https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + PATH, {
+        method: 'PUT',
+        headers: ghHeaders(),
+        body: JSON.stringify(body)
+      }).then(function (r) {
+        if (r.status === 409) throw new Error('CONFLICT');
+        if (r.status === 401) throw new Error('Token rejected (401).');
+        if (r.status === 403) throw new Error('Forbidden (403). Fine-grained token needs Contents: Read and write on this repo.');
+        if (!r.ok) return r.json().then(function (j) { throw new Error('GitHub: ' + (j.message || r.status)); });
+        return r.json();
+      });
+    }
+
+    var pollT = null;
+    function pollDeploy(slug) {
+      var el = $('deploy');
+      el.className = 'status';
+      el.textContent = 'deploying… (Vercel usually takes under a minute)';
+      var t0 = Date.now();
+      clearInterval(pollT);
+      pollT = setInterval(function () {
+        fetch('/funding/patrons.json?t=' + Date.now(), { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : { patrons: [] }; })
+          .then(function (d) {
+            var live = (d.patrons || []).some(function (p) { return p.slug === slug; });
+            if (live) {
+              clearInterval(pollT);
+              el.className = 'status ok';
+              el.textContent = 'live ✓';
+            } else if (Date.now() - t0 > 5 * 60 * 1000) {
+              clearInterval(pollT);
+              el.textContent = 'not live after 5 min — check the Vercel dashboard.';
+            }
+          })
+          .catch(function () {});
+      }, 8000);
+    }
+
+    function renderList(patrons) {
+      var tb = $('list').tBodies[0];
+      if (!patrons.length) {
+        tb.innerHTML = '<tr><td class="status">none yet</td></tr>';
+        return;
+      }
+      tb.innerHTML = '<tr><th>Name</th><th>Emphasis</th><th>URL</th><th></th></tr>' +
+        patrons.map(function (p) {
+          var u = SITE + '/funding/patrons/' + p.slug;
+          return '<tr><td>' + p.name + '</td><td class="status">' + (VARIANT_LABEL[p.v] || '?') +
+            '</td><td class="mono">/funding/patrons/' + p.slug +
+            '</td><td><button class="small" data-copy="' + u + '">Copy</button></td></tr>';
+        }).join('');
+    }
+
+    // public registry for the list (works without a token)
+    fetch('/funding/patrons.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : { patrons: [] }; })
+      .then(function (d) { renderList(d.patrons || []); })
+      .catch(function () { renderList([]); });
+
+    document.addEventListener('click', function (e) {
+      var c = e.target.getAttribute && e.target.getAttribute('data-copy');
+      if (c) {
+        navigator.clipboard.writeText(c);
+        e.target.textContent = 'Copied';
+        setTimeout(function () { e.target.textContent = 'Copy'; }, 1400);
+      }
+    });
+
+    $('copy').addEventListener('click', function () {
+      navigator.clipboard.writeText($('url').textContent);
+      this.textContent = 'Copied';
+      var b = this;
+      setTimeout(function () { b.textContent = 'Copy'; }, 1400);
+    });
+
+    function fail(msg) {
+      var el = $('err');
+      el.textContent = msg;
+      el.className = 'err on';
+      $('go').disabled = false;
+    }
+
+    $('go').addEventListener('click', function () {
+      $('err').className = 'err';
+      $('result').className = '';
+      var token = tokenEl.value.trim();
+      var name = $('fname').value.trim();
+      var variant = document.querySelector('input[name="variant"]:checked').value;
+      if (!token) return fail('Paste the access token first.');
+      if (!name) return fail('First name is required.');
+      var base = slugify(name);
+      if (!base) return fail('Name must contain at least one letter or digit.');
+
+      if (rememberEl.checked) localStorage.setItem('pl-admin-token', token);
+      else localStorage.removeItem('pl-admin-token');
+
+      $('go').disabled = true;
+
+      var attempt = function (retried) {
+        return getRegistry().then(function (reg) {
+          var slug = dedupe(base, reg.patrons);
+          var next = reg.patrons.concat([{ name: name, slug: slug, v: variant }]);
+          return commit(next, reg.sha, slug).then(function () {
+            var url = SITE + '/funding/patrons/' + slug;
+            $('url').textContent = url;
+            $('preview').href = '/funding/patrons/' + slug;
+            $('result').className = 'on';
+            $('go').disabled = false;
+            $('fname').value = '';
+            renderList(next);
+            pollDeploy(slug);
+          });
+        }).catch(function (err) {
+          if (err.message === 'CONFLICT' && !retried) return attempt(true); // sha raced; refetch once
+          fail(err.message || String(err));
+        });
+      };
+      attempt(false);
+    });
+  })();
+  </script>
+</body>
+</html>
