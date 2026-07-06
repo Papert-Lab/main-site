@@ -201,7 +201,7 @@
       <p>My name is Hudson. I’m 16, left high school this spring, and moved across the country alone to pursue learning science research.</p>
       <p>I received <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">$20,000 from Emergent Ventures</a> earlier this year and moved to Virginia Tech shortly after to collaborate with <a href="https://hamiltonfour.tech/" target="_blank" rel="noopener">Prof.&nbsp;David Smith</a>.</p>
       <figure style="margin: 40px 0 0;">
-        <img src="/images/lab-bw.jpg" alt="The lab — a desk between two whiteboards, Blacksburg, Virginia" style="width: 100%; height: auto; display: block; border-radius: 4px; animation: pl-heroEntrance 1s var(--ease-out) 0.1s both;">
+        <img src="/images/lab.jpg" alt="The lab — a desk between two whiteboards, Blacksburg, Virginia" style="width: 100%; height: auto; display: block; border-radius: 4px; animation: pl-heroEntrance 1s var(--ease-out) 0.1s both;">
         <figcaption style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--text-tertiary); margin-top: 10px;">My desk and whiteboards at Virginia Tech.</figcaption>
       </figure>
     </section>
@@ -741,6 +741,9 @@
       var el = document.getElementById(id);
       if (!el) return;
       history.replaceState(null, '', '#' + id);
+      jumping = true;
+      clearTimeout(jumpT);
+      jumpT = setTimeout(function () { jumping = false; }, 900);
       window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
     });
   });
@@ -817,6 +820,7 @@
 
   /* ── scrollspy ── */
   var IDS = ['sec-hello', 'sec-vision', 'sec-work', 'sec-patrons'];
+  var lastY = null, dir = 'down', jumping = false, jumpT;
 
   /* Scroll-driven scene (scrollytelling pattern): the step is a pure
      function of progress through the 500vh scene block. No wheel
@@ -846,7 +850,14 @@
     var doc = document.documentElement;
     if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) act = IDS[IDS.length - 1];
 
-    var step = sceneStep();
+    // scrolling up shows the overview as a plain image — the sequence only
+    // plays forward. Direction persists across events at unchanged scrollY
+    // (coalesced scroll, resize) so the latch can't be undone without real
+    // downward movement. Rail jumps don't flash steps.
+    if (lastY === null || window.scrollY > lastY + 1) dir = 'down';
+    else if (window.scrollY < lastY - 1) dir = 'up';
+    lastY = window.scrollY;
+    var step = (dir === 'up' || jumping) ? 0 : sceneStep();
 
     var fold = state.fold;
     var seasonsEl = document.getElementById('seasons');
