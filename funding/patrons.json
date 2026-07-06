@@ -1,3 +1,9 @@
 {
-  "patrons": []
+  "patrons": [
+    {
+      "name": "Ben",
+      "slug": "ben",
+      "v": "t"
+    }
+  ]
 }
