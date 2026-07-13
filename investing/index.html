@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Papert Lab — a letter for investors</title>
+
+  <meta property="og:title" content="Papert Lab — a letter for investors">
+  <meta property="og:description" content="Papert Lab is an applied cognitive science research nonprofit. A letter for investors.">
+  <meta property="og:url" content="https://papertlab.org/investing/flourishing">
+  <meta property="og:type" content="website">
+  <meta name="description" content="Papert Lab — a letter for investors.">
+  <link rel="canonical" href="https://papertlab.org/investing/flourishing">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <script>
+    // Patron URLs (/investing/patrons/<slug>, rewritten here by vercel.json)
+    // resolve their personalization from /phil/patrons.json. Until that
+    // fetch lands, gate the two personalized regions so the patron never
+    // sees "hi friend!" flash into their own name. ?patron=<slug> is a
+    // local-testing fallback (no rewrites on a plain static server).
+    (function () {
+      var m = location.pathname.match(/^\/investing\/patrons\/([^\/]+)\/?$/);
+      var q = new URLSearchParams(location.search);
+      window.__patronSlug = (m && decodeURIComponent(m[1])) || q.get('patron') || null;
+      // named variant routes: /investing/safety | /investing/flourishing | /investing/pedagogy
+      var vm = location.pathname.match(/^\/investing\/(safety|flourishing|pedagogy)\/?$/);
+      var VMAP = { safety: 'a', flourishing: 'f', pedagogy: 't' };
+      window.__variantOverride = VMAP[(vm && vm[1]) || q.get('v')] || null;
+      if (window.__patronSlug || window.__variantOverride) {
+        var s = document.createElement('style');
+        s.id = 'patron-gate';
+        s.textContent = '#var-tools { visibility: hidden; }';
+        document.head.appendChild(s);
+      }
+      if (window.__patronSlug) {
+        var r = document.createElement('meta');
+        r.name = 'robots';
+        r.content = 'noindex';
+        document.head.appendChild(r);
+      }
+    })();
+  </script>
+
+  <style>
+    /* Distilled from the Papert Lab design system (colors_and_type.css)
+       + production style.css — only what this page uses. */
+    :root {
+      --bg: #f5f0e6;
+      --text: #3D3530;
+      --text-muted: #6B6358;
+      --text-tertiary: #9B9488;
+      --accent: #5C3A1E;
+      --card-bg: #FAF8F3;
+      --card-border: #E8E2D8;
+      --rule: #d6cdbc;
+      --font-body: Georgia, "Times New Roman", serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text);
+      background-color: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
+      background-size: 256px, 512px;
+      background-repeat: repeat;
+    }
+
+    /* ── Site header — identical to the main page ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background-color: var(--bg);
+      /* texture painted explicitly — header's parent is the page wrapper,
+         not body, so background-image: inherit would resolve to none */
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='5' stitchTiles='stitch' seed='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.15'/%3E%3C/svg%3E");
+      background-size: 256px, 512px;
+      background-repeat: repeat;
+    }
+    header nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .site-name {
+      display: inline-block;
+      overflow: hidden;
+      max-width: 73px;
+      height: 40px;
+      text-decoration: none;
+      vertical-align: middle;
+    }
+    .site-name img { height: 40px; width: auto; display: block; filter: brightness(0.2); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-weight: 400;
+    }
+    .nav-links a, .nav-links a:visited { color: var(--text-tertiary); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    @media (max-width: 500px) {
+      header nav { padding: 1rem; }
+      .nav-links { gap: 1.2rem; font-size: 12px; letter-spacing: 2px; }
+    }
+
+    h1, h2, h3 { font-family: var(--font-body); font-weight: normal; color: var(--text); }
+
+    p {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-muted);
+      margin: 0 0 1.2em;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.2s var(--ease-out);
+    }
+    a:hover { color: var(--text); }
+    a:visited { color: var(--accent); }
+
+    footer a { text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--accent); }
+
+    @keyframes pl-heroEntrance {
+      0%   { opacity: 0; transform: scale(0.96) translateY(15px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @media (max-width: 779px) { #bm-rail { display: none !important; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+<div style="position: relative">
+
+  <header id="site-header">
+    <nav>
+      <a href="/" class="site-name"><img src="/images/layers/chalk-text.png" alt="Papert Lab"></a>
+      <div class="nav-links">
+        <a href="/#manifesto">Manifesto</a>
+        <a href="https://essays.papertlab.org">Essays</a>
+        <a href="/#about">About</a>
+        <a href="/projects/">Projects</a>
+      </div>
+    </nav>
+  </header>
+
+  <nav id="bm-rail" aria-label="Bookmarks" style="position: fixed; right: 28px; top: 50%; transform: translateY(-50%); z-index: 40;">
+    <div style="position: relative; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; padding: 14px 0;">
+      <span style="position: absolute; top: 0; bottom: 0; right: 0; border-right: 1px dashed #c3bcae;"></span>
+      <a href="#sec-hello" title="Intro" data-bm="sec-hello" style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; padding: 15px 0;">
+        <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Intro</span>
+        <span style="display: block; height: 1px; width: 12px; background: #b8b1a4; transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);"></span>
+      </a>
+      <a href="#sec-vision" title="Why?" data-bm="sec-vision" style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; padding: 15px 0;">
+        <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Why?</span>
+        <span style="display: block; height: 1px; width: 12px; background: #b8b1a4; transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);"></span>
+      </a>
+      <a href="#sec-work" title="Projects" data-bm="sec-work" style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; padding: 15px 0;">
+        <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Projects</span>
+        <span style="display: block; height: 1px; width: 12px; background: #b8b1a4; transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);"></span>
+      </a>
+      <a href="#sec-patrons" title="Patrons" data-bm="sec-patrons" style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; padding: 15px 0;">
+        <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Patrons</span>
+        <span style="display: block; height: 1px; width: 12px; background: #b8b1a4; transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);"></span>
+      </a>
+    </div>
+  </nav>
+
+  <main style="max-width: 640px; margin: 0 auto; padding: 0 24px 40px;">
+
+    <section id="sec-hello" data-screen-label="Hello" style="padding-top: 64px;">
+      <h1 style="font-family: var(--font-body); font-weight: normal; font-size: clamp(34px, 6vw, 44px); line-height: 1.12; color: var(--text); margin: 0 0 26px;">hi<span id="patron-name"></span>!</h1>
+      <p>My name is Hudson. I’m 16, left high school this spring, and moved across the country alone to pursue learning science research.</p>
+      <p>I received <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">$20,000 from Emergent Ventures</a> earlier this year and moved to Virginia Tech shortly after to collaborate with <a href="https://hamiltonfour.tech/" target="_blank" rel="noopener">Prof.&nbsp;David Smith</a>.</p>
+      <figure style="margin: 40px 0 0;">
+        <img src="/images/lab.jpg" alt="The lab — a desk between two whiteboards, Blacksburg, Virginia" style="width: 100%; height: auto; display: block; border-radius: 4px; animation: pl-heroEntrance 1s var(--ease-out) 0.1s both;">
+      </figure>
+    </section>
+
+    <section id="sec-vision" data-screen-label="The vision" style="padding-top: 56px;">
+      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 0 0 18px;">Papert Lab</h2>
+      <p>Papert Lab is an applied cognitive science research nonprofit investigating the role of computers on how humans learn, solve problems, and conduct scientific research.</p>
+      <blockquote style="margin: 30px 0; padding: 0; font-style: italic; font-size: 1rem; line-height: 1.75; color: var(--text);">We envision a world where every person feels empowered and excited to use computers to augment their cognition and learning.</blockquote>
+      <p>Previous research blending cognitive and computer science yielded artifacts like the <a href="https://dougengelbart.org/content/view/209/" target="_blank" rel="noopener">GUI and computer mouse</a>, <a href="https://el.media.mit.edu/logo-foundation/what_is_logo/history.html" target="_blank" rel="noopener">LOGO</a>, <a href="https://www.media.mit.edu/people/mres/overview/" target="_blank" rel="noopener">Scratch</a> and the <a href="https://dynabook.com/global/en/history.html" target="_blank" rel="noopener">Dynabook</a>. A post-AGI world must focus on fostering a community of continual building, learning, and disseminating knowledge. Papert Lab is researching, building, and piloting the next generation of computational paradigms that augment human cognition and learning.</p>
+      <figure style="margin: 36px 0;">
+        <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/B6rKUf9DWRI" title="Douglas Engelbart — The Mother of All Demos (1968)" style="width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; border-radius: 4px;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen"></iframe>
+        <figcaption style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.5; color: var(--text-tertiary); margin-top: 10px;">Douglas Engelbart, Mother of All Demos.</figcaption>
+      </figure>
+      <div id="var-agi" hidden>
+        <div>
+          <h3 style="font-family: var(--font-body); font-weight: normal; font-size: 26px; line-height: 1.3; color: var(--text); margin: 40px 0 16px;">Moving Humanity From Consumption to Creation</h3>
+          <p>A world where AI conducts scientific research, writes code, and solves complex problems usually invokes a fear-based response among “outsiders,” or people who lack control over AI progress. This can manifest as some false sense of human intellectual superiority over AI, but I doubt this will sustainably uphold a contributive society as it becomes clear that AI is far superior to us in essentially all domains. That is, we can not forever be delusional in valuing human cognition over machine intelligence.</p>
+          <p>I feel this is likely to lead to a transition from humans being active contributors in society to passive consumers who let a small group of powerful humans and AIs direct their lives. Similar to this thought is the idea of “relative disempowerment” (<a href="https://arxiv.org/abs/2501.16946" target="_blank" rel="noopener">Kulveit et al.</a>), whereby human quality of life stagnates or marginally improves despite the global GDP experiencing rapid growth and technological advancement. This would be due to a misalignment between human needs and technological advancement (i.e. technological advancement does not serve human needs).</p>
+          <p>This is not an inevitability, though. If humans deliberately decide to be creators and change makers, we may be able to maintain, and even increase, our sense of meaning and purpose. Moreover, increasing the quantity and impact of human-initiated artifacts may help to ensure alignment between humans and AI. This does not mean, however, that we should purely be creators without consuming anything; if we don’t consume, how will we learn? Instead, we must draw a distinction between <em>consuming to be entertained</em> and <em>consuming as a means to achieving an objective</em>.</p>
+          <p>I have experienced this dichotomy first hand as I transitioned from being a passive consumer of calculus to using AI to extend and apply my understanding of calculus to my research in learning science. I have repeatedly observed this phenomena among the 30 study participants I have interviewed, where many of them use the computer science vocabulary they are taught in university to design complicated program behavior. To make this transition, though, one must be able to imagine the idealistic world in which their invention exists and instantiate its implementation through specifications that define its behavior.</p>
+        </div>
+      </div>
+      <div id="var-flourish" hidden>
+        <div>
+          <h3 style="font-family: var(--font-body); font-weight: normal; font-size: 26px; line-height: 1.3; color: var(--text); margin: 40px 0 16px;">Flourishing Is Something You Make</h3>
+          <p>Collaborating with AI to cure disease, eliminate child mortality, end hunger, and improve the climate are sure to increase the average person’s quality of life and have been written about extensively (<a href="https://darioamodei.com/essay/machines-of-loving-grace" target="_blank" rel="noopener">Amodei</a>). A more interesting question is what to do once this state is reached. It is unlikely that all human struggle will be eliminated at this point, and perhaps may even be a stretch to assume that it will be reduced; it is more likely to be shifted onto some other problems. Thus, the question is not how to create this idealistic utopia, but how to increase one’s flourishing while living in it, which we define as <em>relentlessly pursuing a virtuous vision</em>.</p>
+          <p>Then to promote flourishing, one must learn how to (1) identify a virtuous problem to solve; (2) describe and instantiate the idealistic world where the problem is solved. We can think of these two sub-problems as a self-evolving <a href="https://www.cmu.edu/dietrich/psychology/pdf/klahr/PDFs/klahr_dunbar881.pdf" target="_blank" rel="noopener">loop of scientific discovery</a>, whereby one makes a hypothesis of a virtuous problem through searching the problem space and determines how to approach this problem through searching the solution space.</p>
+          <p>This transforms flourishing into a problem which AI can guide and augment. We can imagine innovators specifying the behavior of tools-for-thought, <a href="https://notes.andymatuschak.org/zKPv6qkSErdRGqyryvgS2wS" target="_blank" rel="noopener">mnemonic mediums</a>, and collaborative AI agents — all of which help the innovator to augment her cognition through our scientific loop of flourishing. Thus, to increase the amount of people who flourish, we should foster a culture that encourages learning and creation with computers.</p>
+          <p>We can increase human autonomy by enabling technical and non-technical people to design systems that augment how they solve problems and learn in <em>their own domains</em> by describing the system’s behavior. This would enable people to work on more meaningful problems and utilize AI to accelerate progress and discovery, thus aligning one’s vision and time. In practice, this would mean that the limiting factor to making change would be one’s ability to choose non-trivial problems instead of their proficiency at performing specific tasks, which increases autonomy by enabling people to create more useful tools.</p>
+        </div>
+      </div>
+      <div id="var-tools">
+        <div>
+          <h3 style="font-family: var(--font-body); font-weight: normal; font-size: 26px; line-height: 1.3; color: var(--text); margin: 40px 0 16px;">Accessibility Doesn’t Mean Empowerment</h3>
+          <p>Although the GUI made computing more accessible to more people, it also masked the divide between the haves (technical) and the have-nots (non-technical). What is particularly problematic now is that because non-technical people can still use computers and computer programs (thanks to the internet), non-technical people are not cognizant that they lack technical skills and are at a disadvantage; their deficiencies are unknown-unknowns.</p>
+          <p>The same phenomena that happened with the GUI (masking skill deficiencies) is happening now, whereby the foundation model companies are trying to make agentic coding more accessible (e.g. Claude Code → Claude Cowork), but by doing so, the technical divide will once again be masked and the less-technical people will be left behind, since using the Claude Code CLI and knowing how to design specifications will likely continue to outperform chatbot interfaces that utilize algorithmic prompt optimization. By educating the brightest people <em>across domains</em> (particularly non-computing ones) to describe the behavior of systems that extend their thought, we can avoid repeating this pattern and design tools that genuinely augment human cognition and learning.</p>
+          <p>This idea of developing computational fluency to augment thought traces back to <a href="https://dougengelbart.org/" target="_blank" rel="noopener">Douglas Engelbart</a> and <a href="https://dailypapert.com/about-seymour-papert/" target="_blank" rel="noopener">Seymour Papert</a>. Many have speculated about why we have failed (not cared about?) their vision of using computers to support learning and thinking that is situated in creating things. However, I feel that our failure to broadly acculturate computer programming is primarily due to our failure to demonstrate the benefits of computer programming for augmenting human cognition.</p>
+          <p>Indeed, I had no idea that the computer could be much more than a word processor and a means to completing a goal before I started frequently using AI. Thus, we must create environments that naturally motivate curiosity and exploration with computers and AI, which will naturally develop one’s thirst for computational knowledge.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-work" data-screen-label="The work" style="padding-top: 56px;">
+      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 0 0 18px;">What is an applied cognitive science research nonprofit?</h2>
+      <p>Good question! To better illustrate our work, first look at our initiatives:</p>
+      <div style="margin: 22px 0 24px; border-top: 1px solid var(--card-border);">
+        <div style="display: flex; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--text-tertiary); min-width: 22px;">01</span>
+          <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Publishing peer-reviewed research papers</span>
+        </div>
+        <div style="display: flex; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--text-tertiary); min-width: 22px;">02</span>
+          <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Building research tools to support our internal research</span>
+        </div>
+        <div style="display: flex; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--text-tertiary); min-width: 22px;">03</span>
+          <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Conducting participant interviews and pilot studies</span>
+        </div>
+        <div style="display: flex; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--text-tertiary); min-width: 22px;">04</span>
+          <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Deploying our pedagogy in university courses with thousands of students</span>
+        </div>
+        <div style="display: flex; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--text-tertiary); min-width: 22px;">05</span>
+          <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Developing tools for thought</span>
+        </div>
+        <div style="display: flex; gap: 16px; align-items: baseline; padding: 13px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-family: var(--font-sans); font-size: 11px; letter-spacing: 1px; color: var(--text-tertiary); min-width: 22px;">06</span>
+          <span style="font-size: 16px; line-height: 1.6; color: var(--text);">Hosting weekly discussion groups on augmenting human cognition with computers</span>
+        </div>
+      </div>
+      <div id="zoom-scene" style="height: 500vh; margin: 36px 0 calc((min(84vh, 620px) - 100vh) / 2 + 24px);">
+        
+      <div id="scene-stage" style="position: sticky; top: 0; height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <div style="position: relative; width: min(84vh, 620px);">
+        <svg id="scene-svg" viewBox="0 0 760 760" style="width: 100%; height: auto; display: block; transform-origin: 0 0; transform: translate(0%, 0%) scale(1); transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);" role="img" aria-label="Notebook sketch of the Papert Lab research cycle">
+          <g stroke="#5b3a22" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+            <!-- flows (sketchy, double-stroked) -->
+            <g data-flow="a" stroke-width="1.3" style="opacity: 0.85; transition: opacity 0.6s ease;">
+              <path d="M150,190 Q192,222 218,232"></path>
+              <path d="M385,165 Q364,208 334,240"></path>
+              <path d="M600,178 Q495,244 372,282"></path>
+              <path d="M366,318 Q420,322 468,328"></path>
+              <path d="M480,368 Q350,450 210,535"></path>
+              <path d="M505,375 Q462,468 413,553"></path>
+              <path d="M255,640 Q440,742 570,657"></path>
+              <path d="M508,613 Q545,604 578,596"></path>
+              <path d="M667,554 Q718,258 380,262"></path>
+            </g>
+            <g data-flow="b" stroke-width="0.9" transform="translate(1.5,-1.5)" style="opacity: 0.3; transition: opacity 0.6s ease;">
+              <path d="M150,190 Q192,222 218,232"></path>
+              <path d="M385,165 Q364,208 334,240"></path>
+              <path d="M600,178 Q495,244 372,282"></path>
+              <path d="M480,368 Q350,450 210,535"></path>
+              <path d="M255,640 Q440,742 570,657"></path>
+              <path d="M667,554 Q718,258 380,262"></path>
+            </g>
+            <g data-flow="a" stroke-width="1.4" style="opacity: 0.85; transition: opacity 0.6s ease;">
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(218,232) rotate(21)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(334,240) rotate(133.2)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(372,282) rotate(162.8)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(468,328) rotate(10.3)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(210,535) rotate(148.7)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(413,553) rotate(120)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(570,657) rotate(-33.2)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(578,596) rotate(-13.6)"></path>
+              <path d="M-7,-4.5 L0,0 L-7,4.5" transform="translate(380,262) rotate(179.4)"></path>
+            </g>
+
+            <!-- thinker at his reading desk -->
+            <g transform="translate(125,120)" data-v="1" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <g stroke-width="1.7">
+                <path d="M-72,38 Q0,34 72,37"></path>
+                <path d="M40,-20 Q54,6 46,36"></path>
+                <path d="M34,-10 Q12,4 -10,27"></path>
+                <circle cx="30" cy="-30" r="12" stroke-width="1.5"></circle>
+              </g>
+              <path d="M-72,41 Q0,37 72,40" stroke-width="0.9" opacity="0.35"></path>
+              <g stroke-width="1.2">
+                <path d="M-62,39 L-58,82"></path>
+                <path d="M58,38 L62,80"></path>
+                <path d="M-58,62 L60,60" opacity="0.5" stroke-width="0.9"></path>
+                <path d="M23,-21 q3,6 7,6 q4,0 8,-5"></path>
+                <path d="M-10,27 l-7,2"></path>
+              </g>
+              <g stroke-width="1.3">
+                <path d="M-12,29 L-44,31"></path>
+                <path d="M-38,30 l0,-2 M-30,30 l0,-2 M-22,29 l0,-2" stroke-width="0.9" opacity="0.6"></path>
+                <path d="M-44,31 L-49,-3 L-21,-6 L-18,27 Z" stroke-width="1.5"></path>
+                <path d="M-45,26 L-48,-1" stroke-width="0.8" opacity="0.35"></path>
+                <path d="M-42,4 l15,-1 M-41,12 l12,-1" stroke-width="0.9" opacity="0.5"></path>
+                <path d="M-64,8 L-64,30 M-69,30 L-59,30"></path>
+                <path d="M-64,2 q3,4 0,6 q-3,-2 0,-6" stroke-width="1"></path>
+              </g>
+              <g stroke-width="0.9" opacity="0.5">
+                <path d="M52,-6 l14,-10 M54,4 l14,-10 M55,14 l13,-10 M55,24 l13,-10"></path>
+              </g>
+              <g stroke-width="1.2" opacity="0.75">
+                <circle cx="38" cy="-48" r="2.5"></circle>
+                <circle cx="45" cy="-59" r="3.5"></circle>
+                <path d="M40,-76 a6,6 0 0 1 5,-9 a8,7 0 0 1 13,-4 a8,6 0 0 1 12,3 a6,5 0 0 1 1,9 a6,5 0 0 1 -8,6 a9,5 0 0 1 -13,0 a7,5 0 0 1 -10,-5 z" stroke-width="1.3"></path>
+                <path d="M60,-86 a4,4 0 1 1 -6,3" stroke-width="0.9" opacity="0.7"></path>
+              </g>
+            </g>
+
+            <!-- invited talk: the hall -->
+            <g transform="translate(390,100)" data-v="2" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <g stroke-width="0.8" opacity="0.3">
+                <path d="M-92,52 L0,-38 M92,52 L0,-38 M-60,54 L0,-38 M60,54 L0,-38"></path>
+              </g>
+              <g stroke-width="1.4">
+                <path d="M-88,48 Q0,44 88,48"></path>
+                <path d="M-68,32 Q0,28 68,32"></path>
+                <path d="M-50,18 Q0,15 50,18"></path>
+                <path d="M-34,6 Q0,4 34,6"></path>
+              </g>
+              <g stroke-width="1.2">
+                <circle cx="-70" cy="42" r="4.5"></circle><circle cx="-40" cy="41" r="4.5"></circle><circle cx="-8" cy="40" r="4.5"></circle><circle cx="28" cy="41" r="4.5"></circle><circle cx="62" cy="42" r="4.5"></circle>
+                <circle cx="-52" cy="26" r="3.8"></circle><circle cx="-22" cy="25" r="3.8"></circle><circle cx="10" cy="25" r="3.8"></circle><circle cx="40" cy="26" r="3.8"></circle>
+                <circle cx="-36" cy="12" r="3"></circle><circle cx="-8" cy="11" r="3"></circle><circle cx="20" cy="12" r="3"></circle>
+                <circle cx="-20" cy="1" r="2.5"></circle><circle cx="4" cy="1" r="2.5"></circle>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M-16,-52 L16,-54 L17,-40 L-15,-38 Z"></path>
+                <circle cx="0" cy="-30" r="3"></circle>
+                <path d="M0,-27 L0,-18 M0,-24 L8,-28"></path>
+              </g>
+            </g>
+
+            <!-- the weekly table: café, coffee, conversation -->
+            <g transform="translate(628,112)" data-v="3" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <path d="M-55,14 Q0,10 55,13" stroke-width="1.6"></path>
+              <path d="M-55,18 Q0,14 55,17" stroke-width="0.9" opacity="0.45"></path>
+              <g stroke-width="1.3">
+                <path d="M-2,18 Q-5,26 -1,32 Q2,37 -1,40"></path>
+                <path d="M2,18 Q5,26 1,32"></path>
+                <path d="M-1,40 Q-10,43 -17,50"></path>
+                <path d="M-1,40 Q9,43 16,50"></path>
+                <path d="M-6,21 L6,21" stroke-width="1"></path>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M1,-64 L0,-45"></path>
+                <path d="M-9,-37 Q0,-47 9,-37 Z"></path>
+                <path d="M-3,-35 a3,3 0 0 0 6,0" stroke-width="1" opacity="0.7"></path>
+              </g>
+              <g stroke-width="1.3" transform="translate(22,0)">
+                <path d="M-11,0 q0,10 11,10 q11,0 11,-10 Z"></path>
+                <path d="M11,-1 a5,4 0 0 1 0,8" stroke-width="1.1"></path>
+                <path d="M-16,13 L17,13" stroke-width="1" opacity="0.7"></path>
+                <path d="M-4,-6 q3,-5 0,-10 q-3,-5 0,-9" stroke-width="1" opacity="0.55"></path>
+                <path d="M3,-5 q3,-5 0,-10" stroke-width="1" opacity="0.55"></path>
+              </g>
+              <g stroke-width="1.4">
+                <circle cx="-38" cy="-10" r="8"></circle>
+                <path d="M-45,-3 Q-50,14 -46,26"></path>
+                <path d="M-32,-2 Q-22,4 -14,10" stroke-width="1.3"></path>
+                <circle cx="38" cy="-12" r="8"></circle>
+                <path d="M45,-5 Q50,12 46,24"></path>
+                <path d="M32,-4 Q22,-14 14,-8" stroke-width="1.3"></path>
+                <circle cx="0" cy="-20" r="7"></circle>
+                <path d="M-10,-10 Q0,-15 10,-10" stroke-width="1.2"></path>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M-53,-2 Q-60,14 -54,30"></path>
+                <path d="M-52,30 L-54,50 M-44,28 L-42,50"></path>
+                <path d="M53,-4 Q60,12 54,28"></path>
+                <path d="M52,28 L54,50 M44,26 L42,49"></path>
+              </g>
+              <g stroke-width="1.1">
+                <path d="M-18,8 q0,5 5,5 q5,0 5,-5"></path>
+                <path d="M-7,9 a3,3 0 0 1 0,-5" opacity="0.8"></path>
+                <path d="M-22,14 L-2,14" opacity="0.7"></path>
+              </g>
+              <g stroke-width="0.9" opacity="0.5">
+                <path d="M-13,2 q2,-4 0,-7 q-2,-3 0,-6"></path>
+                <path d="M-8,3 q2,-4 0,-7"></path>
+              </g>
+            </g>
+
+            <!-- the whiteboards: the thing to think with -->
+            <g transform="translate(280,300)" data-v="4" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <path d="M-100,82 L88,76" stroke-width="0.9" opacity="0.3"></path>
+              <g stroke-width="1.6">
+                <path d="M-92,-58 Q-53,-63 -14,-61 Q-12,-9 -12,43 Q-51,48 -90,47 Q-91,-6 -92,-58"></path>
+                <path d="M-95,-59 L-11,-63" stroke-width="2"></path>
+                <path d="M-2,-52 Q37,-57 76,-55 Q78,-6 78,41 Q39,48 0,45 Q-1,-3 -2,-52"></path>
+                <path d="M-5,-53 L79,-57" stroke-width="2"></path>
+              </g>
+              <path d="M-89,-55 L-17,-59 L-15,41 L-87,45 Z" stroke-width="0.8" opacity="0.25"></path>
+              <g stroke-width="1.2">
+                <path d="M-80,48 L-79,74 M-24,46 L-23,72"></path>
+                <path d="M-80,62 L-23,60" stroke-width="0.9" opacity="0.5"></path>
+                <circle cx="-79" cy="78" r="3"></circle>
+                <circle cx="-23" cy="76" r="3"></circle>
+                <path d="M10,46 L11,70 M66,42 L67,68"></path>
+                <path d="M10,60 L67,58" stroke-width="0.9" opacity="0.5"></path>
+                <circle cx="11" cy="74" r="3"></circle>
+                <circle cx="67" cy="72" r="3"></circle>
+              </g>
+              <g stroke-width="1" opacity="0.8">
+                <path d="M-84,-48 q11,-4 21,-1" stroke-width="1.1"></path>
+                <path d="M-84,-44 l23,-2" stroke-width="0.8"></path>
+                <path d="M-56,-49 q9,-2 16,-1" opacity="0.7"></path>
+                <path d="M-58,-51 l20,4" stroke-width="0.8"></path>
+                <path d="M-84,-32 l14,-2 l1.5,9 l-14,2 Z" transform="rotate(-2 -77 -27)"></path>
+                <path d="M-68,-28 q6,-1 9,-1 M-62,-31 l3,2.5 l-3,2.5" stroke-width="0.9"></path>
+                <path d="M-55,-27 q-2,-6 5,-7 q2,-4 8,-3 q6,-1 6,4 q4,3 0,6 q-3,4 -9,2 q-7,2 -10,-2"></path>
+                <path d="M-48,-18 q1,5 0,8 M-51,-12 l3,3 l3,-3.5" stroke-width="0.9"></path>
+                <path d="M-56,-6 l16,-2 l1.5,10 l-16,2 Z" transform="rotate(2 -48 -1)"></path>
+                <ellipse cx="-73" cy="-9" rx="9" ry="5.5" transform="rotate(-8 -73 -9)"></ellipse>
+                <path d="M-80,-9 q7,-3 14,-1" stroke-width="0.8"></path>
+                <path d="M-64,-11 q6,-5 8,-9" stroke-width="0.8" stroke-dasharray="2 3"></path>
+                <path d="M-84,10 q12,-4 22,-2" opacity="0.75"></path>
+                <path d="M-83,17 q9,-2 17,-1" opacity="0.6"></path>
+                <path d="M-84,24 q13,-4 24,-2" opacity="0.75"></path>
+                <path d="M-82,31 q8,-2 14,-1" opacity="0.6"></path>
+                <path d="M-46,38 l0,-16 M-46,38 l22,-2" stroke-width="0.9"></path>
+                <path d="M-44,34 q8,-2 11,-7 q3,-5 7,-7" stroke-width="0.9"></path>
+              </g>
+              <g stroke-width="1" opacity="0.8">
+                <path d="M6,-44 q13,-4 25,-1" stroke-width="1.1"></path>
+                <path d="M6,-40 l27,-2" stroke-width="0.8"></path>
+                <circle cx="8" cy="-29" r="1.2"></circle><path d="M13,-30 q11,-3 22,-1"></path>
+                <circle cx="8" cy="-21" r="1.2"></circle><path d="M13,-22 q9,-2 20,-1" opacity="0.7"></path>
+                <path d="M11,-22 l26,-2" stroke-width="0.8"></path>
+                <circle cx="8" cy="-13" r="1.2"></circle><path d="M13,-14 q13,-3 26,-1"></path>
+                <path d="M41,-32 Q42,-5 41,20" stroke-dasharray="3 4" stroke-width="0.8" opacity="0.6"></path>
+                <path d="M8,-4 l22,-3 l1.5,12 l-22,3 Z" transform="rotate(-2 19 2)"></path>
+                <path d="M12,0 l15,-2 M12,4 l11,-1.5" stroke-width="0.8"></path>
+                <path d="M33,-6 q4,6 0,13" stroke-width="0.9"></path>
+                <path d="M48,-28 q9,-3 16,-1" opacity="0.75"></path>
+                <path d="M48,-20 q7,-2 13,-1" opacity="0.6"></path>
+                <ellipse cx="57" cy="-8" rx="10" ry="5.5" transform="rotate(5 57 -8)"></ellipse>
+                <path d="M50,-8 q7,-3 14,-1" stroke-width="0.8"></path>
+                <path d="M48,-3 q-6,4 -11,5 M40,0 l-3,2.5 l4,1.5" stroke-width="0.9"></path>
+                <path d="M10,22 l14,-2 l1,8 l-14,2 Z" transform="rotate(2 17 25)"></path>
+                <path d="M28,23 Q40,20 38,11 Q36,4 27,6"></path>
+                <path d="M27,6 l4,-3 M27,6 l4.5,2" stroke-width="0.9"></path>
+                <path d="M48,32 q9,-3 17,-1" opacity="0.7"></path>
+              </g>
+            </g>
+
+            <!-- the paper -->
+            <g transform="translate(505,330)" data-v="5" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <path d="M-28,-38 L8,-42 L16,-34 L20,26 L-16,30 Z" stroke-width="1.1" opacity="0.4"></path>
+              <path d="M-22,-32 L12,-34 L20,-26 L22,32 L-20,34 Z" stroke-width="1.6"></path>
+              <path d="M12,-34 L13,-26 L20,-26" stroke-width="1.3"></path>
+              <path d="M14,-32 l4,4 M12,-29 l5,4" stroke-width="0.8" opacity="0.5"></path>
+              <g stroke-width="0.9" opacity="0.5">
+                <path d="M-12,-18 L14,-19 M-12,-8 L14,-9 M-12,2 L14,1 M-12,12 L12,11 M-12,22 L6,21"></path>
+              </g>
+            </g>
+
+            <!-- one-on-one study: children and the turtle -->
+            <g transform="translate(200,590)" data-v="6" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <path d="M-78,22 Q0,18 78,21" stroke-width="1.7"></path>
+              <path d="M-78,25 Q0,21 78,24" stroke-width="0.9" opacity="0.35"></path>
+              <g stroke-width="1.2">
+                <path d="M-68,23 L-64,58 M64,22 L68,56"></path>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M-16.5,9.5 Q-8,8.4 0.4,9.3 L0.7,16.3 Q-8,17.6 -16.1,16.7 L-16.5,9.5"></path>
+                <path d="M-14,12 l11,-0.6 M-13.5,14.6 l9,-0.4" stroke-width="0.7" opacity="0.4"></path>
+                <path d="M3.6,9.7 Q11,8.5 18.5,9 L18.9,16.1 Q11,17.5 4.1,16.5 L3.6,9.7" transform="rotate(-2.5 11 13)"></path>
+                <path d="M-8.5,1.7 Q0,0.3 8.4,1.1 L8.7,8.7 Q0,9.9 -8.1,9.2 L-8.5,1.7" transform="rotate(2 0 5)"></path>
+                <path d="M-6.2,1.4 q2,-2.4 4,-0.2 M-1.1,0.8 q2.1,-2.2 4.1,-0.1 M4,1.2 q2,-2.3 4,-0.2" stroke-width="0.9"></path>
+                <path d="M19.6,11.6 Q26,10.2 32.5,10.8 L32.8,16.4 Q26,17.8 20.1,17.1 L19.6,11.6" transform="rotate(3.5 26 14)"></path>
+                <path d="M22,11.2 q1.9,-2.2 3.9,-0.2 M26.9,10.8 q2,-2.1 4,-0.1" stroke-width="0.9"></path>
+                <path d="M21.5,13.8 l8.5,-0.6" stroke-width="0.7" opacity="0.4"></path>
+              </g>
+              <g stroke-width="1.4">
+                <circle cx="-44" cy="-4" r="6.5"></circle>
+                <path d="M-51,2 Q-54,12 -51,20"></path>
+                <path d="M-38,2 Q-28,8 -19,13" stroke-width="1.3"></path>
+                <circle cx="52" cy="-16" r="9"></circle>
+                <path d="M46,-9 q4,5 10,3" stroke-width="1.2"></path>
+                <path d="M61,-9 Q65,6 59,20"></path>
+                <path d="M50,-6 Q47,-5 45,-4" stroke-width="1.3"></path>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M34,-5 L46,-7 L48,7 L36,9 Z"></path>
+                <path d="M37,-1 L45,-2 M37,3 L45,2" stroke-width="0.9" opacity="0.6"></path>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M-53,24 L-33,23"></path>
+                <path d="M-49,24 L-51,46 M-38,23 L-36,45"></path>
+                <path d="M42,23 L62,22"></path>
+                <path d="M45,23 L43,46 M58,22 L60,44"></path>
+              </g>
+              <g stroke-width="0.9" opacity="0.5">
+                <path d="M-50,32 l12,-8 M-38,34 l12,-8 M-26,36 l12,-8"></path>
+              </g>
+            </g>
+
+            <!-- classroom deployment: six dynabooks round the table -->
+            <g transform="translate(455,615)" data-v="7" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <ellipse cx="8" cy="14" rx="52" ry="15" stroke-width="1.5"></ellipse>
+              <ellipse cx="8" cy="15" rx="54" ry="13" stroke-width="0.8" opacity="0.3"></ellipse>
+              <g stroke-width="1.2">
+                <path d="M2,29 L-4,47 M18,29 L24,47"></path>
+              </g>
+              <g stroke-width="1.3">
+                <circle cx="-34" cy="-2" r="6"></circle>
+                <circle cx="-16" cy="-10" r="6"></circle>
+                <circle cx="6" cy="-12" r="6"></circle>
+                <circle cx="26" cy="-8" r="6"></circle>
+                <circle cx="42" cy="0" r="6"></circle>
+                <path d="M-42,4 Q-34,1 -27,5 M-24,-3 Q-16,-6 -9,-2 M-2,-5 Q6,-8 13,-4 M19,-1 Q26,-4 33,0 M35,6 Q42,3 49,7" stroke-width="1.1"></path>
+                <circle cx="-10" cy="32" r="7"></circle>
+                <path d="M-15,27 q4,-3 8,-1 M-16,32 q5,-3 10,-1" stroke-width="0.9" opacity="0.5"></path>
+              </g>
+              <g stroke-width="1">
+                <path d="M-37,5 l9,-1 l1,6 l-9,1 Z"></path><path d="M-34,7 l5,-1" opacity="0.6"></path>
+                <path d="M-20,0 l9,-1 l1,6 l-9,1 Z"></path><path d="M-17,2 l5,-1" opacity="0.6"></path>
+                <path d="M2,-2 l9,-1 l1,6 l-9,1 Z"></path><path d="M5,0 l5,-1" opacity="0.6"></path>
+                <path d="M22,1 l9,-1 l1,6 l-9,1 Z"></path><path d="M25,3 l5,-1" opacity="0.6"></path>
+                <path d="M40,7 l9,-1 l1,6 l-9,1 Z"></path><path d="M43,9 l5,-1" opacity="0.6"></path>
+              </g>
+              <g stroke-width="1.4">
+                <circle cx="-66" cy="-22" r="7"></circle>
+                <path d="M-66,-15 L-67,18"></path>
+                <path d="M-67,18 L-71,44 M-67,18 L-62,44"></path>
+                <path d="M-65,-8 Q-56,-4 -48,0" stroke-width="1.3"></path>
+              </g>
+            </g>
+
+            <!-- research tools: the turtle, exploded -->
+            <g transform="translate(625,590)" data-v="8" style="opacity: 1; filter: none; transition: opacity 0.6s ease, filter 0.6s ease;">
+              <path d="M-70,46 Q0,42 70,45" stroke-width="1.7"></path>
+              <path d="M-70,49 Q0,45 70,48" stroke-width="0.9" opacity="0.35"></path>
+              <g stroke-width="1.2">
+                <path d="M-60,47 L-56,66 M56,45 L60,64"></path>
+              </g>
+              <g stroke-width="1.5">
+                <path d="M-30,-30 L34,-32 L36,12 L-28,14 Z"></path>
+                <path d="M-24,-24 L28,-26 L30,6 L-22,8 Z" stroke-width="1" opacity="0.6"></path>
+                <path d="M3,14 L2,32" stroke-width="1.3"></path>
+                <path d="M-10,34 L16,33" stroke-width="1.3"></path>
+              </g>
+              <g stroke-width="1">
+                <path d="M-18,-18 l5,0 l0,4 l-5,0 Z M-10,-21 l5,0 l0,4 l-5,0 Z M-14,-10 l5,0 l0,4 l-5,0 Z"></path>
+                <path d="M8,-18 l5,0 l0,4 l-5,0 Z M15,-13 l5,0 l0,4 l-5,0 Z"></path>
+                <path d="M18,-1 l5,0 l0,4 l-5,0 Z"></path>
+                <ellipse cx="-11" cy="-14" rx="11" ry="9" stroke-width="0.9" opacity="0.7"></ellipse>
+                <ellipse cx="14" cy="-13" rx="10" ry="8" stroke-width="0.9" opacity="0.7"></ellipse>
+                <path d="M0,-13 L4,-13" stroke-width="0.9" opacity="0.7"></path>
+                <path d="M20,-4 Q19,-7 17,-8" stroke-width="0.8" opacity="0.6" stroke-dasharray="2 3"></path>
+              </g>
+              <g stroke-width="1.2">
+                <path d="M-26,40 L20,38"></path>
+                <path d="M-20,39 l0,-2 M-12,39 l0,-2 M-4,39 l0,-2 M4,38 l0,-2 M12,38 l0,-2" stroke-width="0.9" opacity="0.6"></path>
+                <path d="M30,40 a4,3 0 1 1 0.1,0"></path>
+                <path d="M31,36 Q34,26 35,14" stroke-width="0.8" opacity="0.5"></path>
+              </g>
+              <g stroke-width="1.4">
+                <circle cx="-50" cy="-16" r="8"></circle>
+                <path d="M-40,-8 Q-36,10 -42,28"></path>
+                <path d="M-44,-4 Q-34,12 -26,34"></path>
+              </g>
+            </g>
+
+          </g>
+        </svg>
+        </div>
+        <div id="scene-box" style="position: absolute; bottom: 10vh; left: 50%; transform: translateX(-50%) translateY(16px); opacity: 0; transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out); width: min(592px, 86vw); font-family: var(--font-body); font-size: 17px; line-height: 1.6; font-weight: bold; color: var(--text);"></div>
+        </div></div>
+      <p>In summary: we use our understanding of how people think, solve problems, learn, and conduct scientific discovery to design tools that are generally applicable to science and education, which we pilot and use to improve our own research.</p>
+    </section>
+
+    <section id="sec-patrons" data-screen-label="Patrons" style="padding-top: 56px;">
+      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 0 0 18px;">We’re funded by patrons</h2>
+      <p>Over the past six months, I have conducted 30 two-hour long participant interviews, received a $20,000 <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">Emergent Ventures</a>, moved across the country alone for research, became a visiting scholar at Virginia Tech, submitted three papers (one under review), published Papert Lab’s first essay, and started a weekly <a href="/projects/vt-discussion/">discussion group</a> on augmenting human cognition with computers.</p>
+      <p>I’ll be staying at Virginia Tech through January to pilot our pedagogy for AI-assisted programming in courses with thousands of students, conduct a RCT to empirically evaluate our pedagogy, publish in the largest and most prestigious HCI conference (CHI), and expand Papert Lab’s research to cognitive science journals. I am also solidifying a visiting appointment at CMU beginning after I leave Virginia Tech, which will be announced soon!!</p>
+      <p>I cannot afford to continue collaborating with professors and graduate students at Virginia Tech, hosting the discussion group, nor conducting pilot studies if I don’t fundraise again. Paying myself the wage of a Virginia Tech Ph.D. student with research expenses and travel costs, I need another $20,000 to continue my research through January.</p>
+      <p>If you’d like to contribute to developing pedagogy that enables humanity to create and innovate with AI coding agents, please consider supporting our work. You can see more information about the Season III research agenda and funding breakdown <a href="/phil/details/">here</a>.</p>
+
+      <div id="seasons" style="margin: 34px 0 40px; display: flex; flex-direction: column; gap: 4px; perspective: 700px;">
+        <div class="row-s12" style="display: flex; gap: 18px; align-items: baseline; overflow: hidden; transform-origin: 50% 0; max-height: 64px; padding: 9px 2px; opacity: 0; transform: translateY(10px); transition: opacity 0.5s var(--ease-out) 0s, transform 0.55s var(--ease-out) 0s, max-height 0.55s var(--ease-out) 0s, padding 0.55s var(--ease-out) 0s;">
+          <span style="font-size: 22px; color: var(--text); min-width: 124px; white-space: nowrap;">Season I</span>
+          <span style="flex: 1; font-size: 16px; color: var(--text);">UC San Diego (home)</span>
+          <span style="font-size: 16px; color: var(--text);">Self</span>
+        </div>
+        <div class="row-s12" style="display: flex; gap: 18px; align-items: baseline; overflow: hidden; transform-origin: 50% 0; max-height: 64px; padding: 9px 2px; opacity: 0; transform: translateY(10px); transition: opacity 0.5s var(--ease-out) 0.1s, transform 0.55s var(--ease-out) 0.1s, max-height 0.55s var(--ease-out) 0.1s, padding 0.55s var(--ease-out) 0.1s;">
+          <span style="font-size: 22px; color: var(--text); min-width: 124px; white-space: nowrap;">Season II</span>
+          <span style="flex: 1; font-size: 16px; color: var(--text);">Virginia Tech (summer)</span>
+          <span style="font-size: 16px; color: var(--text);">Emergent Ventures</span>
+        </div>
+        <div id="row-s3" style="display: flex; gap: 18px; align-items: baseline; padding: 9px 2px; transform-origin: 50% 50%; opacity: 0; transform: translateY(10px) scale(1); transition: opacity 0.6s var(--ease-out) 0.3s, transform 0.6s var(--ease-out) 0.22s;">
+          <span style="font-size: 22px; color: var(--text); min-width: 124px; white-space: nowrap;">Season III</span>
+          <span style="flex: 1; font-size: 16px; color: var(--text);">Virginia Tech (semester)</span>
+          <span style="font-size: 16px; color: var(--text);">Patron-funded</span>
+        </div>
+      </div>
+
+      <p>In 1953, Jean Piaget received a small grant from John Marshall of the Rockefeller Foundation to fund genetic epistemology research at the University of Geneva. Shortly after, Seymour Papert joined Piaget as a mentee and mathematician to immerse himself in epistemological and cognitive science research. These five years in Switzerland were particularly germane to Papert&rsquo;s thinking of learning science, acting as an accelerator for his later work with AI and LOGO at MIT. Looking back, it is clear that John Marshall&rsquo;s patronage significantly contributed to Papert&rsquo;s formative development and future work.</p>
+      <p>Similar to Piaget, we are funding Season III of research through philanthropic patrons. As a 501(c)(3) nonprofit organization, all donations are tax-deductible. The Season III round closes September 1. All tiers are cumulative (i.e. the Dynabook tier also gets LOGO benefits). If you&rsquo;d like to donate, get in touch at <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a>.</p>
+
+      <div style="border-top: 1px solid var(--card-border);">
+        <div style="display: flex; gap: 18px; align-items: baseline; padding: 18px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-size: 21px; color: var(--text); min-width: 92px;">$1k</span>
+          <span style="flex: 1;">
+            <span style="display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-bottom: 8px;">LOGO · Seymour Papert</span>
+            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--text-muted);">
+              <li>Name listed on Season III page of Papert Lab</li>
+              <li>Patron-only monthly letters and demo videos during Season III</li>
+              <li>Invite to Season III meetup in San Francisco</li>
+              <li>Pre-print access during Season III</li>
+            </ul>
+          </span>
+        </div>
+        <div style="display: flex; gap: 18px; align-items: baseline; padding: 18px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-size: 21px; color: var(--text); min-width: 92px;">$5k</span>
+          <span style="flex: 1;">
+            <span style="display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-bottom: 8px;">Dynabook · Alan Kay</span>
+            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--text-muted);">
+              <li>Name listed on Papert Lab homepage</li>
+              <li>Named in acknowledgements section of one publication</li>
+              <li>Sponsor a project</li>
+              <li>One 30 min meeting</li>
+            </ul>
+          </span>
+        </div>
+        <div style="display: flex; gap: 18px; align-items: baseline; padding: 18px 2px; border-bottom: 1px solid var(--card-border);">
+          <span style="font-size: 21px; color: var(--text); min-width: 92px;">≥ $10k</span>
+          <span style="flex: 1;">
+            <span style="display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-bottom: 8px;">The Mother of All Demos · Douglas Engelbart</span>
+            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--text-muted);">
+              <li>Named in acknowledgements section of all publications</li>
+              <li>Collaborate on or commission a spinoff project</li>
+              <li>Monthly 30 min meetings during Season III</li>
+            </ul>
+          </span>
+        </div>
+      </div>
+      <div style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.8; color: var(--text-tertiary); margin-top: 14px;">
+        *Papert Lab’s Season III of research will be named after the first donor to contribute $10k or more<br>
+        **Funding closes on September 1st, 2026
+      </div>
+
+      <hr style="border: none; border-top: 1px solid var(--rule); margin: 40px 0 32px;">
+
+      <p>If you’ve enjoyed this, consider checking out our <a href="https://essays.papertlab.org/p/thoughts-june-2026" target="_blank" rel="noopener">first essay</a>!</p>
+
+      <div style="margin-top: 44px;">
+        <img src="/images/signature.svg" alt="Hudson" style="height: 84px; width: auto; display: block;">
+        
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="max-width: 640px; margin: 48px auto 0; padding: 24px 24px 48px; border-top: 1px solid var(--card-border); font-family: var(--font-sans); font-size: 12.8px; color: var(--text-tertiary);">
+    © 2026 Papert Lab · 501(c)(3) · <a href="mailto:hudson@papertlab.org" style="color: var(--text-tertiary);">hudson [at] papertlab [dot] org</a> · <a href="https://github.com/Papert-Lab" target="_blank" rel="noopener" style="color: var(--text-tertiary);">GitHub</a>
+  </footer>
+
+</div>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  /* ── personalization: /investing/patrons/<slug> → patrons.json lookup ── */
+  var VARIANTS = { a: 'var-agi', f: 'var-flourish', t: 'var-tools' };
+  function showVariant(code) {
+    Object.keys(VARIANTS).forEach(function (k) {
+      var el = document.getElementById(VARIANTS[k]);
+      if (el) el.hidden = (k !== code);
+    });
+  }
+  function ungate() {
+    var g = document.getElementById('patron-gate');
+    if (g) g.remove();
+  }
+  if (window.__patronSlug) {
+    var slug = window.__patronSlug.toLowerCase();
+    fetch('/phil/patrons.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : { patrons: [] }; })
+      .then(function (d) {
+        var p = (d.patrons || []).filter(function (x) {
+          return String(x.slug || '').toLowerCase() === slug &&
+            (x.type || 'phil') === 'investing';
+        })[0];
+        if (p) {
+          $('#patron-name').textContent = ' ' + p.name;
+          showVariant(VARIANTS[p.v] ? p.v : 't');
+          document.title = 'Papert Lab — a letter for ' + p.name;
+        }
+        ungate();
+      })
+      .catch(ungate);
+  } else if (window.__variantOverride) {
+    showVariant(window.__variantOverride);
+    ungate();
+  }
+
+  /* ── bookmark rail: smooth-scroll + scrollspy ── */
+  var railLinks = $$('#bm-rail a[data-bm]');
+  railLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = a.getAttribute('data-bm');
+      var el = document.getElementById(id);
+      if (!el) return;
+      history.replaceState(null, '', '#' + id);
+      jumping = true;
+      clearTimeout(jumpT);
+      jumpT = setTimeout(function () { jumping = false; }, 900);
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
+    });
+  });
+  function applyRail() {
+    railLinks.forEach(function (a) {
+      var on = a.getAttribute('data-bm') === state.active;
+      var spans = a.querySelectorAll('span');
+      spans[0].style.color = on ? 'var(--text)' : 'var(--text-tertiary)';
+      spans[0].style.fontSize = on ? '18px' : '14px';
+      spans[1].style.height = on ? '2px' : '1px';
+      spans[1].style.width = on ? '26px' : '12px';
+      spans[1].style.background = on ? 'var(--text)' : '#b8b1a4';
+    });
+  }
+
+  /* ── zoom scene: 8 vignettes of the research cycle ── */
+  var ICONS = [
+    { cx: 125, cy: 110, s: 2.6, label: "We read seminal literature across cognitive and learning science, computing education, HCI, and the history of computing because it seems to yield more nuanced interdisciplinary insights." },
+    { cx: 390, cy: 100, s: 2.6, label: "We give talks and work with collaborators at other universities to survey how other scholars approach similar problems and receive mentorship, which we incorporate into the design of our studies and writings." },
+    { cx: 628, cy: 105, s: 2.6, label: "We host weekly discussion groups on augmenting human cognition with computers to foster a network of collaborators and generate ideas for additional research and readings." },
+    { cx: 280, cy: 305, s: 2.3, label: "The insights gathered from essays, classroom pilots, papers, and discussion groups all get captured in tools-for-thought that we iteratively design based on our previous findings in cognitive science." },
+    { cx: 505, cy: 328, s: 3.0, label: "We submit papers to computing education, HCI, learning science, and ML conferences, usually reporting results from studies and classroom pilots. In addition, we publish monthly essays to our Substack." },
+    { cx: 200, cy: 605, s: 2.6, label: "While big quantitative studies are helpful to understand the efficacy of our pedagogy, we also conduct one-on-one think-aloud interviews with students to understand how they approach problems." },
+    { cx: 452, cy: 620, s: 2.6, label: "We conduct large-scale classroom pilots with the pedagogical tools we instantiate to assess their efficacy, identify possible modifications, and apply our research to the general population." },
+    { cx: 625, cy: 598, s: 2.6, label: "Based on research questions or classroom deployments, we develop research tools that expedite and improve analysis and exploration. We use our findings from previous pilots to improve our research tools." }
+  ];
+
+  var svg = $('#scene-svg');
+  var box = $('#scene-box');
+  var scene = document.getElementById('zoom-scene');
+  var state = { active: 'sec-hello', step: 0, seasonsOn: false, fold: false };
+
+  function applyScene() {
+    var step = state.step;
+    var t = 'translate(0%, 0%) scale(1)';
+    if (step > 0) {
+      var ic = ICONS[step - 1];
+      var tx = (0.5 - (ic.s * ic.cx) / 760) * 100;
+      var ty = (0.5 - (ic.s * ic.cy) / 760) * 100;
+      t = 'translate(' + tx.toFixed(2) + '%, ' + ty.toFixed(2) + '%) scale(' + ic.s + ')';
+    }
+    svg.style.transform = t;
+    $$('[data-v]', svg).forEach(function (g) {
+      var dim = step > 0 && step !== +g.getAttribute('data-v');
+      g.style.opacity = dim ? 0.16 : 1;
+      g.style.filter = dim ? 'blur(2.5px)' : 'none';
+    });
+    $$('[data-flow]', svg).forEach(function (g) {
+      var b = g.getAttribute('data-flow') === 'b';
+      g.style.opacity = step === 0 ? (b ? 0.3 : 0.85) : (b ? 0.04 : 0.1);
+    });
+    box.style.opacity = step > 0 ? 1 : 0;
+    box.style.transform = 'translateX(-50%) translateY(' + (step > 0 ? '0px' : '16px') + ')';
+    box.textContent = step > 0 ? ICONS[step - 1].label : '';
+  }
+  function setStep(s) {
+    if (s !== state.step) { state.step = s; applyScene(); }
+  }
+
+  /* ── seasons fold ── */
+  var rows12 = $$('.row-s12');
+  var row3 = $('#row-s3');
+  function applySeasons() {
+    var sOn = state.seasonsOn, fold = state.fold;
+    rows12.forEach(function (r) {
+      r.style.opacity = fold ? 0 : (sOn ? 1 : 0);
+      r.style.transform = fold ? 'rotateX(-74deg)' : (sOn ? 'translateY(0px)' : 'translateY(10px)');
+      r.style.maxHeight = fold ? '0px' : '64px';
+      r.style.padding = fold ? '0px 2px' : '9px 2px';
+    });
+    row3.style.opacity = sOn ? 1 : 0;
+    row3.style.transform = sOn ? (fold ? 'scale(1.06)' : 'translateY(0px) scale(1)') : 'translateY(10px) scale(1)';
+  }
+
+  /* ── scrollspy ── */
+  var IDS = ['sec-hello', 'sec-vision', 'sec-work', 'sec-patrons'];
+  var lastY = null, lastT = null, fastN = 0, jumping = false, jumpT;
+  var sceneMode = 'sequence';
+
+  /* Scroll-driven scene (scrollytelling pattern): the step is a pure
+     function of progress through the 500vh scene block. No wheel
+     hijacking, no momentum classification — trackpad jitter can't
+     reset the zoom, and touch/keyboard/scrollbar all work. Leading
+     and trailing bands show the overview; eight equal bands between
+     them map to the vignettes. */
+  function enterImageMode() {
+    if (sceneMode === 'image' || !scene) return;
+    sceneMode = 'image';
+    var sceneTopAbs = scene.getBoundingClientRect().top + window.scrollY;
+    var oldH = scene.getBoundingClientRect().height;
+    var stage = document.getElementById('scene-stage');
+    scene.style.height = 'auto';
+    scene.style.marginBottom = '36px';
+    if (stage) stage.style.height = 'auto';
+    var newH = scene.getBoundingClientRect().height;
+    // keep what's on screen where it is: viewport below the scene shifts by
+    // the removed height; viewport inside it pins to the image top
+    if (window.scrollY >= sceneTopAbs + oldH - window.innerHeight) {
+      window.scrollTo({ top: window.scrollY - (oldH - newH), behavior: 'instant' });
+    } else if (window.scrollY > sceneTopAbs) {
+      window.scrollTo({ top: sceneTopAbs, behavior: 'instant' });
+    }
+    lastY = window.scrollY;
+    if (state.step !== 0) { state.step = 0; applyScene(); }
+  }
+
+  function exitImageMode() {
+    if (sceneMode === 'sequence' || !scene) return;
+    sceneMode = 'sequence';
+    fastN = 0;
+    scene.style.height = '500vh';
+    scene.style.marginBottom = 'calc((min(84vh, 620px) - 100vh) / 2 + 24px)';
+    var stage = document.getElementById('scene-stage');
+    if (stage) stage.style.height = '100vh';
+  }
+
+  function sceneStep() {
+    if (sceneMode === 'image') return 0;
+    if (!scene) return 0;
+    var r = scene.getBoundingClientRect();
+    var travel = r.height - window.innerHeight;
+    if (travel <= 0) return 0;
+    var p = Math.min(1, Math.max(0, -r.top / travel));
+    if (p < 0.05 || p >= 0.96) return 0;
+    return Math.min(8, 1 + Math.floor((p - 0.05) / (0.91 / 8)));
+  }
+
+  function spy() {
+    var probe = window.scrollY + Math.min(window.innerHeight * 0.3, 220);
+    var act = IDS[0];
+    IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var top = el.getBoundingClientRect().top + window.scrollY;
+      if (top <= probe) act = id;
+    });
+    var doc = document.documentElement;
+    if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) act = IDS[IDS.length - 1];
+
+    // The zoom sequence is a slow-scroll experience: position maps to the
+    // step, so scrolling down advances icons and scrolling up walks back to
+    // the previous icon (overview below the first). Scrolling FAST in either
+    // direction collapses the scene into a plain image for the rest of the
+    // visit — no rapid step-flashing, no 500vh of scroll debt left behind.
+    var nowT = performance.now();
+    var dy = lastY === null ? 0 : window.scrollY - lastY;
+    var dt = lastT === null ? 1000 : Math.max(1, nowT - lastT);
+    lastY = window.scrollY;
+    lastT = nowT;
+    if (dy !== 0) fastN = (Math.abs(dy) / dt > 3) ? fastN + 1 : 0; // zero-motion events don't vote
+
+    if (sceneMode === 'sequence' && scene && !jumping) {
+      var sr = scene.getBoundingClientRect();
+      var inScene = sr.top < window.innerHeight * 0.6 && sr.bottom > 0;
+      if (inScene && fastN >= 2) enterImageMode();
+    } else if (sceneMode === 'image' && scene && scene.getBoundingClientRect().top >= window.innerHeight) {
+      // scrolled back above the scene: re-arm the sequence for the next
+      // slow descent (the 400vh reinflates below the viewport — invisible)
+      exitImageMode();
+    }
+    var step = jumping ? 0 : sceneStep();
+
+    var fold = state.fold;
+    var seasonsEl = document.getElementById('seasons');
+    if (seasonsEl) {
+      var sr = seasonsEl.getBoundingClientRect();
+      var svh = window.innerHeight;
+      if (sr.top < svh * 0.3) fold = true;
+      else if (sr.top > svh * 0.42) fold = false;
+    }
+
+    if (act !== state.active) { state.active = act; applyRail(); }
+    if (step !== state.step) { state.step = step; applyScene(); }
+    if (fold !== state.fold) { state.fold = fold; applySeasons(); }
+  }
+
+  window.addEventListener('scroll', spy, { passive: true });
+  window.addEventListener('resize', spy, { passive: true });
+  spy();
+  applyRail();
+
+  var seasons = document.getElementById('seasons');
+  if (seasons && 'IntersectionObserver' in window) {
+    var rio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          state.seasonsOn = true;
+          applySeasons();
+          rio.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    rio.observe(seasons);
+  } else if (seasons) {
+    state.seasonsOn = true;
+    applySeasons();
+  }
+})();
+</script>
+</body>
+</html>

@@ -7,10 +7,10 @@
 
   <meta property="og:title" content="Papert Lab — a letter for patrons">
   <meta property="og:description" content="Papert Lab is an applied cognitive science research nonprofit. A letter for patrons.">
-  <meta property="og:url" content="https://papertlab.org/funding/pedagogy">
+  <meta property="og:url" content="https://papertlab.org/phil/flourishing">
   <meta property="og:type" content="website">
   <meta name="description" content="Papert Lab — a letter for patrons.">
-  <link rel="canonical" href="https://papertlab.org/funding/pedagogy">
+  <link rel="canonical" href="https://papertlab.org/phil/flourishing">
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -18,17 +18,17 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <script>
-    // Patron URLs (/funding/patrons/<slug>, rewritten here by vercel.json)
-    // resolve their personalization from /funding/patrons.json. Until that
+    // Patron URLs (/phil/patrons/<slug>, rewritten here by vercel.json)
+    // resolve their personalization from /phil/patrons.json. Until that
     // fetch lands, gate the two personalized regions so the patron never
     // sees "hi friend!" flash into their own name. ?patron=<slug> is a
     // local-testing fallback (no rewrites on a plain static server).
     (function () {
-      var m = location.pathname.match(/^\/funding\/patrons\/([^\/]+)\/?$/);
+      var m = location.pathname.match(/^\/phil\/patrons\/([^\/]+)\/?$/);
       var q = new URLSearchParams(location.search);
       window.__patronSlug = (m && decodeURIComponent(m[1])) || q.get('patron') || null;
-      // named variant routes: /funding/safety | /funding/flourishing | /funding/pedagogy
-      var vm = location.pathname.match(/^\/funding\/(safety|flourishing|pedagogy)\/?$/);
+      // named variant routes: /phil/safety | /phil/flourishing | /phil/pedagogy
+      var vm = location.pathname.match(/^\/phil\/(safety|flourishing|pedagogy)\/?$/);
       var VMAP = { safety: 'a', flourishing: 'f', pedagogy: 't' };
       window.__variantOverride = VMAP[(vm && vm[1]) || q.get('v')] || null;
       if (window.__patronSlug || window.__variantOverride) {
@@ -622,7 +622,7 @@
       <p>Over the past six months, I have conducted 30 two-hour long participant interviews, received a $20,000 <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">Emergent Ventures</a>, moved across the country alone for research, became a visiting scholar at Virginia Tech, submitted three papers (one under review), published Papert Lab’s first essay, and started a weekly <a href="/projects/vt-discussion/">discussion group</a> on augmenting human cognition with computers.</p>
       <p>I’ll be staying at Virginia Tech through January to pilot our pedagogy for AI-assisted programming in courses with thousands of students, conduct a RCT to empirically evaluate our pedagogy, publish in the largest and most prestigious HCI conference (CHI), and expand Papert Lab’s research to cognitive science journals. I am also solidifying a visiting appointment at CMU beginning after I leave Virginia Tech, which will be announced soon!!</p>
       <p>I cannot afford to continue collaborating with professors and graduate students at Virginia Tech, hosting the discussion group, nor conducting pilot studies if I don’t fundraise again. Paying myself the wage of a Virginia Tech Ph.D. student with research expenses and travel costs, I need another $20,000 to continue my research through January.</p>
-      <p>If you’d like to contribute to developing pedagogy that enables humanity to create and innovate with AI coding agents, please consider supporting our work. You can see more information about the Season III research agenda and funding breakdown <a href="/funding/details/">here</a>.</p>
+      <p>If you’d like to contribute to developing pedagogy that enables humanity to create and innovate with AI coding agents, please consider supporting our work. You can see more information about the Season III research agenda and funding breakdown <a href="/phil/details/">here</a>.</p>
 
       <div id="seasons" style="margin: 34px 0 40px; display: flex; flex-direction: column; gap: 4px; perspective: 700px;">
         <div class="row-s12" style="display: flex; gap: 18px; align-items: baseline; overflow: hidden; transform-origin: 50% 0; max-height: 64px; padding: 9px 2px; opacity: 0; transform: translateY(10px); transition: opacity 0.5s var(--ease-out) 0s, transform 0.55s var(--ease-out) 0s, max-height 0.55s var(--ease-out) 0s, padding 0.55s var(--ease-out) 0s;">
@@ -710,7 +710,7 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ── personalization: /funding/patrons/<slug> → patrons.json lookup ── */
+  /* ── personalization: /phil/patrons/<slug> → patrons.json lookup ── */
   var VARIANTS = { a: 'var-agi', f: 'var-flourish', t: 'var-tools' };
   function showVariant(code) {
     Object.keys(VARIANTS).forEach(function (k) {
@@ -724,11 +724,12 @@
   }
   if (window.__patronSlug) {
     var slug = window.__patronSlug.toLowerCase();
-    fetch('/funding/patrons.json', { cache: 'no-store' })
+    fetch('/phil/patrons.json', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : { patrons: [] }; })
       .then(function (d) {
         var p = (d.patrons || []).filter(function (x) {
-          return String(x.slug || '').toLowerCase() === slug;
+          return String(x.slug || '').toLowerCase() === slug &&
+            (x.type || 'phil') === 'phil';
         })[0];
         if (p) {
           $('#patron-name').textContent = ' ' + p.name;
