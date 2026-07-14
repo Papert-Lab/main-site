@@ -1,26 +1,57 @@
 {
   "rewrites": [
     {
-      "source": "/funding/patrons/:slug",
-      "destination": "/funding/index.html"
+      "source": "/phil/patrons/:slug",
+      "destination": "/phil/index.html"
     },
     {
-      "source": "/funding/safety",
-      "destination": "/funding/index.html"
+      "source": "/phil/safety",
+      "destination": "/phil/index.html"
     },
     {
-      "source": "/funding/flourishing",
-      "destination": "/funding/index.html"
+      "source": "/phil/flourishing",
+      "destination": "/phil/index.html"
     },
     {
-      "source": "/funding/pedagogy",
-      "destination": "/funding/index.html"
+      "source": "/phil/pedagogy",
+      "destination": "/phil/index.html"
+    },
+    {
+      "source": "/investing/patrons/:slug",
+      "destination": "/investing/index.html"
+    },
+    {
+      "source": "/investing/safety",
+      "destination": "/investing/index.html"
+    },
+    {
+      "source": "/investing/flourishing",
+      "destination": "/investing/index.html"
+    },
+    {
+      "source": "/investing/pedagogy",
+      "destination": "/investing/index.html"
     }
   ],
   "redirects": [
     {
       "source": "/funding",
-      "destination": "/funding/pedagogy",
+      "destination": "/phil/flourishing",
+      "permanent": false
+    },
+    {
+      "source": "/funding/:path*",
+      "destination": "/phil/:path*",
+      "permanent": false
+    },
+    {
+      "source": "/phil",
+      "destination": "/phil/flourishing",
+      "permanent": false
+    },
+    {
+      "source": "/investing",
+      "destination": "/investing/flourishing",
       "permanent": false
     }
   ]

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Papert Lab — a letter for patrons</title>
+  <title>Papert Lab — a letter for investors</title>
 
-  <meta property="og:title" content="Papert Lab — a letter for patrons">
-  <meta property="og:description" content="Papert Lab is an applied cognitive science research nonprofit. A letter for patrons.">
-  <meta property="og:url" content="https://papertlab.org/funding/pedagogy">
+  <meta property="og:title" content="Papert Lab — a letter for investors">
+  <meta property="og:description" content="Papert Lab is an applied cognitive science research nonprofit. A letter for investors.">
+  <meta property="og:url" content="https://papertlab.org/investing/flourishing">
   <meta property="og:type" content="website">
-  <meta name="description" content="Papert Lab — a letter for patrons.">
-  <link rel="canonical" href="https://papertlab.org/funding/pedagogy">
+  <meta name="description" content="Papert Lab — a letter for investors.">
+  <link rel="canonical" href="https://papertlab.org/investing/flourishing">
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -18,17 +18,17 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <script>
-    // Patron URLs (/funding/patrons/<slug>, rewritten here by vercel.json)
-    // resolve their personalization from /funding/patrons.json. Until that
+    // Patron URLs (/investing/patrons/<slug>, rewritten here by vercel.json)
+    // resolve their personalization from /phil/patrons.json. Until that
     // fetch lands, gate the two personalized regions so the patron never
     // sees "hi friend!" flash into their own name. ?patron=<slug> is a
     // local-testing fallback (no rewrites on a plain static server).
     (function () {
-      var m = location.pathname.match(/^\/funding\/patrons\/([^\/]+)\/?$/);
+      var m = location.pathname.match(/^\/investing\/patrons\/([^\/]+)\/?$/);
       var q = new URLSearchParams(location.search);
       window.__patronSlug = (m && decodeURIComponent(m[1])) || q.get('patron') || null;
-      // named variant routes: /funding/safety | /funding/flourishing | /funding/pedagogy
-      var vm = location.pathname.match(/^\/funding\/(safety|flourishing|pedagogy)\/?$/);
+      // named variant routes: /investing/safety | /investing/flourishing | /investing/pedagogy
+      var vm = location.pathname.match(/^\/investing\/(safety|flourishing|pedagogy)\/?$/);
       var VMAP = { safety: 'a', flourishing: 'f', pedagogy: 't' };
       window.__variantOverride = VMAP[(vm && vm[1]) || q.get('v')] || null;
       if (window.__patronSlug || window.__variantOverride) {
@@ -193,8 +193,8 @@
         <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Projects</span>
         <span style="display: block; height: 1px; width: 12px; background: #b8b1a4; transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);"></span>
       </a>
-      <a href="#sec-patrons" title="Patrons" data-bm="sec-patrons" style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; padding: 15px 0;">
-        <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Patrons</span>
+      <a href="#sec-patrons" title="Funding" data-bm="sec-patrons" style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; text-decoration: none; padding: 15px 0;">
+        <span style="font-family: var(--font-body); line-height: 1; white-space: nowrap; color: var(--text-tertiary); font-size: 14px; transition: color 0.18s var(--ease-out), font-size 0.18s var(--ease-out);">Funding</span>
         <span style="display: block; height: 1px; width: 12px; background: #b8b1a4; transition: width 0.22s var(--ease-out), background 0.22s var(--ease-out);"></span>
       </a>
     </div>
@@ -617,12 +617,10 @@
       <p>In summary: we use our understanding of how people think, solve problems, learn, and conduct scientific discovery to design tools that are generally applicable to science and education, which we pilot and use to improve our own research.</p>
     </section>
 
-    <section id="sec-patrons" data-screen-label="Patrons" style="padding-top: 56px;">
-      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 0 0 18px;">We’re funded by patrons</h2>
-      <p>Over the past six months, I have conducted 30 two-hour long participant interviews, received a $20,000 <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">Emergent Ventures</a>, moved across the country alone for research, became a visiting scholar at Virginia Tech, submitted three papers (one under review), published Papert Lab’s first essay, and started a weekly <a href="/projects/vt-discussion/">discussion group</a> on augmenting human cognition with computers.</p>
-      <p>I’ll be staying at Virginia Tech through January to pilot our pedagogy for AI-assisted programming in courses with thousands of students, conduct a RCT to empirically evaluate our pedagogy, publish in the largest and most prestigious HCI conference (CHI), and expand Papert Lab’s research to cognitive science journals. I am also solidifying a visiting appointment at CMU beginning after I leave Virginia Tech, which will be announced soon!!</p>
-      <p>I cannot afford to continue collaborating with professors and graduate students at Virginia Tech, hosting the discussion group, nor conducting pilot studies if I don’t fundraise again. Paying myself the wage of a Virginia Tech Ph.D. student with research expenses and travel costs, I need another $20,000 to continue my research through January.</p>
-      <p>If you’d like to contribute to developing pedagogy that enables humanity to create and innovate with AI coding agents, please consider supporting our work. You can see more information about the Season III research agenda and funding breakdown <a href="/funding/details/">here</a>.</p>
+    <section id="sec-patrons" data-screen-label="Funding" style="padding-top: 56px;">
+      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 0 0 18px;">Season III Progress</h2>
+      <p>Over the past six months, I have conducted 30 two-hour long participant interviews, received a $20,000 <a href="https://www.mercatus.org/emergent-ventures" target="_blank" rel="noopener">Emergent Ventures</a>, moved across the country alone for research, became a visiting scholar at Virginia Tech, submitted three papers (one under review), published Papert Lab’s first essay, and started a weekly <a href="https://papertlab.org/projects/vt-discussion/">discussion group</a> on augmenting human cognition with computers.</p>
+      <p>I’ll be staying at Virginia Tech through January to pilot our pedagogy for AI-assisted programming in courses with thousands of students, conduct a RCT to empirically evaluate our pedagogy, submit to the largest and most prestigious HCI conference (CHI), and expand Papert Lab’s research to cognitive science journals. I am also solidifying a visiting appointment at CMU beginning after I leave Virginia Tech, which will be announced soon.</p>
 
       <div id="seasons" style="margin: 34px 0 40px; display: flex; flex-direction: column; gap: 4px; perspective: 700px;">
         <div class="row-s12" style="display: flex; gap: 18px; align-items: baseline; overflow: hidden; transform-origin: 50% 0; max-height: 64px; padding: 9px 2px; opacity: 0; transform: translateY(10px); transition: opacity 0.5s var(--ease-out) 0s, transform 0.55s var(--ease-out) 0s, max-height 0.55s var(--ease-out) 0s, padding 0.55s var(--ease-out) 0s;">
@@ -642,49 +640,19 @@
         </div>
       </div>
 
-      <p>In 1953, Jean Piaget received a small grant from John Marshall of the Rockefeller Foundation to fund genetic epistemology research at the University of Geneva. Shortly after, Seymour Papert joined Piaget as a mentee and mathematician to immerse himself in epistemological and cognitive science research. These five years in Switzerland were particularly germane to Papert&rsquo;s thinking of learning science, acting as an accelerator for his later work with AI and LOGO at MIT. Looking back, it is clear that John Marshall&rsquo;s patronage significantly contributed to Papert&rsquo;s formative development and future work.</p>
-      <p>Similar to Piaget, we are funding Season III of research through philanthropic patrons. As a 501(c)(3) nonprofit organization, all donations are tax-deductible. The Season III round closes September 1. All tiers are cumulative (i.e. the Dynabook tier also gets LOGO benefits). If you&rsquo;d like to donate, get in touch at <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a>.</p>
+      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 48px 0 18px;">Theory of Change</h2>
+      <p>AI labs have poured hundreds of millions into developing AI agents that extend and accelerate scientific progress without first understanding the psychology of the scientists who will inevitably guide them. I worry that models will fail to make significant scientific progress if we don&rsquo;t also understand the societal, technological, and cognitive factors that have incubated impactful science over the past few centuries. By understanding the cognitive processes that enable scientists to make groundbreaking discoveries, we can align models to scientists by training them to handle the more rote or esoteric aspects of scientific discovery to enable scientists to guide problem selection and solving.</p>
+      <p>I am excited by the prospect of enabling people who would otherwise be just a standard deviation or two from the mean to contribute to Nobel Prize-level scientific research through exceptional pedagogy and collaborative AI tools. Not only can we increase the number of exceptional scientists who have an innate inclination towards STEM, but we can expand the domains with which people can contribute to collective knowledge by allowing people to contribute to research through means beyond math and traditional science.</p>
+      <p>The development of new interfaces that augment and extend human learning and cognition has repeatedly led to new scientific fields and new scientific breakthroughs. Arguably more important, these forms of (not necessarily digital) new technology have expanded the ways in which people can derive meaning and contribute to advancing society, in turn generating immense wealth for the creators of these technological mediums, in addition to those who extend them to facilitate new forms of innovation.</p>
+      <p>In recent history, the birth of many of these mediums have been spurred by observations of how humans learn and solve problems. In fact, Alan Kay&rsquo;s observations of children learning to program with Logo, the pedagogical programming language developed by Seymour Papert as a precursor to Scratch, directly led to his ideation of the personal computer and the graphical user interface (GUI). However, we feel that many of these pedagogical mediums and tools for thought have lacked significant adoption and impact because they have failed to align themselves with economic incentives that continue to drive innovation.</p>
 
-      <div style="border-top: 1px solid var(--card-border);">
-        <div style="display: flex; gap: 18px; align-items: baseline; padding: 18px 2px; border-bottom: 1px solid var(--card-border);">
-          <span style="font-size: 21px; color: var(--text); min-width: 92px;">$1k</span>
-          <span style="flex: 1;">
-            <span style="display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-bottom: 8px;">LOGO · Seymour Papert</span>
-            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--text-muted);">
-              <li>Name listed on Season III page of Papert Lab</li>
-              <li>Patron-only monthly letters and demo videos during Season III</li>
-              <li>Invite to Season III meetup in San Francisco</li>
-              <li>Pre-print access during Season III</li>
-            </ul>
-          </span>
-        </div>
-        <div style="display: flex; gap: 18px; align-items: baseline; padding: 18px 2px; border-bottom: 1px solid var(--card-border);">
-          <span style="font-size: 21px; color: var(--text); min-width: 92px;">$5k</span>
-          <span style="flex: 1;">
-            <span style="display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-bottom: 8px;">Dynabook · Alan Kay</span>
-            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--text-muted);">
-              <li>Name listed on Papert Lab homepage</li>
-              <li>Named in acknowledgements section of one publication</li>
-              <li>Sponsor a project</li>
-              <li>One 30 min meeting</li>
-            </ul>
-          </span>
-        </div>
-        <div style="display: flex; gap: 18px; align-items: baseline; padding: 18px 2px; border-bottom: 1px solid var(--card-border);">
-          <span style="font-size: 21px; color: var(--text); min-width: 92px;">≥ $10k</span>
-          <span style="flex: 1;">
-            <span style="display: block; font-family: var(--font-sans); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); margin-bottom: 8px;">The Mother of All Demos · Douglas Engelbart</span>
-            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.7; color: var(--text-muted);">
-              <li>Named in acknowledgements section of all publications</li>
-              <li>Collaborate on or commission a spinoff project</li>
-              <li>Monthly 30 min meetings during Season III</li>
-            </ul>
-          </span>
-        </div>
-      </div>
-      <div style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.8; color: var(--text-tertiary); margin-top: 14px;">
-        *Papert Lab’s Season III of research will be named after the first donor to contribute $10k or more<br>
-        **Funding closes on September 1st, 2026
+      <h2 style="font-family: var(--font-sans); font-size: 13px; font-weight: 400; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-tertiary); margin: 48px 0 18px;">Funding</h2>
+      <p>We conduct foundational research to understand the shape of scientific discovery and problem solving with AI. We pilot new interfaces for augmenting learning and problem solving within K-12 classrooms, large university classes, and research labs. We feel that the most transformative societal change is driven by extending academic research into profitable tools that drive market growth and competition, hence why we will use our research to design profitable and impactful computing mediums that augment how humans solve problems, learn, and conduct scientific research through intelligent computer systems like BCIs and LLMs.</p>
+      <p>We are raising a small angel round<sup style="font-size: 0.7em;"><a href="#fn-1" id="fn-1-ref" style="text-decoration: none;">1</a></sup> to support future research in understanding problem solving, learning, and scientific discovery to inform the design of new computational paradigms that augment human cognition. Our work will continue to focus on fundamental research and developing open-source mediums for the foreseeable future, though we anticipate using our research to develop profitable tools that meaningfully transform how humans learn and solve problems with computers.</p>
+      <p>If you&rsquo;d like to invest, get in touch at <a href="mailto:hudson@papertlab.org">hudson [at] papertlab [dot] org</a>.</p>
+      <p style="color: var(--text); font-weight: bold;">Funding closes on September 1st, 2026</p>
+      <div id="fn-1" style="font-family: var(--font-sans); font-size: 12.5px; line-height: 1.8; color: var(--text-tertiary); margin-top: 14px;">
+        <sup>1</sup>&nbsp;We are in the process of forming a for-profit entity. Papert Lab is also supported through tax-deductible donations to our 501(c)(3) non-profit. See <a id="phil-link" href="/phil/pedagogy" style="color: var(--text-tertiary);">papertlab.org/phil/pedagogy</a> for more information.
       </div>
 
       <hr style="border: none; border-top: 1px solid var(--rule); margin: 40px 0 32px;">
@@ -710,13 +678,20 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  /* ── personalization: /funding/patrons/<slug> → patrons.json lookup ── */
+  /* ── personalization: /investing/patrons/<slug> → patrons.json lookup ── */
   var VARIANTS = { a: 'var-agi', f: 'var-flourish', t: 'var-tools' };
+  var VROUTE = { a: 'safety', f: 'flourishing', t: 'pedagogy' };
   function showVariant(code) {
     Object.keys(VARIANTS).forEach(function (k) {
       var el = document.getElementById(VARIANTS[k]);
       if (el) el.hidden = (k !== code);
     });
+    // footnote points to the /phil letter with the same emphasis
+    var pl = document.getElementById('phil-link');
+    if (pl && VROUTE[code]) {
+      pl.href = '/phil/' + VROUTE[code];
+      pl.textContent = 'papertlab.org/phil/' + VROUTE[code];
+    }
   }
   function ungate() {
     var g = document.getElementById('patron-gate');
@@ -724,11 +699,12 @@
   }
   if (window.__patronSlug) {
     var slug = window.__patronSlug.toLowerCase();
-    fetch('/funding/patrons.json', { cache: 'no-store' })
+    fetch('/phil/patrons.json', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : { patrons: [] }; })
       .then(function (d) {
         var p = (d.patrons || []).filter(function (x) {
-          return String(x.slug || '').toLowerCase() === slug;
+          return String(x.slug || '').toLowerCase() === slug &&
+            (x.type || 'phil') === 'investing';
         })[0];
         if (p) {
           $('#patron-name').textContent = ' ' + p.name;
