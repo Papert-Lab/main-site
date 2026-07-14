@@ -173,6 +173,7 @@
         <label><input type="radio" name="variant" value="a"> Safety</label>
         <label><input type="radio" name="variant" value="t"> Pedagogy</label>
       </div>
+      <div class="status" id="pagehint" style="margin-top: 12px;"></div>
       <button id="go">Generate URL</button>
       <div class="err" id="err"></div>
       <div id="result">
@@ -198,6 +199,18 @@
     var SITE = 'https://papertlab.org';
     var VARIANT_LABEL = { a: 'Safety', f: 'Flourishing', t: 'Pedagogy' };
     var TYPE_LABEL = { phil: 'Phil', investing: 'Investing' };
+    var VROUTE = { a: 'safety', f: 'flourishing', t: 'pedagogy' };
+
+    // live preview of which of the six letter pages the patron will get
+    function updatePageHint() {
+      var t = document.querySelector('input[name="ptype"]:checked').value;
+      var v = document.querySelector('input[name="variant"]:checked').value;
+      document.getElementById('pagehint').textContent = 'letter page: papertlab.org/' + t + '/' + VROUTE[v];
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="ptype"], input[name="variant"]'), function (r) {
+      r.addEventListener('change', updatePageHint);
+    });
+    updatePageHint();
 
     // testing escape hatch: /admin/?branch=some-branch commits there instead of main
     var qBranch = new URLSearchParams(location.search).get('branch');
