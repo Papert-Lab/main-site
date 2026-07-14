@@ -94,6 +94,12 @@
       "name": "Tim",
       "slug": "tim",
       "v": "f"
+    },
+    {
+      "name": "Grace",
+      "slug": "grace1",
+      "v": "t",
+      "type": "investing"
     }
   ]
 }
