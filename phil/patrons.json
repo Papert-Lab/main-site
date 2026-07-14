@@ -112,6 +112,12 @@
       "slug": "cory",
       "v": "f",
       "type": "investing"
+    },
+    {
+      "name": "Alex",
+      "slug": "alex",
+      "v": "t",
+      "type": "phil"
     }
   ]
 }
