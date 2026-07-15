@@ -148,6 +148,12 @@
       "slug": "linus",
       "v": "t",
       "type": "phil"
+    },
+    {
+      "name": "Adam",
+      "slug": "adam",
+      "v": "t",
+      "type": "phil"
     }
   ]
 }
