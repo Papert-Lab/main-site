@@ -124,6 +124,12 @@
       "slug": "patrick",
       "v": "t",
       "type": "phil"
+    },
+    {
+      "name": "Kanjun",
+      "slug": "kanjun",
+      "v": "f",
+      "type": "investing"
     }
   ]
 }
