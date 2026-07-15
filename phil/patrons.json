@@ -160,6 +160,12 @@
       "slug": "claire",
       "v": "f",
       "type": "investing"
+    },
+    {
+      "name": "Alexey",
+      "slug": "alexey",
+      "v": "a",
+      "type": "phil"
     }
   ]
 }
