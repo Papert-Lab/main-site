@@ -136,6 +136,12 @@
       "slug": "logan",
       "v": "a",
       "type": "investing"
+    },
+    {
+      "name": "Molly",
+      "slug": "molly",
+      "v": "f",
+      "type": "investing"
     }
   ]
 }
