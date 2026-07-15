@@ -154,6 +154,12 @@
       "slug": "adam",
       "v": "t",
       "type": "phil"
+    },
+    {
+      "name": "Claire",
+      "slug": "claire",
+      "v": "f",
+      "type": "investing"
     }
   ]
 }
