@@ -130,6 +130,12 @@
       "slug": "kanjun",
       "v": "f",
       "type": "investing"
+    },
+    {
+      "name": "Logan",
+      "slug": "logan",
+      "v": "a",
+      "type": "investing"
     }
   ]
 }
