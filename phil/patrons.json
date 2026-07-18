@@ -190,6 +190,12 @@
       "slug": "michael",
       "v": "t",
       "type": "phil"
+    },
+    {
+      "name": "Austin",
+      "slug": "austin",
+      "v": "a",
+      "type": "investing"
     }
   ]
 }
