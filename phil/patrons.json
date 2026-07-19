@@ -196,6 +196,12 @@
       "slug": "austin",
       "v": "a",
       "type": "investing"
+    },
+    {
+      "name": "David",
+      "slug": "david1",
+      "v": "a",
+      "type": "phil"
     }
   ]
 }
